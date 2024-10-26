@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('lendings', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->foreign('id')->references('id')->on('financial_operations')->cascadeOnDelete();
             $table->date('expected_date_of_return')->nullable();
             $table->unsignedBigInteger('previous_lending_id')->unique()->nullable();
