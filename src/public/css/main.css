@@ -1,0 +1,788 @@
+:root {
+    --primary: rgb(29, 123, 238);
+    --secondary: rgb(137, 181, 234);
+}
+* {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+html, body {
+    margin: 0;
+    position: relative;
+    min-height: 100vh;
+}
+h1 {
+    padding-left: 50px;
+    font-weight: 100;
+}
+h2 {
+    font-weight: 100;
+}
+nav {
+    background-color: var(--primary);
+    display: flex;
+    padding-left: 20px;
+    justify-content: space-between;
+    color: white;
+}
+nav div:first-child {
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+}
+nav div:first-child a {
+    margin: 0;
+    padding-left: 10px;
+    color: white;
+    text-decoration: none;
+}
+.bi{
+    color: var(--primary);
+}
+.bi-credit-card-fill{
+    color: white;
+}
+.bi-caret-down-fill{
+    color: white;
+    margin-left: 5px;
+}
+.content {
+    padding-bottom: 30px;
+}
+.dropbtn {
+    background-color: var(--primary);
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    border-radius: 0 0 0 15px;
+    overflow: hidden;
+}
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:last-child {
+    border-radius: 0 0 0 15px;
+}
+.dropdown-content a:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.accounts_box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.account_box {
+    width: 27%;
+    position: relative;
+    height: 300px;
+    margin-bottom: 50px;
+}
+.account_box div h2{
+    margin-bottom: 0px;
+}
+.edit_account {
+    position: absolute;
+    top: 10px;
+    right: 35px;
+    font-size: larger;
+    margin-right: 5px;
+}
+.delete_account {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: larger;
+}
+.edit_account:hover, .delete_account:hover {
+    cursor: pointer;
+}
+.operation_type:hover, .operation_type:hover {
+    cursor: pointer;
+}
+.account {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+.account_admin{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+
+.overview_account{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+.account h2 {
+    text-align: center;
+    margin: 20px;
+}
+.account p {
+    text-align: center;
+    margin: 16px 20px;
+}
+.account:hover {
+    cursor: pointer;
+    background-color: #e8e8e8;
+}
+.add_account_button {
+    width: 27%;
+    display: flex;
+    align-items: center;
+    height: 300px;
+    justify-content: center;
+}
+.add_account_button i {
+    font-size: 90px;
+    color: lightgray;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+    margin: 0 10px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px #ccc;
+}
+input:checked + .slider:before {
+    -webkit-transform: translateX(31px);
+    -ms-transform: translateX(31px);
+    transform: translateX(31px);
+}
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 50px;
+}
+.flex-between h1 {
+    padding-left: 0px;
+}
+.flex-between .switch {
+    margin-top: 20px;
+}
+.switch-box {
+    display: flex;
+    align-items: flex-end;
+    height: min-content;
+}
+.switch-box p {
+    margin: 0;
+    padding-bottom: 5px;
+}
+table {
+    width: -webkit-fill-available;
+    margin: 0 50px;
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-collapse: collapse;
+}
+.usersTable {
+    width: -webkit-fill-available;
+    margin: 30px 50px;
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-collapse: collapse;
+}
+
+table th {
+    text-align: left;
+    padding: 15px 10px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 100;
+}
+table th:first-child {
+    border-radius: 15px 0 0 0;
+}
+table th:last-child {
+    border-radius: 0 15px 0 0;
+}
+table td {
+    padding: 10px;
+}
+table tr:nth-child(odd) {
+    background-color: #e6e6e6;
+}
+table tr td:last-child {
+    width: 120px;
+    text-align: right;
+}
+table tr td:last-child .bi {
+    font-size: larger;
+}
+
+table td a {
+    color: var(--primary);
+    text-decoration: none;
+    padding: 0 5px;
+}
+table td a:hover {
+    opacity: 0.7;
+}
+.sap-icons{
+    text-align: end;
+}
+
+.filter-box1 {
+    display: flex;
+    margin: 50px 50px 20px 50px;
+    justify-content: space-between;
+}
+.filter-box1 button {
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 1px solid var(--primary);
+    background-color: white;
+    color: var(--primary);
+    font-size: 16px;
+
+}
+
+
+.filter-box {
+    display: flex;
+    margin: 50px 50px 20px 50px;
+    justify-content: space-between;
+}
+.filter-box button {
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 1px solid var(--primary);
+    background-color: white;
+    color: var(--primary);
+    font-size: 16px;
+}
+.filter-box button:hover, .filter-box1 button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.filter-box div:first-child {
+    display: flex;
+    align-items: flex-end;
+}
+.filter-box div:first-child input {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    font-size: 16px;
+    padding: 5px 10px;
+    margin: 0 30px 0 10px;
+}
+.pagination {
+    text-align: center;
+    color: gray;
+    margin: 20px 0 0 0;
+}
+footer {
+    background-color: lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    font-size: 13px;
+}
+.table-sum {
+    text-align: right;
+    margin: 0 50px 20px 50px;
+}
+.table-sum #income, #outcome {
+    font-size: 15px;
+    margin: 0;
+}
+.table-sum #total {
+    font-size: 17px;
+    margin: 0;
+}
+.add_account_button i:hover {
+    cursor: pointer;
+    color: #bebebe;
+}
+.login-box {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../images/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.login {
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 40%;
+}
+.login h1 {
+    padding: 0;
+    font-size: 40px;
+    margin-bottom: 50px;
+}
+.login button {
+    border: 1px solid var(--primary);
+    background-color: white;
+    font-size: 20px;
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 20px;
+}
+.login button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.login a {
+    color: #777;
+}
+.login a:hover {
+    opacity: 0.7;
+}
+.modal-box {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    overflow: scroll;
+}
+.modal {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    width: 40%;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    /*max-height: 90%;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 550px;
+}
+.modal p {
+    font-size: 18px;
+}
+.close-modal {
+    color: #929292;
+    position: absolute;
+    font-size: 30px;
+    font-weight: bold;
+    top: 10px;
+    right: 15px;
+}
+.close-modal:hover,
+.close-modal:focus {
+    opacity: 0.7;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal button{
+    border: 1px solid var(--primary);
+    background-color: white;
+    font-size: 18px;
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 20px;
+}
+.modal button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.modal h2 {
+    font-size: 30px;
+}
+#set-pass-modal .modal h2 {
+    margin-bottom: 0;
+}
+#set-pass-modal .modal p {
+    font-size: 20px;
+    margin-bottom: 50px;
+}
+.login-box .modal-box {
+    background-color: transparent;
+    display: flex;
+}
+.login-box .modal-box .close-modal {
+    display: none;
+}
+.radio-buttons-box {
+    width: 70%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+    align-items: center;
+}
+.radio-buttons-box div {
+    display: flex;
+    flex-direction: row;
+}
+.radio-buttons-box input {
+    width: auto;
+    margin-left: 10px;
+}
+.radio-buttons-box label {
+    font-size: 20px;
+    color: black;
+}
+#operation-modal .modal{
+    align-items: flex-start;
+}
+#operation-modal .modal h2, button{
+    align-self: center;
+}
+#create-operation-modal .modal h2{
+    align-self: center;
+}
+.expense_opt, .lending_opt, .edit_lending_opt{
+    display: none;
+}
+#check-operation-modal .modal p{
+    font-size: 25px;
+    text-align: center;
+}
+.modal div .cancel{
+    border-color: red;
+    color: red;
+}
+#delete-operation-modal .modal p{
+    font-size: 25px;
+    text-align: center;
+}
+select {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background-color: white;
+    font-size: 18px;
+    padding: 5px 40px 0 0;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("../images/caret-down.svg");
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 8px) center;
+}
+select:focus{
+    outline: none;
+    border-bottom: 2px solid var(--secondary);
+}
+select:hover {
+    cursor: pointer;
+}
+form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+#logout-button {
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 16px;
+    border: none;
+}
+#logout-button:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+.error-box {
+    width: 70%;
+}
+.error-box p {
+    margin: 0;
+    color: red;
+    font-size: 14px;
+}
+.input-box {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.error_div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 40%;
+}
+.error_div span{
+    color: var(--primary);
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bold;
+}
+.align-right {
+    text-align: right;
+    padding-right: 40px;
+}
+.w-100 {
+    width: 100px;
+}
+input {
+    padding: 5px 0;
+    font-size: 20px;
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    width: 100%;
+    cursor: text;
+}
+input:focus{
+    outline: none;
+    border-bottom: 2px solid var(--secondary);
+}
+.field {
+    display: flex;
+    flex-flow: column-reverse;
+    width: 70%;
+    margin-bottom: 5px;
+}
+label, input {
+    transition: all 0.4s;
+    touch-action: manipulation;
+}
+label {
+    font-size: 16px;
+    color: var(--primary);
+}
+
+.pagination ul li{
+    display: inline;
+    margin: 0px 5px;
+    padding-inline-start: 0px;
+    font-weight: 600;
+}
+a{
+    color: #1e1e1e;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:link {
+    color: var(--primary);
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: var(--primary);
+    background-color: transparent;
+    text-decoration: none;
+}
+#operations-export {
+    margin-left: 5px;
+}
+.main_info {
+    margin-top: 20px;
+}
+.operation-detail:hover, .operation-check:hover, .operation-edit:hover, .operation-delete:hover, .report-delete:hover, .operation-repayment:hover{
+    cursor: pointer;
+    background: transparent;
+}
+.operation-detail, .operation-check, .operation-edit, .operation-delete, .report-delete, .operation-repayment{
+    border: none;
+    background: transparent;
+}
+.tooltip {
+    display: inline-block;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: white;
+    border: solid var(--primary) 1px;
+    font-weight: bold;
+    color: var(--primary);
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.edit_type_category{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    padding: 5px 0;
+    font-size: 20px;
+    border: none;
+}
+.edit_type_category div{
+    margin-right: 50px;
+}
+#operation-modal .modal{
+    width: fit-content;
+    min-width: 20%;
+}
+.detail_div{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    padding: 5px 0;
+    font-size: 20px;
+    border: none;
+    flex-wrap: nowrap;
+}
+.detail_div div{
+    margin-right: 50px;
+    white-space: nowrap;
+}
+.lending_detail_div{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    padding: 5px 0;
+    font-size: 20px;
+    border: none;
+    flex-wrap: nowrap;
+}
+.lending_detail_div div{
+    margin-right: 50px;
+    white-space: nowrap;
+}
+#lending_detail{
+    color: var(--primary);
+    font-size: 22px;
+    margin: 0;
+}
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid var(--primary);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#loader-modal .modal{
+    min-width: fit-content;
+    width: fit-content;
+}
+.show-pass {
+    position: absolute;
+    top: 20px;
+    font-size: 22px;
+    right: 10px;
+    cursor: pointer;
+}
+#login-pass {
+    padding-right: 40px;
+    width: calc(100% - 40px);
+    box-sizing: content-box;
+}
+#change-pass-old {
+    padding-right: 40px;
+    width: calc(100% - 40px);
+    box-sizing: content-box;
+}
+#change-pass-new1 {
+    padding-right: 40px;
+    width: calc(100% - 40px);
+    box-sizing: content-box;
+}
+#change-pass-new2 {
+    padding-right: 40px;
+    width: calc(100% - 40px);
+    box-sizing: content-box;
+}
