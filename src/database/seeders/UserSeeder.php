@@ -10,7 +10,7 @@ class UserSeeder extends Seeder
 {
     /**
      * The number of random users to create.
-     * 
+     *
      * @var int
      */
     private static int $userCount = 10;
@@ -22,7 +22,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::firstOrCreate([ 'email' => 'a@b.c' ]);
+        User::firstOrCreate(
+            ['email' => 'a@b.c'],
+            ['password' => Hash::make('password')],
+            ['user_type' => 2]
+        );
 
         User::factory()->count($this::$userCount)->create();
     }
