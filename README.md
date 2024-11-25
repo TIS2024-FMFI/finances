@@ -76,7 +76,9 @@ Run the migrations to set up the database structure:
 php artisan migrate
 ```
 
-###(Optional) Step 7: Seed the Database
+### Step 7: Ensure that databases "users" and "finances" are created in our phpMyAdmin
+
+###(Optional) Step 8: Seed the Database
 If you want to seed the database with sample data, run:
 ```bash
 php artisan db:seed
@@ -95,7 +97,7 @@ $this->call([
 ]);
 ```
 
-### Step 8: Start the Server
+### Step 9: Start the Server
 Start the development server:
 ```bash
 php artisan serve
