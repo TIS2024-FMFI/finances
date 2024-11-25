@@ -21,9 +21,9 @@ class AccountsOverviewController extends Controller
      */
     public function admin_show()
     {
-        $users = Auth::user()->is_admin ? User::whereNotIn('id', [Auth::user()->id])->get() : null;
+        $users = Auth::user()->user_type == 2 ? User::whereNotIn('id', [Auth::user()->id])->get() : null;
         // Check if the authenticated user is an admin
-        $accounts = Auth::user()->is_admin ? Account::all() : Auth::user()->accounts;
+        $accounts = Auth::user()->user_type == 2 ? Account::all() : Auth::user()->accounts;
 
         // Return the view with accounts data
         return view('admin.index', ['accounts' => $accounts,'users' => $users]);

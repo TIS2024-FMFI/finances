@@ -6,6 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    /**
+     * The name of the database connection.
+     *
+     * @var string
+     */
+    protected $connection = 'db2'; // Replace with your specific connection name
+
+
+
     /**
      * Run the migrations.
      *
@@ -18,7 +28,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password')->default(Hash::make('password'));
             $table->boolean('password_change_required')->default(true);
-            $table->boolean('is_admin')->default(false);
+            $table->boolean('user_type')->default(0);
         });
     }
 

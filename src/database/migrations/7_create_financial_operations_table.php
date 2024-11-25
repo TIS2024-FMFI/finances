@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('subject');
             $table->unsignedDecimal('sum',10,2);
             $table->string('attachment')->unique()->nullable();
+            $table->smallInteger('status')->default(0);
+            $table->unsignedBigInteger('lending_id');
+            $table->foreign('lending_id')->references("id")->on("lendings")->cascadeOnDelete();
+
         });
     }
 

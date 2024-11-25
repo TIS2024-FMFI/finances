@@ -45,7 +45,7 @@ class CreateOperationController extends GeneralOperationController
     public function getFormData(Account $account)
     {
         // Check if the authenticated user is an admin
-        if (Auth::user()->is_admin) {
+        if (Auth::user()->user_type == 2) {
             // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
             return [
                 'operation_types' => OperationType::userAssignable()->get(),

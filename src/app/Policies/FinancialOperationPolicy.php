@@ -29,7 +29,7 @@
         public function view(User $user, FinancialOperation $financialOperation)
         {
             // Grant access to admin users for any financial operation.
-            if ($user->is_admin) {
+            if ($user->user_type == 2) {
                 return true;
             }
 
@@ -53,7 +53,7 @@
         public function create(User $user, Account $account)
         {
             // Grant access to admin users for any financial operation.
-            if ($user->is_admin) {
+            if ($user->user_type == 2) {
                 return true;
             }
             return $user->accounts->contains($account);
@@ -71,7 +71,7 @@
          */
         public function createRepayment(User $user, Lending $lending)
         {// Grant access to admin users for any financial operation.
-            if ($user->is_admin) {
+            if ($user->user_type == 2) {
                 return true;
             }
 
@@ -91,7 +91,7 @@
         public function update(User $user, FinancialOperation $financialOperation)
         {
             // Grant access to admin users for any financial operation.
-            if ($user->is_admin) {
+            if ($user->user_type == 2) {
                 return true;
             }
             return $user->id === $financialOperation->user()->id;
@@ -110,7 +110,7 @@
         public function delete(User $user, FinancialOperation $financialOperation)
         {
             // Grant access to admin users for any financial operation.
-            if ($user->is_admin) {
+            if ($user->user_type == 2) {
                 return true;
             }
             //DB::enableQueryLog();

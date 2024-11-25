@@ -38,7 +38,7 @@ class CreateAccountController
 
         if (! $user->accounts->contains($account))
             $user->accounts()->attach($account, ['account_title' => $request->validated('title')]);
-        $admins = User::where('is_admin',1);
+        $admins = User::where('user_type == 2',1);
         foreach ($admins as $admin){
             if (! $admin->accounts->contains($account))
                 $admin->accounts()->attach($account, ['account_title' => $request->validated('title')]);
@@ -62,7 +62,7 @@ class CreateAccountController
 
         if (! $user->accounts->contains($account))
             $user->accounts()->attach($account, ['account_title' => $request->validated('title')]);
-        $admins = User::where('is_admin',1);
+        $admins = User::where('user_type == 2',1);
         foreach ($admins as $admin){
             if (! $admin->accounts->contains($account))
                 $admin->accounts()->attach($account, ['account_title' => $request->validated('title')]);

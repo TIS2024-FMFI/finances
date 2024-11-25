@@ -16,6 +16,11 @@ class User extends Authenticatable
 {
     use HasFactory;
 
+    protected $table = 'users';
+    protected $connection = 'db2';
+
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +29,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
-        'is_admin',
+        'user_type',
     ];
 
     /**
@@ -70,6 +75,7 @@ class User extends Authenticatable
     public function accounts()
     {
         return $this->belongsToMany(Account::class, 'account_user')->withPivot('id', 'account_title');
+
     }
 
 

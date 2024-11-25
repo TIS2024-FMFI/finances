@@ -25,7 +25,7 @@ class AccountPolicy
     public function view(User $user, Account $account)
     {
         // Grant access to any account for admin users, acknowledging their elevated privileges.
-        if ($user->is_admin) {
+        if ($user->user_type == 2) {
             return true;
         }
 
@@ -51,7 +51,7 @@ class AccountPolicy
     public function update(User $user, Account $account)
     {
         // Grant permission to update any account for admin users.
-        if ($user->is_admin) {
+        if ($user->user_type == 2) {
             return true;
         }
 
@@ -76,7 +76,7 @@ class AccountPolicy
     public function delete(User $user, Account $account)
     {
         // Grant permission to delete any account for admin users.
-        if ($user->is_admin) {
+        if ($user->user_type == 2) {
             return true;
         }
 
