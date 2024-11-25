@@ -13,10 +13,10 @@
     <script src={{ asset('js/main.js') }} rel="stylesheet"></script>
     <title>BudgetMaster</title>
 </head>
-<body data-is-admin="{{ Auth::user()->is_admin ? 'true' : 'false' }}">
+<body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
 <nav>
     <div>
-        <a @if(auth()->user()->is_admin)
+        <a @if(auth()->user()->user_type == 2)
                href={{ route('admin_home') }}
                     @else
                        href={{ route('home') }}

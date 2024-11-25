@@ -43,7 +43,7 @@ class ReportsOverviewController extends Controller
         $to = $request->getValidatedToDateOrMax();
 
         // Admin users can view all reports within the specified date range.
-        if (auth()->user()->is_admin) {
+        if (auth()->user()->user_type == 2) {
             $reports = SapReport::where('account_id', $account->id)
                 ->whereBetween('exported_or_uploaded_on', [$from, $to])
                 ->orderBy('exported_or_uploaded_on', 'desc')
@@ -70,7 +70,7 @@ class ReportsOverviewController extends Controller
         $to = $request->getValidatedToDateOrMax();
         $user = null;
         // Admin users can view all reports within the specified date range.
-        if (auth()->user()->is_admin) {
+        if (auth()->user()->user_type == 2) {
             $reports = SapReport::where('account_id', $account->id)
                 ->whereBetween('exported_or_uploaded_on', [$from, $to])
                 ->orderBy('exported_or_uploaded_on', 'desc')
@@ -98,7 +98,7 @@ class ReportsOverviewController extends Controller
         $to = $request->getValidatedToDateOrMax();
 
         // Admin users can view all reports within the specified date range.
-        if (auth()->user()->is_admin) {
+        if (auth()->user()->user_type == 2) {
             $reports = SapReport::where('account_id', $account->id)
                 ->whereBetween('exported_or_uploaded_on', [$from, $to])
                 ->orderBy('exported_or_uploaded_on', 'desc')

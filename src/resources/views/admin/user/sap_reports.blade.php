@@ -7,7 +7,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
 <div class="flex-between">
     <div class="main_info">
-        <a @if(auth()->user()->is_admin)
+        <a @if(auth()->user()->user_type == 2)
                href={{ route('admin_home') }}
            @else
             href={{ route('home') }}

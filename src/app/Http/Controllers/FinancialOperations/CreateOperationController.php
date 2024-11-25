@@ -45,7 +45,7 @@ class CreateOperationController extends GeneralOperationController
     public function getFormData(Account $account)
     {
         // Check if the authenticated user is an admin
-        if (Auth::user()->is_admin) {
+        if (Auth::user()->user_type == 2) {
             // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
             return [
                 'operation_types' => OperationType::userAssignable()->get(),
@@ -268,7 +268,7 @@ class CreateOperationController extends GeneralOperationController
     private function createOperationRecord(Account $account, array $data, string|null $attachment)
     {
         unset($data['expected_date_of_return']);
-        unset($data['previous_lending_id']);
+        unset($data['']);
         DB::enableQueryLog();
         $currentUser = Auth::user();
         // Identifikujte, či operáciu vykonáva admin alebo bežný užívateľ
@@ -289,7 +289,7 @@ class CreateOperationController extends GeneralOperationController
     private function createOperationRecordAdmin(User $user, Account $account, array $data, string|null $attachment)
     {
         unset($data['expected_date_of_return']);
-        unset($data['previous_lending_id']);
+        unset($data['']);
         DB::enableQueryLog();
 
         Log::debug($user);

@@ -52,7 +52,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if (Auth::user()->is_admin) {
+            if (Auth::user()->user_type == 2) {
                 return redirect(route('admin_home'));
             } else {
                 return redirect(route('home'));

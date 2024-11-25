@@ -19,6 +19,9 @@ class Account extends Model
 {
     use HasFactory;
 
+    protected $connection = 'db1';
+    protected $table = 'accounts';
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -40,7 +43,9 @@ class Account extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'account_user')->withPivot('id', 'account_title');
+        return $this
+            ->belongsToMany(User::class, env('DB1_NAME').'.account_user')
+            ->withPivot('id', 'account_title');
     }
 
     /**
@@ -164,7 +169,7 @@ class Account extends Model
     public function userOperationsBetween(User $user, Carbon $from, Carbon $to)
     {
         // Grant access to all operations within the account for admin users.
-        if ($user->is_admin) {
+        if ($user->user_type == 2) {
             return $this->operations()->whereBetween('date', [$from, $to]);
         }
 

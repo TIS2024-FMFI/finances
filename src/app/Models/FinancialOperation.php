@@ -8,11 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\DB;
-use App\Models\AccountUser;
-use App\Models\Account;
-use App\Models\User;
+
 
 
 class FinancialOperation extends Model
@@ -99,11 +96,11 @@ class FinancialOperation extends Model
     {
         return $query
             ->join('lendings', 'financial_operations.id','=','lendings.id')
-            ->whereRaw('previous_lending_id is null')
+            ->whereRaw(' is null')
             ->whereNotExists(function($query) {
                 $query->select(DB::raw(1))
                     ->fromRaw('lendings as repay')
-                    ->whereRaw('repay.previous_lending_id = financial_operations.id');
+                    ->whereRaw('repay. = financial_operations.id');
             });
     }
 
@@ -164,7 +161,7 @@ class FinancialOperation extends Model
 
     /**
      * Return true if the operation has an assiocated SAP operation
-     * 
+     *
      * @return bool
      */
     public function isChecked()

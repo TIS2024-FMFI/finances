@@ -7,7 +7,7 @@
     <h2>Pridať operáciu</h2>
 
     <form id="create-operation-form"
-          @if(auth()->user()->is_admin && isset($user))
+          @if(auth()->user()->user_type == 2 && isset($user))
             data-user-id="{{$user->id}}"
         @endif
 

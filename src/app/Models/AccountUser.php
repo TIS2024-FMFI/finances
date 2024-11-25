@@ -11,9 +11,11 @@ class AccountUser extends Model
 {
     use HasFactory;
 
+    protected $connection = 'db1'; // Primary database
+
     /**
      * The name of the table in the database.
-     * 
+     *
      * @var string
      */
     protected $table = 'account_user';
@@ -34,7 +36,7 @@ class AccountUser extends Model
 
     /**
      * Returns the user to which the record belongs to.
-     * 
+     *
      * @return BelongsTo
      */
     public function user()
@@ -44,7 +46,7 @@ class AccountUser extends Model
 
     /**
      * Returns the account to which the record belongs to.
-     * 
+     *
      * @return BelongsTo
      */
     public function account()
@@ -54,7 +56,7 @@ class AccountUser extends Model
 
     /**
      * Returns all financial operations that belong to this record.
-     * 
+     *
      * @return HasMany
      */
     public function financialOperations()
