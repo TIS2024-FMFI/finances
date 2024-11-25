@@ -106,3 +106,8 @@ Your application should now be accessible at:
 - http://localhost:8000 or http://localhost:8080.
 - Manage the database directly using phpMyAdmin at http://localhost/phpmyadmin.
 
+Default password for every user is "password"
+Defauld admin is:
+    email: "a@b.c"
+    passord: "password"
+
