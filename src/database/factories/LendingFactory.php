@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
-use Database\Seeders\AccountSeeder;
-use Database\Seeders\FinancialOperationSeeder;
-use Database\Seeders\OperationTypeSeeder;
+use App\Models\AccountUser;
+use App\Models\FinancialOperation;
+use App\Models\Lending;
+use App\Models\OperationType;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +21,18 @@ class LendingFactory extends Factory
      */
     public function definition()
     {
+
+        $user_host= AccountUser::all('id')->random()['id'];
+        $user_client = AccountUser::where('user_id', '!=', $user_host)->get('id')->random()['id'];
+
+        $usedOperationIds = Lending::pluck('operation_id')->toArray();
+        $operation = FinancialOperation::whereNotIn('id', $usedOperationIds)->inRandomOrder()->firstOrFail()->id;
+
         return [
-            'expected_date_of_return' => fake()->date
+            'expected_date_of_return' => fake()->date,
+            "host_id"=>$user_host,
+            "client_id"=>$user_client,
+            "operation_id"=>$operation
         ];
     }
 }

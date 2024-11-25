@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AccountUser;
+use App\Models\Lending;
 use App\Models\OperationType;
 //use Database\Seeders\AccountSeeder;
 //use Database\Seeders\OperationTypeSeeder;
@@ -22,6 +23,7 @@ class FinancialOperationFactory extends Factory
     {
         $accounts_users = AccountUser::all('id');
         $operationTypes = OperationType::where('lending', '=', false)->get('id');
+//        $lending = Lending::all()->get('id');
 
         return [
             'account_user_id' => $accounts_users->random()['id'],
@@ -30,7 +32,6 @@ class FinancialOperationFactory extends Factory
             'operation_type_id' => $operationTypes->random()['id'],
             'subject' => fake()->name,
             'sum' => fake()->randomFloat(2,1,1000),
-            'attachment' => fake()->unique()->filePath(),
         ];
     }
 }

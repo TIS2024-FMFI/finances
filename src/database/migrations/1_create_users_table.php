@@ -12,8 +12,6 @@ return new class extends Migration
      *
      * @var string
      */
-    protected $connection = 'db2'; // Replace with your specific connection name
-
 
 
     /**
@@ -23,7 +21,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::connection('db2')->create('users', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();
             $table->string('password')->default(Hash::make('password'));

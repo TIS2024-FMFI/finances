@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('lendings', function (Blueprint $table) {
             $table->id();
-            $table->foreign('id')->references('id')->on('financial_operations')->cascadeOnDelete();
             $table->date('expected_date_of_return')->nullable();
-            $table->unsignedBigInteger('lending_id');
+            $table->unsignedBigInteger('host_id');
             $table->foreign('host_id')->references('id')->on('account_user')->cascadeOnDelete();
-            $table->unsignedBigInteger('lending_id');
+            $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('account_user')->cascadeOnDelete();
+            $table->unsignedBigInteger('operation_id')->unique();
+            $table->foreign('operation_id')->references('id')->on('financial_operations')->cascadeOnDelete();
 
 
         });

@@ -61,7 +61,7 @@ class Lending extends Model
      */
     public static function findRepayment(int $loanId)
     {
-        return Lending::where('previous_lending_id', '=', $loanId)->first();
+        return Lending::where('id', '=', $loanId)->first();
     }
 
     /**
@@ -81,7 +81,7 @@ class Lending extends Model
      */
     public function repayment()
     {
-        return $this->hasOne(Lending::class, 'previous_lending_id', 'id');
+        return $this->hasOne(Lending::class, 'id', 'id');
     }
 
     /**
@@ -91,7 +91,7 @@ class Lending extends Model
      */
     public function loan()
     {
-        return $this->hasOne(FinancialOperation::class, 'id', 'previous_lending_id');
+        return $this->hasOne(FinancialOperation::class, 'id', 'id');
     }
 
     /**
