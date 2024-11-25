@@ -268,7 +268,7 @@ class CreateOperationController extends GeneralOperationController
     private function createOperationRecord(Account $account, array $data, string|null $attachment)
     {
         unset($data['expected_date_of_return']);
-        unset($data['previous_lending_id']);
+        unset($data['']);
         DB::enableQueryLog();
         $currentUser = Auth::user();
         // Identifikujte, či operáciu vykonáva admin alebo bežný užívateľ
@@ -289,7 +289,7 @@ class CreateOperationController extends GeneralOperationController
     private function createOperationRecordAdmin(User $user, Account $account, array $data, string|null $attachment)
     {
         unset($data['expected_date_of_return']);
-        unset($data['previous_lending_id']);
+        unset($data['']);
         DB::enableQueryLog();
 
         Log::debug($user);

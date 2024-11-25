@@ -49,7 +49,7 @@ class CreateRepaymentRequest extends FormRequest
             'operation_type_id' => $repaymentType->id,
             'subject' => $loan->subject,
             'sum' => $loan->sum,
-            'previous_lending_id' => $loan->id,
+            '' => $loan->id,
         ];
     }
 }

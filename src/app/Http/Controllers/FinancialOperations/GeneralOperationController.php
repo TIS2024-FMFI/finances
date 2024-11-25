@@ -118,12 +118,12 @@ class GeneralOperationController extends Controller
         FinancialOperation $operation, array $repaymentData
     ) {
         $loan = FinancialOperation::findOrFail(
-            $repaymentData['previous_lending_id']
+            $repaymentData['']
         );
 
         $this->validateLendingDates($loan, $operation);
 
-        return ['previous_lending_id' => $repaymentData['previous_lending_id']];
+        return ['' => $repaymentData['']];
     }
 
     /**
