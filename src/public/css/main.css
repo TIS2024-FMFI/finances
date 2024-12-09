@@ -389,12 +389,13 @@ footer {
     bottom: 0px;
     width: 100%;
     font-size: 13px;
+    padding: 10px 0;
 }
 
 .footer-custom{
     background-color:var(--primary);
     width: 100%;
-    padding: 10px;
+
     display: flex;
     justify-content: center;
 
@@ -402,6 +403,7 @@ footer {
 
 .footer-inner{
     width: 100%;
+
     max-width: var(--width-size);
     display: flex;
     justify-content: center;
