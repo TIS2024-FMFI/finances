@@ -351,7 +351,7 @@ $(document).ready(function(){
 
     $(".account_user_click").click(function(){
         var user_id = $(this).data("id");
-        window.location.href = root + '/user/'+ user_id +'/accounts';
+        window.location.href = root + '/overview/accounts/'+ user_id +'/operations';
     });
 
 
@@ -364,9 +364,14 @@ $(document).ready(function(){
 
     // Financial accounts -->
 
-    $(".account").click(function(){
+    $(".account_detail").click(function(){
         var account_id = $(this).data("id");
-        window.location.href = root + '/accounts/'+account_id+'/operations';
+        window.location.href = root + '/accounts/'+ account_id +'/operations';
+    });
+
+    $(".account_detail_admin").click(function(){
+        var account_id = $(this).data("id");
+        window.location.href = root + '/overview/accounts/'+ account_id +'/operations';
     });
 
     // Create financial account form -->

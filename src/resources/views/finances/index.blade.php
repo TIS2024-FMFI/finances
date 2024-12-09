@@ -1,10 +1,8 @@
 @include('common.navigation', ['open_change_password' => Auth::user()->password_change_required])
 
-<div>basic</div>
-
-<h1>Moje účty</h1>
 
 <table class="accounts_table">
+    <h1>Moje účty</h1>
     <thead>
     <tr>
         <th>SAP ID / Názov účtu</th>
@@ -27,13 +25,7 @@
                 <td style="color: {$color_of_balance};" class="align-right">{$account_balance}€</td>
                 <td class=" ">
                     <div class="account_manipulations align-right">
-                        <button data-id="{$account_id}" data-title="{$account_title}" data-sap="{$account_sap_id}" class="edit_account">
-                            <i class="bi bi-pencil" title="Upraviť účet"></i>
-                        </button>
-                        <button data-id="{$account_id}" class="delete_account">
-                            <i class="bi bi-trash3" title="Zmazať účet"></i>
-                        </button>
-                        <button data-id="{$account_id}" class="account ">
+                        <button data-id="{$account_id}" class="account_detail ">
                             <i  class="bi bi-info-circle" title="Detail účtu"></i>
                         </button>
 

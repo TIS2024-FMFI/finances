@@ -191,29 +191,17 @@ nav {
 .account_box div h2{
     margin-bottom: 0px;
 }
-.edit_account {
 
-    top: 10px;
-    right: 35px;
-    font-size: larger;
-}
-.delete_account {
-
-    top: 10px;
-    right: 10px;
-    font-size: larger;
-}
-.edit_account:hover, .delete_account:hover, .account:hover {
+.edit_account:hover, .delete_account:hover .account_detail:hover, .account_detail_admin:hover {
     cursor: pointer;
 }
 .operation_type:hover, .operation_type:hover {
     cursor: pointer;
 }
-.account {
+.account_detail, .account_detail_admin, .delete_account, .edit_account {
     top: 10px;
     right: 35px;
     font-size: larger;
-    margin-right: 5px;
 }
 
 .account_manipulations{

@@ -5,8 +5,6 @@ $from = filter_input(INPUT_GET, 'from', FILTER_SANITIZE_URL);
 $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 ?>
 
-<div>Basic</div>
-
 <div class="flex-between">
     <div class="main_info">
         <a @if(auth()->user()->user_type == 2)

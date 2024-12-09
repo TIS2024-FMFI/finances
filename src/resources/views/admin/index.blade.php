@@ -38,8 +38,6 @@
 //echo "</table>";
 //?>
 
-<div>admin</div>
-
 
 <table class="accounts_table">
     <div class='operations-name'>Všetky účty</div>
@@ -71,7 +69,7 @@
                         <button data-id="{$account_id}" class="delete_account">
                             <i class="bi bi-trash3" title="Zmazať účet"></i>
                         </button>
-                        <button data-id="{$account_id}" class="account ">
+                        <button data-id="{$account_id}" class="account_detail_admin ">
                             <i  class="bi bi-info-circle" title="Detail účtu"></i>
                         </button>
 
