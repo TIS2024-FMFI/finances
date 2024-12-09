@@ -1,35 +1,42 @@
 @include('common.navigation', ['open_change_password' => Auth::user()->password_change_required])
 
-<h1>Moje účty</h1>
-<div class="accounts_box">
 
+<table class="accounts_table">
+    <h1>Moje účty</h1>
+    <thead>
+    <tr>
+        <th>SAP ID / Názov účtu</th>
+        <th class="align-right">Zostatok</th>
+        <th class="align-right">Manipulácie</th>
+    </tr>
+    </thead>
+    <tbody>
     <?php
     foreach ($accounts as $account) {
         $account_balance = $account->getBalance();
         $account_id = $account->id;
         $account_sap_id = $account->sap_id;
         $account_title = $account->user->first()?->pivot?->account_title ?? 'Pomenuj ma';
-        $color_of_balance = 'red';
-        if($account_balance >= 0){
-            $color_of_balance = 'green';
-        }
+        $color_of_balance = $account_balance >= 0 ? 'green' : 'red';
+
         echo <<<EOL
-                <div class="account_box">
-                    <div data-id="$account_id" class="account">
-                        <h2>$account_title</h2>
-                        <p>$account_sap_id</p>
-                        <p>Zostatok na účte: <em style="color: $color_of_balance";>$account_balance €</em></p>
+            <tr>
+                <td>{$account_sap_id}</td>
+                <td style="color: {$color_of_balance};" class="align-right">{$account_balance}€</td>
+                <td class=" ">
+                    <div class="account_manipulations align-right">
+                        <button data-id="{$account_id}" class="account_detail ">
+                            <i  class="bi bi-info-circle" title="Detail účtu"></i>
+                        </button>
+
                     </div>
-                    <i data-id="$account_id" data-title="$account_title" data-sap="$account_sap_id" class="bi bi-pencil edit_account" title="Upraviť účet"></i>
-                    <i data-id="$account_id" class="bi bi-trash3 delete_account" title="Zmazať účet"></i>
-                </div>
-                EOL;
+
+                </td>
+            </tr>
+            EOL;
     }
     ?>
-
-    <div class="add_account_button">
-        <i class="bi bi-plus" title="Pridať účet"></i>
-    </div>
-</div>
+    </tbody>
+</table>
 
 @include('common.footer')

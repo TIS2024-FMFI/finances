@@ -1,6 +1,7 @@
 :root {
-    --primary: rgb(29, 123, 238);
-    --secondary: rgb(137, 181, 234);
+    --primary: rgb(146, 40, 43);
+    --secondary: rgb(115, 39, 38);
+    --width-size: 1536px;
 }
 * {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,7 +12,6 @@ html, body {
     min-height: 100vh;
 }
 h1 {
-    padding-left: 50px;
     font-weight: 100;
 }
 h2 {
@@ -20,21 +20,58 @@ h2 {
 nav {
     background-color: var(--primary);
     display: flex;
-    padding-left: 20px;
-    justify-content: space-between;
-    color: white;
+    justify-content: center;
+
 }
-nav div:first-child {
-    display: flex;
-    align-items: center;
-    font-size: 28px;
+
+.main-wrapper{
+    margin:  0 50px;
 }
-nav div:first-child a {
+
+.nav_first{
     margin: 0;
-    padding-left: 10px;
-    color: white;
+    align-items: center;
+    display: flex;
+
     text-decoration: none;
+    font-size: 28px;
+
 }
+.nav_first > a{
+    color: white!important;
+}
+
+.nav_width {
+    max-width: var(--width-size);
+    width: 100%;
+    display:flex;
+    justify-content: center;
+
+
+}
+
+.nav_wrapper{
+    padding: 0 50px;
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+}
+
+.info-box{
+    display: flex;
+    justify-content: space-between;
+}
+.table-sum-row{
+    display: flex;
+    justify-content: space-between;
+    min-width: 300px;
+    margin-bottom: 8px;
+}
+
+.table-sum-row > p{
+    margin: 0;
+}
+
 .bi{
     color: var(--primary);
 }
@@ -46,12 +83,22 @@ nav div:first-child a {
     margin-left: 5px;
 }
 .content {
-    padding-bottom: 30px;
+    padding-bottom: 70px;
+    display:flex;
+    width: 100%;
+    justify-content: center;
+
+}
+
+.content-inner{
+    max-width: var(--width-size);
+    width: 100%;
+
 }
 .dropbtn {
     background-color: var(--primary);
     color: white;
-    padding: 16px;
+    padding: 16px 0;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -70,12 +117,14 @@ nav div:first-child a {
     right: 0;
     border-radius: 0 0 0 15px;
     overflow: hidden;
+
 }
 .dropdown-content a {
-    color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    color:black!important;
+    font-size: 16px;
 }
 .dropdown-content a:last-child {
     border-radius: 0 0 0 15px;
@@ -92,6 +141,47 @@ nav div:first-child a {
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
+
+.account-info{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap:10px
+}
+
+.account-name{
+    color:white;
+    font-size: 24px;
+    background-color: var(--secondary);
+    padding: 20px 20px;
+    margin-top: 20px;
+    flex-grow: 1;
+
+
+}
+
+.account-name > p{
+    margin: 0;
+}
+
+.account-details{
+    color:white;
+    font-size: 24px;
+    background-color: var(--secondary);
+    padding: 20px 20px;
+    margin-top: 20px;
+    flex-grow: 1;
+}
+
+.account-details > p{
+    margin: 0;
+}
+
+.operations-name{
+    font-size: 32px;
+    margin: 20px 0;
+}
+
 .account_box {
     width: 27%;
     position: relative;
@@ -101,36 +191,36 @@ nav div:first-child a {
 .account_box div h2{
     margin-bottom: 0px;
 }
-.edit_account {
-    position: absolute;
-    top: 10px;
-    right: 35px;
-    font-size: larger;
-    margin-right: 5px;
-}
-.delete_account {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: larger;
-}
-.edit_account:hover, .delete_account:hover {
+
+.edit_account:hover, .delete_account:hover .account_detail:hover, .account_detail_admin:hover {
     cursor: pointer;
 }
 .operation_type:hover, .operation_type:hover {
     cursor: pointer;
 }
-.account {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    justify-content: center;
-    background-color: #f1f1f1;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border-radius: 15px;
+.account_detail, .account_detail_admin, .delete_account, .edit_account {
+    top: 10px;
+    right: 35px;
+    font-size: larger;
 }
+
+.account_manipulations{
+    display:flex;
+    gap:10px;
+    justify-content: right;
+    width: 100%!important;
+    padding-right: -20px!important;
+}
+
+.account_user_click{
+    top: 10px;
+    right: 35px;
+    font-size: larger;
+    margin-right: 5px;
+}
+
+
+
 .account_admin{
     width: 100%;
     display: flex;
@@ -154,18 +244,7 @@ nav div:first-child a {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     border-radius: 15px;
 }
-.account h2 {
-    text-align: center;
-    margin: 20px;
-}
-.account p {
-    text-align: center;
-    margin: 16px 20px;
-}
-.account:hover {
-    cursor: pointer;
-    background-color: #e8e8e8;
-}
+
 .add_account_button {
     width: 27%;
     display: flex;
@@ -226,7 +305,8 @@ input:checked + .slider:before {
 .flex-between {
     display: flex;
     justify-content: space-between;
-    margin: 0 50px;
+
+    /*width: 100%;*/
 }
 .flex-between h1 {
     padding-left: 0px;
@@ -245,19 +325,23 @@ input:checked + .slider:before {
 }
 table {
     width: -webkit-fill-available;
-    margin: 0 50px;
     background-color: #f1f1f1;
-    border-radius: 15px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border-collapse: collapse;
+    /*border-collapse: collapse;*/
 }
 .usersTable {
     width: -webkit-fill-available;
-    margin: 30px 50px;
+    margin: 30px 0;
     background-color: #f1f1f1;
-    border-radius: 15px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border-collapse: collapse;
+}
+
+.usersTable > th {
+    text-align: left;
+    padding: 15px 10px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 100;
 }
 
 table th {
@@ -267,12 +351,7 @@ table th {
     color: white;
     font-weight: 100;
 }
-table th:first-child {
-    border-radius: 15px 0 0 0;
-}
-table th:last-child {
-    border-radius: 0 15px 0 0;
-}
+
 table td {
     padding: 10px;
 }
@@ -280,7 +359,7 @@ table tr:nth-child(odd) {
     background-color: #e6e6e6;
 }
 table tr td:last-child {
-    width: 120px;
+    width: 200px;
     text-align: right;
 }
 table tr td:last-child .bi {
@@ -314,21 +393,34 @@ table td a:hover {
 
 }
 
-
 .filter-box {
     display: flex;
-    margin: 50px 50px 20px 50px;
+    margin: 20px 0;
     justify-content: space-between;
 }
-.filter-box button {
+
+
+.button-filter{
     padding: 10px 20px;
-    border-radius: 15px;
     border: 1px solid var(--primary);
     background-color: white;
     color: var(--primary);
     font-size: 16px;
 }
-.filter-box button:hover, .filter-box1 button:hover {
+
+.button-add {
+    padding: 2px 14px 6px 14px;
+    margin: 0;
+    border: 1px solid var(--primary);
+    background-color: white;
+    color: var(--primary);
+    font-size: 26px;
+    text-align: center;
+    display: inline-block;
+
+}
+
+.button-filter:hover, .button-add:hover{
     cursor: pointer;
     opacity: 0.7;
 }
@@ -346,7 +438,7 @@ table td a:hover {
 .pagination {
     text-align: center;
     color: gray;
-    margin: 20px 0 0 0;
+    margin: 20px 0;
 }
 footer {
     background-color: lightgrey;
@@ -358,10 +450,31 @@ footer {
     bottom: 0px;
     width: 100%;
     font-size: 13px;
+    padding: 10px 0;
 }
+
+.footer-custom{
+    background-color:var(--primary);
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+}
+
+.footer-inner{
+    width: 100%;
+
+    max-width: var(--width-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
 .table-sum {
     text-align: right;
-    margin: 0 50px 20px 50px;
+    margin: 20px 0;
 }
 .table-sum #income, #outcome {
     font-size: 15px;
@@ -609,8 +722,10 @@ form {
 }
 .align-right {
     text-align: right;
-    padding-right: 40px;
+    padding-right: 10px;
 }
+
+
 .w-100 {
     width: 100px;
 }
@@ -667,6 +782,8 @@ a:visited {
 }
 .main_info {
     margin-top: 20px;
+    width: 100%;
+
 }
 .operation-detail:hover, .operation-check:hover, .operation-edit:hover, .operation-delete:hover, .report-delete:hover, .operation-repayment:hover{
     cursor: pointer;

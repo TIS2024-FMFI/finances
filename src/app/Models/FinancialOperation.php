@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 
-
-
 class FinancialOperation extends Model
 {
     use HasFactory;
@@ -167,6 +165,22 @@ class FinancialOperation extends Model
     public function isChecked()
     {
         return ! is_null($this->sapOperation);
+    }
+
+    /**
+     * Return status of the operation - waiting/refused/accepted
+     *
+     * @return bool
+     */
+    public function stringStatus()
+    {
+        if ($this->status == 0){
+            return "Waiting";
+        }else if ($this->status == 1){
+            return "Approved";
+        }else{
+            return "Refused";
+        }
     }
 
     /**

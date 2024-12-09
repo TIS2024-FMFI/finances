@@ -349,6 +349,12 @@ $(document).ready(function(){
         $("#edit-account-sap-id").val(account_sap_id);
     });
 
+    $(".account_user_click").click(function(){
+        var user_id = $(this).data("id");
+        window.location.href = root + '/overview/accounts/'+ user_id +'/operations';
+    });
+
+
     $(".delete_account").click(function() {
         let account_id = $(this).data("id");
         $("#delete-account-modal").css("display", "flex");
@@ -358,9 +364,14 @@ $(document).ready(function(){
 
     // Financial accounts -->
 
-    $(".account").click(function(){
+    $(".account_detail").click(function(){
         var account_id = $(this).data("id");
-        window.location.href = root + '/accounts/'+account_id+'/operations';
+        window.location.href = root + '/accounts/'+ account_id +'/operations';
+    });
+
+    $(".account_detail_admin").click(function(){
+        var account_id = $(this).data("id");
+        window.location.href = root + '/overview/accounts/'+ account_id +'/operations';
     });
 
     // Create financial account form -->
@@ -2476,9 +2487,9 @@ $(".account_admin").click(function(){
 
 })
 
-function admin_user_overview(row) {
-    var user_id = row.getAttribute('data-id');
-    window.location.href = root + '/user/'+ user_id +'/accounts';
-}
+
+
+
+
 
 
