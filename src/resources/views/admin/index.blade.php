@@ -28,14 +28,14 @@ foreach ($accounts as $account) {
         $color_of_balance = 'green';
     }
     echo <<<EOL
-                <div class="account_box">
-                    <div data-id="$account_id" class="overview_account">
-                        <p>$account_sap_id</p>
-                        <p>Zostatok na účte: <em style="color: $color_of_balance";>$account_balance €</em></p>
-                    </div>
+        <div class="account_box">
+            <div data-id="$account_id" class="overview_account">
+                <p>$account_sap_id</p>
+                <p>Zostatok na účte: <em style="color: $color_of_balance";>$account_balance €</em></p>
+            </div>
 
-                </div>
-                EOL;
+        </div>
+        EOL;
 }
 ?>
 

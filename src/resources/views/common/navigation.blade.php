@@ -14,27 +14,38 @@
     <title>BudgetMaster</title>
 </head>
 <body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
+
 <nav>
-    <div>
-        <a @if(auth()->user()->user_type == 2)
-               href={{ route('admin_home') }}
+    <div class="nav_width">
+        <div class="nav_wrapper">
+            <div class="nav_first">
+                <a @if(auth()->user()->user_type == 2)
+                    href={{ route('admin_home') }}
                     @else
-                       href={{ route('home') }}
-            @endif><i class="bi bi-credit-card-fill"></i> BudgetMaster</a>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn">{{ Auth::User()->email }}<i class="bi bi-caret-down-fill"></i></button>
-        <div class="dropdown-content">
-            <a class="change-pass">Zmeniť heslo</a>
-            <a class="create-user">Vytvoriť používateľa</a>
-            <form method="POST" action={{ route('logout') }}>
-                @csrf
-                <button type="submit" id="logout-button">Odhlásiť sa</button>
-            </form>
+                    href={{ route('home') }}
+                    @endif><i class="bi bi-credit-card-fill"></i> Finances</a>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">{{ Auth::User()->email }}<i class="bi bi-caret-down-fill"></i></button>
+                <div class="dropdown-content">
+                    <a class="change-pass">Zmeniť heslo</a>
+                    <a class="create-user">Vytvoriť používateľa</a>
+                    <form method="POST" action={{ route('logout') }}>
+                    @csrf
+                    <button type="submit" id="logout-button">Odhlásiť sa</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
 </nav>
 <div class="content">
+    <div class="content-inner">
+
+
+
+
 
 @include('auth.modals.create_user')
 
