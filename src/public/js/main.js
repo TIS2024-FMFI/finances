@@ -349,6 +349,12 @@ $(document).ready(function(){
         $("#edit-account-sap-id").val(account_sap_id);
     });
 
+    $(".account_user_click").click(function(){
+        var user_id = $(this).data("id");
+        window.location.href = root + '/user/'+ user_id +'/accounts';
+    });
+
+
     $(".delete_account").click(function() {
         let account_id = $(this).data("id");
         $("#delete-account-modal").css("display", "flex");
@@ -2476,9 +2482,9 @@ $(".account_admin").click(function(){
 
 })
 
-function admin_user_overview(row) {
-    var user_id = row.getAttribute('data-id');
-    window.location.href = root + '/user/'+ user_id +'/accounts';
-}
+
+
+
+
 
 

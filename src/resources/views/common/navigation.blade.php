@@ -29,7 +29,7 @@
                 <button class="dropbtn">{{ Auth::User()->email }}<i class="bi bi-caret-down-fill"></i></button>
                 <div class="dropdown-content">
                     <a class="change-pass">Zmeniť heslo</a>
-                    <a class="create-user">Vytvoriť používateľa</a>
+<!--                    <a class="create-user">Vytvoriť používateľa</a>-->
                     <form method="POST" action={{ route('logout') }}>
                     @csrf
                     <button type="submit" id="logout-button">Odhlásiť sa</button>
@@ -42,6 +42,7 @@
 </nav>
 <div class="content">
     <div class="content-inner">
+        <div class="main-wrapper">
 
 
 
