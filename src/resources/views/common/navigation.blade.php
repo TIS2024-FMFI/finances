@@ -28,7 +28,6 @@
             <div class="dropdown">
                 <button class="dropbtn">{{ Auth::User()->email }}<i class="bi bi-caret-down-fill"></i></button>
                 <div class="dropdown-content">
-                    <a class="change-pass">Zmeniť heslo</a>
 <!--                    <a class="create-user">Vytvoriť používateľa</a>-->
                     <form method="POST" action={{ route('logout') }}>
                     @csrf
@@ -48,13 +47,6 @@
 
 
 
-@include('auth.modals.create_user')
-
-@if(isset($open_change_password))
-    @include('user_account_management.modals.change_password', ['open' => $open_change_password])
-@else
-    @include('user_account_management.modals.change_password')
-@endif
 
 @include('finances.modals.operation')
 @include('finances.modals.create_operation')
