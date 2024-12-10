@@ -22,18 +22,13 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
-     * Show the Login view if there is already a registered user.
-     * Otherwise, show the First User view.
+     * Show the Login view 
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      * the view that will be shown
      */
     public function show()
     {
-        if (!User::first()) {
-            return view('auth.first_user');
-        }
-
         return view('auth.login');
     }
 
