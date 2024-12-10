@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @include('common.app_root_script')
-        <script src={{ asset('js/main.js') }} rel="stylesheet"></script>
+        <script src={{ asset('js/login.js') }} rel="stylesheet"></script>
         <title>Prihlásenie</title>
     </head>
     <body>
@@ -59,7 +59,7 @@
                     </div>
 
                     <button type="submit">Prihlásiť sa</button>
-                    <a href={{ route('forgot-password') }}>Zabudli ste heslo?</a>
+                    <a href="https://pritomnost.dai.fmph.uniba.sk">Zabudli ste heslo?</a>
 
                 </form>
             </div>

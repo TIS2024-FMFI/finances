@@ -1,0 +1,67 @@
+.login-box {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../images/dai-header.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.login {
+    background-color: rgba(146, 40, 43, 0.5);    
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 0px 15px 0px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 40%;
+
+}
+.login h1 {
+    padding: 0;
+    font-size: 40px;
+    margin-bottom: 50px;
+    color: white;
+    font-weight: bold;
+}
+.login button {
+    border: 1px solid var(--secondary);
+    background-color: white;
+    font-size: 20px;
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.login button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+.login a {
+    color: rgba(255, 255, 255, 0.8)!important;  
+}
+.login a:hover {
+    color: white!important;
+    opacity: 1;
+}
+.show-pass {
+    position: absolute;
+    top: 20px;
+    font-size: 22px;
+    right: 10px;
+    cursor: pointer;
+}
+#login-pass {
+    padding-right: 40px;
+    width: calc(100% - 40px);
+    box-sizing: content-box;
+}
+
+.login .field label {
+    color: white!important;
+}
