@@ -16,28 +16,37 @@
 <body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
 
 <nav>
-    <div class="nav_width">
-        <div class="nav_wrapper">
-            <div class="nav_first">
-                <a @if(auth()->user()->user_type == 2)
-                    href={{ route('admin_home') }}
-                    @else
-                    href={{ route('home') }}
-                    @endif><i class="bi bi-credit-card-fill"></i> Finances</a>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">{{ Auth::User()->email }}<i class="bi bi-caret-down-fill"></i></button>
-                <div class="dropdown-content">
-<!--                    <a class="create-user">Vytvoriť používateľa</a>-->
-                    <form method="POST" action={{ route('logout') }}>
-                    @csrf
-                    <button type="submit" id="logout-button">Odhlásiť sa</button>
-                    </form>
+    <div class="navbar">
+        <div class="top-bar">
+            <div class="content-inner">
+                <span id="top-bar-email">
+                    {{ Auth::User()->email }}
+                </span>
+                <div class="dropdown">
+                    <button class="dropbtn"><i class="bi bi-caret-down-fill fs-8"></i></button>
+                    <div class="dropdown-content">
+                       <a>Placeholder</a>
+                    </div>
                 </div>
+                <form method="POST" action={{ route('logout') }}>
+                    @csrf
+                    <button type="submit" id="logout-button"><i class="bi bi-box-arrow-right fs-8"></i></button>
+                </form>
             </div>
         </div>
+        <a @if(auth()->user()->user_type == 2)
+                        href={{ route('admin_home') }}
+                        @else
+                        href={{ route('home') }}
+                        @endif>
+            <div class="content-inner">
+                <div class="logo">
+                    <h1>FINANCES</h1>
+                    <p>KATEDRA APLIKOVANEJ INFORMATIKY</p>
+                </div>
+            </div>
+        </a>
     </div>
-
 </nav>
 <div class="content">
     <div class="content-inner">

@@ -1,4 +1,5 @@
 @import url("login.css");
+@import url("navbar.css");
 
 
 :root {
@@ -20,45 +21,12 @@ h1 {
 h2 {
     font-weight: 100;
 }
-nav {
-    background-color: var(--primary);
-    display: flex;
-    justify-content: center;
-
-}
 
 .main-wrapper{
     margin:  0 50px;
 }
 
-.nav_first{
-    margin: 0;
-    align-items: center;
-    display: flex;
 
-    text-decoration: none;
-    font-size: 28px;
-
-}
-.nav_first > a{
-    color: white!important;
-}
-
-.nav_width {
-    max-width: var(--width-size);
-    width: 100%;
-    display:flex;
-    justify-content: center;
-
-
-}
-
-.nav_wrapper{
-    padding: 0 50px;
-    width: 100%;
-    display:flex;
-    justify-content: space-between;
-}
 
 .info-box{
     display: flex;
@@ -98,47 +66,7 @@ nav {
     width: 100%;
 
 }
-.dropbtn {
-    background-color: var(--primary);
-    color: white;
-    padding: 16px 0;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    right: 0;
-    border-radius: 0 0 0 15px;
-    overflow: hidden;
 
-}
-.dropdown-content a {
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    color:black!important;
-    font-size: 16px;
-}
-.dropdown-content a:last-child {
-    border-radius: 0 0 0 15px;
-}
-.dropdown-content a:hover {
-    background-color: #ddd;
-    cursor: pointer;
-}
-.dropdown:hover .dropdown-content {
-    display: block;
-}
 .accounts_box {
     display: flex;
     flex-wrap: wrap;
@@ -634,17 +562,6 @@ form {
     width: 100%;
     flex-direction: column;
     align-items: center;
-}
-#logout-button {
-    width: 100%;
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 16px;
-    border: none;
-}
-#logout-button:hover {
-    background-color: #ddd;
-    cursor: pointer;
 }
 .error-box {
     width: 70%;
