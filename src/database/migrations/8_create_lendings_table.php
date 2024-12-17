@@ -16,12 +16,11 @@ return new class extends Migration
         Schema::create('lendings', function (Blueprint $table) {
             $table->id();
             $table->date('expected_date_of_return')->nullable();
+            $table->smallInteger('status');
             $table->unsignedBigInteger('host_id');
             $table->foreign('host_id')->references('id')->on('account_user')->cascadeOnDelete();
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('account_user')->cascadeOnDelete();
-            $table->unsignedBigInteger('operation_id')->unique();
-            $table->foreign('operation_id')->references('id')->on('financial_operations')->cascadeOnDelete();
 
 
         });
