@@ -116,6 +116,17 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     </div>
 </div>
 
+<div class="search-container">
+    <form method="GET" action="{{ url()->current() }}">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search" 
+            value="{{ request('search') }}" 
+        >
+        <button type="submit" class="button-search">🔍</button>
+    </form>
+</div>
 
 <div class="filter-box">
     <div>
@@ -142,8 +153,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 @endif
 
 <table>
-    <tr>
-        <th>Používateľ</th>
+    <tr> <th>Používateľ</th>
         <th>Názov</th>
         <th>Dátum</th>
         <th>Typ</th>
@@ -154,7 +164,6 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     </tr>
 
     @foreach ($operations as $key=>$operation)
-
     <tr>
         <!--            <td>{{ ($operations->currentPage() - 1) * $operations->perPage() + $key + 1}}.</td>-->
         <td>{{ $operation->user()->email }}</td>
@@ -213,6 +222,18 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 </table>
 
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
+
+<div class="search-container1">
+    <form method="GET" action="{{ url()->current() }}">
+        <input 
+            type="text" 
+            name="searchS" 
+            placeholder="Search" 
+            value="{{ request('searchS') }}" 
+        >
+        <button type="submit" class="button-search">🔍</button>
+    </form>
+</div>
 
 <table>
     <tr>

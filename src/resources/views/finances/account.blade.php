@@ -72,6 +72,18 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     </div>
 </div>
 
+<div class="search-container">
+    <form method="GET" action="{{ url()->current() }}">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search" 
+            value="{{ request('search') }}" 
+        >
+        <button type="submit" class="button-search">🔍</button>
+    </form>
+</div>
+
 <div class="filter-box">
     <div>
         <label>Od:</label>

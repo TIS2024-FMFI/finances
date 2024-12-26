@@ -45,8 +45,16 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
-        $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
-        ->paginate($this::$resultsPerPage)->withQueryString();
+
+        $search = $request->input('search', null);
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
+
+        // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
+        // ->paginate($this::$resultsPerPage)->withQueryString();
         $sapOperations = $account->sapOperations;
 
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
@@ -73,10 +81,18 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
+        
+        $search = $request->input('search', null);
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
+
         $sapOperations = $account->sapOperations;
 
-        $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
-        ->paginate($this::$resultsPerPage)->withQueryString();
+        // $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
+        // ->paginate($this::$resultsPerPage)->withQueryString();
         $users = $account->users;
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
@@ -102,9 +118,15 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $sapOperations = $account->sapOperations;
 
-        $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
-            ->paginate($this::$resultsPerPage)->withQueryString();
-
+        // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
+            // ->paginate($this::$resultsPerPage)->withQueryString();
+        
+        $search = $request->input('search', null);
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');

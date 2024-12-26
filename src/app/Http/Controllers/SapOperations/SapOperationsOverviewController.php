@@ -31,8 +31,14 @@ class SapOperationsOverviewController extends Controller
         $user = Auth::user();
         $users = null;
 
-            $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
-                ->paginate($this::$resultsPerPage)->withQueryString();
+            // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
+            //     ->paginate($this::$resultsPerPage)->withQueryString();
+        $search = $request->input('searchS', null);
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
 
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
@@ -58,8 +64,14 @@ class SapOperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
-            $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
-                ->paginate($this::$resultsPerPage)->withQueryString();
+        $search = $request->input('searchS', null);
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
+            // $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
+            //     ->paginate($this::$resultsPerPage)->withQueryString();
             $users = $account->users;
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
