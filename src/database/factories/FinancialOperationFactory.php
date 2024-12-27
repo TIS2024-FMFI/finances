@@ -7,6 +7,7 @@ use App\Models\Lending;
 use App\Models\OperationType;
 //use Database\Seeders\AccountSeeder;
 //use Database\Seeders\OperationTypeSeeder;
+use App\Models\SapOperation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +24,19 @@ class FinancialOperationFactory extends Factory
     {
         $accounts_users = AccountUser::all('id');
         $operationTypes = OperationType::where('lending', '=', false)->get('id');
-//        $lending = Lending::all()->get('id');
+
+        $sapOperations = SapOperation::all('id');
+        $sapOperationId = $sapOperations->isNotEmpty()
+            ? $sapOperations->random()->id
+            : null;
+
+        $lendings = Lending::all('id');
+        $lendingId = $lendings->isNotEmpty()
+            ? $lendings->random()->id
+            : null;
+
+        $attachmentMessage = "Toto je príloha k finančnej operácii.";
+
 
         return [
             'account_user_id' => $accounts_users->random()['id'],
@@ -32,6 +45,10 @@ class FinancialOperationFactory extends Factory
             'operation_type_id' => $operationTypes->random()['id'],
             'subject' => fake()->name,
             'sum' => fake()->randomFloat(2,1,1000),
+            'sap_operation_id' => $sapOperationId,
+            'attachment' => $attachmentMessage,
+            'status' => $this->faker->numberBetween(1, 3),
+            'lending_id' => $lendingId,
         ];
     }
 }

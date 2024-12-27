@@ -25,9 +25,9 @@ return new class extends Migration
             $table->foreign('sap_operation_id')->references("id")->on("sap_operations")->cascadeOnDelete();
             $table->string('subject');
             $table->unsignedDecimal('sum',10,2);
-            $table->string('attachment')->unique()->nullable();
+            $table->string('attachment')->nullable();
             $table->smallInteger('status')->default(0);
-            $table->unsignedBigInteger('lending_id');
+            $table->unsignedBigInteger('lending_id')->nullable();
             $table->foreign('lending_id')->references("id")->on('lendings')->cascadeOnDelete();
         });
     }
