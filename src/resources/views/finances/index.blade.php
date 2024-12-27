@@ -1,10 +1,5 @@
 @include('common.navigation', ['open_change_password' => Auth::user()->password_change_required])
 
-<div class="search-container-landing">
-    <input type="text" id="search-bar" placeholder="Search">
-    <button id="search-button" class="button-search">🔍</button>
-</div>
-
 <table class="accounts_table">
     <h1>Moje účty</h1>
     <thead>
@@ -42,27 +37,5 @@
     ?>
     </tbody>
 </table>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchBar = document.getElementById('search-bar');
-        const searchButton = document.getElementById('search-button');
-        const tableRows = document.querySelectorAll('.accounts_table tbody tr');
-        searchButton.addEventListener('click', function () {
-            const query = searchBar.value.toLowerCase();
-            tableRows.forEach(row => {
-                const sapIdCell = row.querySelector('td:first-child');
-                if (sapIdCell) {
-                    const sapId = sapIdCell.textContent.toLowerCase();
-                    if (sapId.includes(query)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            });
-        });
-    });
-</script>
 
 @include('common.footer')
