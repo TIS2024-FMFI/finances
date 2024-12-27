@@ -350,7 +350,13 @@ table td a:hover {
     justify-content: space-between;
 }
 
-.button-search{
+.search-container-lanidng {
+    display: flex;
+    margin: 20px 0;
+    justify-content: space-between;
+}
+
+.button-search {
     padding: 10px 20px;
     border: 1px solid var(--primary);
     background-color: white;
