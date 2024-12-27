@@ -358,13 +358,7 @@ table td a:hover {
     font-size: 15px;
     display: block;
     margin-left: auto;
-}
-
-.search-container-landing {
-    display: flex;
-    margin: 20px 0;
-    justify-content: space-between;
-}
+} 
 
 .button-add {
     padding: 2px 14px 6px 14px;
