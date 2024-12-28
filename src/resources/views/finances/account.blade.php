@@ -92,6 +92,29 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         <label>Do:</label>
         <input type="date" id="filter-operations-to" value="<?php echo $to ?>"></input>
 
+        <label class="status-label">Status:</label>
+        <select id="filter-status">
+            <option value="">---</option>
+            <option value="0">Waiting</option>
+            <option value="1">Approved</option>
+            <option value="2">Refused</option>
+        </select>
+        <span>&nbsp;&nbsp;</span>
+        <label for="operation-type-label">Typ:</label>
+        <span>&nbsp;</span>
+        <select id="filter-operation-type">
+            <option value="">---</option>
+            <option value="1">Služba na faktúru</option>
+            <option value="2">Grant</option>
+            <option value="3,10">Pôžička</option>
+            <option value="4,11">Splatenie pôžičky</option>
+            <option value="5,12">Iný</option>
+            <option value="6">Nákup na faktúru</option>
+            <option value="7">Nákup cez Marquet</option>
+            <option value="8">Drobný nákup</option>
+            <option value="9">Pracovná cesta</option>
+        </select>
+        <span>&nbsp;&nbsp;</span>
         <button class="button-filter" type="button" data-account-id="{{ $account->id }}" data-date-errors="{{$errors->first('to')}}" id="filter-operations">Filtrovať</button>
         <button class="button-filter" data-account-id="{{ $account->id }}" type="button" id="operations-export">Exportovať</button>
     </div>

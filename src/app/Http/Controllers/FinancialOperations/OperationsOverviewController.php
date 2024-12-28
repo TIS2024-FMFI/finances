@@ -45,11 +45,20 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
-
         $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
+
         $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
         if (!empty($search)) {
             $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
         }
         $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
@@ -81,11 +90,20 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
-        
         $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
+
         $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
         if (!empty($search)) {
             $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
         }
         $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
@@ -122,9 +140,19 @@ class OperationsOverviewController extends Controller
             // ->paginate($this::$resultsPerPage)->withQueryString();
         
         $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
+
         $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
         if (!empty($search)) {
             $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
         }
         $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
