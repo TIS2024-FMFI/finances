@@ -14,7 +14,7 @@ class LendingSeeder extends Seeder
      *
      * @var int
      */
-    public static int $count = 2;
+    public static int $count = 10;
 
     /**
      * Run the database seeds.
