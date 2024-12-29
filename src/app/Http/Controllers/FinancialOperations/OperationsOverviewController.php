@@ -81,6 +81,9 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'users' => $users,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
     }
 
@@ -125,7 +128,10 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'users' => $users,
-            'sapOperations' => $sapOperations
+            'sapOperations' => $sapOperations,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
 
     }
@@ -170,7 +176,10 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'user' => $user,
-            'sapOperations' => $sapOperations
+            'sapOperations' => $sapOperations,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
     }
 
@@ -189,8 +198,25 @@ class OperationsOverviewController extends Controller
     {
         $dateFrom = $request->getValidatedFromDateOrMin();
         $dateTo = $request->getValidatedToDateOrMax();
+        $search = $request->input('search', null);
+        $operationType = filter_input(INPUT_GET, 'operation_type', FILTER_SANITIZE_URL);
+        $status = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_URL);
 
-        $operations = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc')->get();
+        // $operations = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc')->get();
+
+        $query = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc');
+
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
+        }
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+        $operations = $query->get();
         $filename = $this->generateExportName($account, $dateFrom, $dateTo);
 
         return response()->streamDownload(
