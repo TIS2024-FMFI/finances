@@ -1490,6 +1490,8 @@ $(document).ready(function(){
                 text: 'Vyberte pôžičku'
             }));
             if (response.unrepaid_lendings.length != 0){
+
+
                 response.unrepaid_lendings.forEach(function(unrepaid_lending){
                     let lendind_id = unrepaid_lending.lending.id
                     let lending_title = unrepaid_lending.title
@@ -1500,6 +1502,8 @@ $(document).ready(function(){
                 })
             }
         }).fail(function(response){
+
+            console.log("hi")
             console.log(response);
         })
 

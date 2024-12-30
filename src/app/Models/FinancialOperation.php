@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class FinancialOperation extends Model
 {
+
+
+    protected $connection = 'db1';
+
     use HasFactory;
 
     /**

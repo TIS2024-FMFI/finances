@@ -19,7 +19,7 @@ class Account extends Model
 {
     use HasFactory;
 
-    protected $connection = 'db1';
+    protected $connection = 'db2';
     protected $table = 'accounts';
 
     /**

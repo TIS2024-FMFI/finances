@@ -75,7 +75,7 @@ class User extends Authenticatable
      */
     public function accounts()
     {
-        return $this->belongsToMany(Account::class, 'account_user')->withPivot('id', 'account_title');
+        return $this->belongsToMany(Account::class, env('DB1_NAME').'.account_user')->withPivot('id', 'account_title');
 
     }
 
