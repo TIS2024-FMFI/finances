@@ -25,11 +25,12 @@ class LendingFactory extends Factory
         $user_host= AccountUser::all('id')->random()['id'];
         $user_client = AccountUser::where('user_id', '!=', $user_host)->get('id')->random()['id'];
 
-        $usedOperationIds = Lending::pluck('operation_id')->toArray();
+        $usedOperationIds = Lending::pluck('id')->toArray();
         $operation = FinancialOperation::whereNotIn('id', $usedOperationIds)->inRandomOrder()->firstOrFail()->id;
 
         return [
             'expected_date_of_return' => fake()->date,
+            "status"=>0,
             "host_id"=>$user_host,
             "client_id"=>$user_client,
         ];
