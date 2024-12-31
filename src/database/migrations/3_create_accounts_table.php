@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::connection('db2')->create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('sap_id')->unique();
             $table->string('name')->default("No-Name");
+            $table->string('spravca_id')->default(1);
         });
     }
 

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('account_title');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('account_id');
-            $table->foreign('account_id')->references("id")->on("accounts")->cascadeOnDelete();
+
+
         });
     }
 

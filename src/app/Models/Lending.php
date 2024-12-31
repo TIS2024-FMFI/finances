@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\DatabaseException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,9 +39,6 @@ class Lending extends Model
      *
      * @var string[]
      */
-    protected $with = [
-        'repayment',
-    ];
 
     /**
      * The attributes that should be cast.
@@ -69,9 +67,9 @@ class Lending extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function operation()
+    public function operation(): BelongsTo
     {
-        return $this->hasOne(FinancialOperation::class, 'id', 'id');
+        return $this->belongsTo(FinancialOperation::class, 'operation_id', 'id');
     }
 
     /**
@@ -107,4 +105,24 @@ class Lending extends Model
         if (! $repayment->operation->delete())
             throw new DatabaseException('The lending\'s repayment wasn\'t deleted.');
     }
+
+    public function host()
+    {
+        return $this->belongsTo(AccountUser::class, 'host_id');
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(AccountUser::class, 'client_id');
+    }
+
+    /**
+     * Get the financial operation associated with the lending.
+     */
+    public function financialOperation()
+    {
+        return $this->belongsTo(FinancialOperation::class, 'operation_id');
+    }
+
+
 }

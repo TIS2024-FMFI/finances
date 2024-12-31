@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('sap_reports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('account_id');
-            $table->foreign('account_id')->references('id')->on('accounts')->cascadeOnDelete();
             $table->string('path');
             $table->date('exported_or_uploaded_on');
         });
