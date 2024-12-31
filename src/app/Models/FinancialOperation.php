@@ -96,14 +96,21 @@ class FinancialOperation extends Model
      */
     public function scopeUnrepaidLendings(Builder $query): Builder
     {
-        return $query
-            ->join('lendings', 'financial_operations.id','=','lendings.id')
-            ->whereRaw(' is null')
-            ->whereNotExists(function($query) {
-                $query->select(DB::raw(1))
-                    ->fromRaw('lendings as repay')
-                    ->whereRaw('repay. = financial_operations.id');
-            });
+//        return $query
+//            ->join('lendings', 'financial_operations.id','=','lendings.id')
+//            ->whereRaw(' is null')
+//            ->whereNotExists(function($query) {
+//                $query->select(DB::raw(1))
+//                    ->fromRaw('lendings as repay')
+//                    ->whereRaw('repay. = financial_operations.id');
+//            });
+
+        return $query;
+    }
+
+    public function scopeUserAssignable(Builder $query): Builder
+    {
+        return $query->where('stats', '=', 0);
     }
 
     /**
@@ -309,6 +316,11 @@ class FinancialOperation extends Model
         $fileName = "{$title}_$contentClause";
 
         return FileHelper::appendFileExtension($this->attachment, $fileName);
+    }
+
+    public function lendings()
+    {
+        return $this->hasMany(Lending::class, 'operation_id');
     }
 
 }

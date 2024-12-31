@@ -80,6 +80,8 @@ class User extends Authenticatable
     }
 
 
+
+
     /**
      * Gets all the financial operations which belong to this user.
      *
@@ -89,4 +91,6 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(financialOperations::class, AccountUser::class);
     }
+
+
 }

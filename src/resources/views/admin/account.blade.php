@@ -21,21 +21,14 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
             </div>
 
             <div class="account-details">
-                <!--  TO DOOO<-->
-                <p>Spravca: TODO</p>
+                <p >Meno účtu: {{ $account->name }}</p>
+                <p >Správca: {{ $account->getSpravca() }}</p>
             </div>
-
         </div>
+
     </div>
 
-    <!--    <div class="switch-box">-->
-    <!--        <p>Výpis účtu</p>-->
-    <!--        <label class="switch">-->
-    <!--            <input data-account-id="{{ $account->id }}" class="toggle-button" type="checkbox">-->
-    <!--            <span class="slider round"></span>-->
-    <!--        </label>-->
-    <!--        <p>SAP</p>-->
-    <!--    </div>-->
+
 </div>
 
 
@@ -55,12 +48,30 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
     // Table body should be inside <tbody>
     echo "<tbody>";
+
+    $account_balance = $account->getBalance();
+    $sum_incomes = 0;
+    $sum_expenses = 0;
+    $sum_rozdiel = 0;
+    $sum_zostatkove = 0;
+    $currentYear = Date::now()->year;
+    $zostatkoveStartDate = Date::minValue();
+    $zostatkoveEndDate = Date::create($currentYear, 1, 1);
+
+
     foreach ($users as $user) {
         $user_id = $user->id;
         $user_email = $user->email;
         $incomes = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->expenses()->sum('sum');
         $user_balance = $incomes - $expenses;
+
+        $zostatkopveIncomes = $account->userOperationsBetween($user, $zostatkoveStartDate, $zostatkoveEndDate)->incomes()->sum('sum');
+
+        $sum_incomes += $incomes;
+        $sum_expenses += $expenses;
+        $sum_rozdiel += $user_balance;
+        $sum_zostatkove += $zostatkopveIncomes;
 
         echo "<tr>";
         echo "
@@ -90,28 +101,40 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         <div class="table-sum-row">
             <p>Príjmy: </p>
-            <p id="income"><em>{{ $incomes_total }}€</em></p>
+            <p id="income"><em>{{ number_format($sum_incomes, 2, ',', ' ') }}€</em></p>
         </div>
 
         <div class="table-sum-row">
             <p>Výdavky:</p>
-            <p id="outcome"><em>{{ $expenses_total }}€</em></p>
+            <p id="outcome"><em>{{  number_format($sum_expenses, 2, ',', ' ')}}€</em></p>
         </div>
 
         <div class="table-sum-row">
-            @if( ($incomes_total - $expenses_total) >= 0)
-            <p>Rozdiel:</p>
-            <p id="total"><em style="color: green;">{{ $incomes_total - $expenses_total }}€</em></p>
+            @if( ($sum_rozdiel) >= 0)
+            <p>Celkový zostatok na účte:</p>
+            <p id="total"><em style="color: green;">{{  number_format($sum_rozdiel, 2, ',', ' ')  }}€</em></p>
             @else
             <p>Rozdiel:</p>
-            <p id="total"><em style="color: red;">{{ $incomes_total - $expenses_total }}€</em></p>
+            <p id="total"><em style="color: red;">{{ number_format($sum_rozdiel, 2, ',', ' ') }}€</em></p>
             @endif
 
         </div>
+
         <div class="table-sum-row">
-            <p>Celkový zostatok na účte:</p>
-            <p id="account-balance"><em>{{ $account_balance }}€</em></p>
+            <p>Zostatkove({{$currentYear}}):</p>
+            <p id="account-balance"><em>{{ number_format($sum_zostatkove - $sum_expenses, 2, ',', ' ') }}€</em></p>
         </div>
+
+        <div class="switch-box">
+            <p>Výpis účtu</p>
+            <label class="switch">
+                <input data-account-id="{{ $account->id }}" class="toggle-button" type="checkbox">
+                <span class="slider round"></span>
+            </label>
+            <p>SAP</p>
+        </div>
+
+
 
     </div>
 </div>

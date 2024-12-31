@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -204,4 +205,28 @@ class Account extends Model
     {
         return $this->sapReports()->whereBetween('exported_or_uploaded_on', [$from, $to]);
     }
+
+    // Relationship to Lending as a host
+    public function hostLendings()
+    {
+        return $this->hasMany(Lending::class, 'host_account_user_id');
+    }
+
+    // Relationship to Lending as a client
+    public function clientLendings()
+    {
+        return $this->hasMany(Lending::class, 'client_account_user_id');
+    }
+
+    public function user_spravca()
+    {
+        DB::enableQueryLog();
+        return $this->belongsTo(User::class, 'spravca_id');
+    }
+
+    public function getSpravca(){
+        return $this->user_spravca->email;
+    }
+
+
 }

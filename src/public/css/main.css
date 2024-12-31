@@ -77,7 +77,9 @@ h2 {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap:10px
+    gap:10px;
+    margin-top: 20px;
+
 }
 
 .account-name{
@@ -85,7 +87,7 @@ h2 {
     font-size: 24px;
     background-color: var(--secondary);
     padding: 20px 20px;
-    margin-top: 20px;
+
     flex-grow: 1;
 
 
@@ -97,11 +99,11 @@ h2 {
 
 .account-details{
     color:white;
-    font-size: 24px;
+    font-size: 18px;
     background-color: var(--secondary);
-    padding: 20px 20px;
-    margin-top: 20px;
+    padding: 8px 20px;
     flex-grow: 1;
+
 }
 
 .account-details > p{
@@ -364,7 +366,7 @@ table td a:hover {
     font-size: 15px;
     display: block;
     margin-left: auto;
-} 
+}
 
 .button-add {
     padding: 2px 14px 6px 14px;
