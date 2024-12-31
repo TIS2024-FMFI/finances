@@ -534,25 +534,29 @@ $(document).ready(function(){
         let date_from = $('#filter-operations-from').val();
         let date_to = $('#filter-operations-to').val();
         let status = $('#filter-status').val();
+        let search = $('#searchh').val();
         let operation_type = $('#filter-operation-type').val();
         let error = $(this).data("date-errors");
         let url = root + '/accounts/'+account_id+'/operations';
-        let params = [];
+        let p = [];
 
         if (date_from != "") {
-            params.push('from=' + date_from);
+            p.push('from=' + date_from);
         }
         if (date_to != "") {
-            params.push('to=' + date_to);
+            p.push('to=' + date_to);
         }
         if (status != "") {
-            params.push('status=' + status);
+            p.push('status=' + status);
+        }
+        if (search != "") {
+            p.push('search=' + search);
         }
         if (operation_type != "") {
-            params.push('operation_type=' + operation_type);
+            p.push('operation_type=' + operation_type);
         }
-        if (params.length > 0) {
-            url += '?' + params.join('&');
+        if (p.length > 0) {
+            url += '?' + p.join('&');
         }
         window.location.href = url;
     });
@@ -584,19 +588,29 @@ $(document).ready(function(){
         let account_id = $(this).data("account-id");
         let date_from = $('#filter-operations-from').val();
         let date_to = $('#filter-operations-to').val();
+        let status = $('#filter-status').val();
+        let search = $('#searchh').val();
         let url = root + '/accounts/'+account_id+'/operations/export';
+        let operation_type = $('#filter-operation-type').val();
+        let p = [];
 
-        if (date_from != "" || date_to != ""){
-            url += '?';
+        if (date_from != "") {
+            p.push('from=' + date_from);
         }
-        if (date_from != ""){
-            url += 'from=' + date_from
+        if (date_to != "") {
+            p.push('to=' + date_to);
         }
-        if (date_to != ""){
-            if (date_from != ""){
-                url += '&';
-            }
-            url += 'to=' + date_to
+        if (status != "") {
+            p.push('status=' + status);
+        }
+        if (search != "") {
+            p.push('search=' + search);
+        }
+        if (operation_type != "") {
+            p.push('operation_type=' + operation_type);
+        }
+        if (p.length > 0) {
+            url += '?' + p.join('&');
         }
         window.location.href = url;
 

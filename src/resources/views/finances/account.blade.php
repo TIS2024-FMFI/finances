@@ -78,8 +78,14 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
             type="text" 
             name="search" 
             placeholder="Search" 
-            value="{{ request('search') }}" 
+            value="{{ request('search') }}"
+            id=searchh
         >
+        <input type="hidden" name="from" value="{{ request('from') }}">
+        <input type="hidden" name="to" value="{{ request('to') }}">
+        <input type="hidden" name="status" value="{{ request('status') }}">
+        <input type="hidden" name="operation_type" value="{{ request('operation_type') }}">
+
         <button type="submit" class="button-search">🔍</button>
     </form>
 </div>

@@ -199,8 +199,8 @@ class OperationsOverviewController extends Controller
         $dateFrom = $request->getValidatedFromDateOrMin();
         $dateTo = $request->getValidatedToDateOrMax();
         $search = $request->input('search', null);
-        $operationType = filter_input(INPUT_GET, 'operation_type', FILTER_SANITIZE_URL);
-        $status = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_URL);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
 
         // $operations = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc')->get();
 
@@ -217,7 +217,7 @@ class OperationsOverviewController extends Controller
             $query->where('status', $status);
         }
         $operations = $query->get();
-        $filename = $this->generateExportName($account, $dateFrom, $dateTo);
+        $filename = $this->generateExportName($account, $dateFrom, $dateTo, $search, $operationType, $status);
 
         return response()->streamDownload(
             fn () => $this->generateCsvFile($operations),
@@ -239,13 +239,24 @@ class OperationsOverviewController extends Controller
      * @return string
      * the generated file name
      */
-    private function generateExportName(Account $account, Carbon $dateFrom, Carbon $dateTo)
+    private function generateExportName(Account $account, Carbon $dateFrom, Carbon $dateTo, $search, $operationType, $status)
     {
         $sap_id  = $account->getSanitizedSapId();
         $from = $this->generateFromString($dateFrom);
         $to = $this->generateToString($dateTo);
+        $filters = '';
+        if ($search) {
+            $filters .= "_search_{$search}";
+        }
+        if ($operationType) {
+            $filters .= "_type_{$operationType}";
+        }
+        if ($status) {
+            $filters .= "_status_{$status}";
+        }
 
-        return "{$sap_id}_export{$from}{$to}.csv";
+        return "{$sap_id}_export{$from}{$to}{$filters}.csv";
+        // return "{$sap_id}_export{$from}{$to}.csv";
     }
 
     /**
