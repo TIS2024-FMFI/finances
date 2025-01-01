@@ -1469,7 +1469,7 @@ $(document).ready(function(){
                 $("#create-operation-modal").css("display", "flex");
             }
         }).done(function(response) {
-            //console.log(response);
+            console.log(response);
             $("#operation_choice").append($('<option>', {
                 value: "default_opt",
                 text: 'Vyberte typ operácie'

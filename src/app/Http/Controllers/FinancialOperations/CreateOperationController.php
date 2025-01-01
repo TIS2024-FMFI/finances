@@ -46,6 +46,7 @@ class CreateOperationController extends GeneralOperationController
     {
         // Check if the authenticated user is an admin
         if (Auth::user()->user_type == 2) {
+            Log::debug('Operation Types:', OperationType::userAssignable()->get()->toArray());
             // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
             return [
                 'operation_types' => OperationType::userAssignable()->get(),
@@ -59,6 +60,8 @@ class CreateOperationController extends GeneralOperationController
                 'unrepaid_lendings' => FinancialOperation::unrepaidLendings()->where('account_user_id', '=', $user->pivot->id)->get()
             ];
         }
+
+
     }
 
 
@@ -85,11 +88,11 @@ class CreateOperationController extends GeneralOperationController
 
     public function createAdmin(User $user, Account $account, CreateOperationRequest $request)
     {
-        Log::debug($user);
+        Log::debug("This user is admin: ", $user);
         if (is_null($user))
             $user = Auth::user();
-        Log::debug(is_null($user));
-        Log::debug($user);
+        Log::debug("Is admin null?: ", is_null($user));
+        Log::debug("Admin is admin: ", $user);
         DB::enableQueryLog();
         $type = OperationType::findOrFail($request->validated('operation_type_id'));
 
@@ -169,6 +172,7 @@ class CreateOperationController extends GeneralOperationController
     private function createOperationFromDataAdmin(User $user = null, Account $account, array $data)
     {
 
+        Log::debug('Creating operation with data:', $data);
         try {
             $attachment = $this->saveAttachment($account, $data);
             $this->createOperationWithinTransactionAdmin($user,$account, $data, $attachment);

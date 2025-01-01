@@ -7,7 +7,7 @@ use App\Http\Controllers\FinancialOperations\DeleteOperationController;
 use App\Http\Controllers\UserAccountManagement\ManageUserAccountController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+//use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FinancialOperations\OperationsOverviewController;
 use App\Http\Controllers\FinancialAccounts\AccountsOverviewController;
 use App\Http\Controllers\FinancialOperations\CreateOperationController;
@@ -54,8 +54,8 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
-Route::post('/register', [RegisterController::class, 'register'])
-    ->middleware(['ajax', 'jsonify']);
+//Route::post('/register', [RegisterController::class, 'register'])
+//    ->middleware(['ajax', 'jsonify']);
 
 
 /**

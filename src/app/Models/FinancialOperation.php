@@ -93,12 +93,12 @@ class FinancialOperation extends Model
     public function scopeUnrepaidLendings(Builder $query): Builder
     {
         return $query
-            ->join('lendings', 'financial_operations.id','=','lendings.id')
-            ->whereRaw(' is null')
-            ->whereNotExists(function($query) {
-                $query->select(DB::raw(1))
-                    ->fromRaw('lendings as repay')
-                    ->whereRaw('repay. = financial_operations.id');
+            ->join('lendings', 'financial_operations.id', '=', 'lendings.id')
+            ->whereNull('lendings.status') // Фильтруем записи, где статус неоплачен
+            ->whereNotExists(function($subQuery) {
+                $subQuery->select(DB::raw(1))
+                    ->from('lendings as repay')
+                    ->whereRaw('repay.id = financial_operations.id');
             });
     }
 
