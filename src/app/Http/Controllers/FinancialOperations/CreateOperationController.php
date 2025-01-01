@@ -86,13 +86,14 @@ class CreateOperationController extends GeneralOperationController
         return $this->createOperationFromData($account, $request->validated());
     }
 
-    public function createAdmin(User $user, Account $account, CreateOperationRequest $request)
+    public function createAdmin(Account $account, CreateOperationRequest $request)
     {
-        Log::debug("This user is admin: ", $user);
+        $user = null;
+        Log::debug($user);
         if (is_null($user))
             $user = Auth::user();
-        Log::debug("Is admin null?: ", is_null($user));
-        Log::debug("Admin is admin: ", $user);
+        Log::debug(is_null($user));
+        Log::debug($user);
         DB::enableQueryLog();
         $type = OperationType::findOrFail($request->validated('operation_type_id'));
 
