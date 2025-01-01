@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             RealOperationTypeSeeder::class,
              FinancialOperationSeeder::class,
             LendingSeeder::class,
+            SapOperationsSeeder::class
         ]);
     }
 }
