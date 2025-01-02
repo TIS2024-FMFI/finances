@@ -86,9 +86,8 @@ class CreateOperationController extends GeneralOperationController
         return $this->createOperationFromData($account, $request->validated());
     }
 
-    public function createAdmin(Account $account, CreateOperationRequest $request)
+    public function createAdmin(User $user, Account $account, CreateOperationRequest $request)
     {
-        $user = null;
         Log::debug($user);
         if (is_null($user))
             $user = Auth::user();
@@ -299,7 +298,7 @@ class CreateOperationController extends GeneralOperationController
 
         Log::debug($user);
         // Identifikujte, či operáciu vykonáva admin alebo bežný užívateľ
-        $accountUser = $account->users()->where('users.id', $user->id)->first();
+        $accountUser = $this->ensureAdminPivot($user, $account);
         $accountUserId = $accountUser->pivot->id;
         $recordData = array_merge($data, ['attachment' => $attachment, 'account_user_id' => $accountUserId]);
         Log::debug('Creating financial operation data', ['data' => $recordData]);
@@ -312,6 +311,19 @@ class CreateOperationController extends GeneralOperationController
 
         return $operation;
     }
+
+    private function ensureAdminPivot(User $user, Account $account)
+    {
+        $accountUser = $account->users()->where('users.id', $user->id)->first();
+        if (!$accountUser) {
+            $account->users()->attach($user->id, [
+                'account_title' => 'Admin pivot for account #'.$account->id,
+            ]);
+            $accountUser = $account->users()->where('users.id', $user->id)->first();
+        }
+        return $accountUser;
+    }
+
 
 
 }

@@ -1513,7 +1513,7 @@ $(document).ready(function(){
         let csrf = $("#create-operation-button").data("csrf");
         let account_id = $(this).data("account-id");
         // ALARM: Here is undefined!
-        let user_id = $(this).data("user-id");
+        let user_id = 57;
         let isAdmin = $('body').data('is-admin');
         let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
         let url = root + urlPath + account_id + "/operations/";
