@@ -6,12 +6,12 @@
 
     <h2>Pridať operáciu</h2>
 
-    <form id="create-operation-form"
-          @if(auth()->user()->user_type == 2 && isset($user))
-            data-user-id="{{$user->id}}"
-        @endif
+      <form id="create-operation-form"
+            @if(auth()->user()->user_type == 2)
+                data-user-id="{{ auth()->user()->id }}"
+          @endif
+      >
 
-    >
 
       <div class="radio-buttons-box">
           <div>

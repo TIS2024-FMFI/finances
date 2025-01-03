@@ -1505,15 +1505,14 @@ $(document).ready(function(){
 
     })
 
-    // ALARM: It doesnt work!
+
     $("#create-operation-form").on("submit", function(e) {
         e.preventDefault();
         $("#create-operation-button").attr("disabled", true);
 
         let csrf = $("#create-operation-button").data("csrf");
         let account_id = $(this).data("account-id");
-        // ALARM: Here is undefined!
-        let user_id = 57;
+        let user_id = $(this).data("user-id");
         let isAdmin = $('body').data('is-admin');
         let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
         let url = root + urlPath + account_id + "/operations/";
