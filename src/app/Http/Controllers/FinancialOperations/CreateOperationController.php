@@ -8,9 +8,11 @@ use App\Http\Helpers\FileHelper;
 use App\Http\Requests\FinancialOperations\CreateOperationRequest;
 use App\Http\Requests\FinancialOperations\CreateRepaymentRequest;
 use App\Models\Account;
+use App\Models\AccountUser;
 use App\Models\FinancialOperation;
 use App\Models\Lending;
 use App\Models\OperationType;
+use App\Models\SapOperation;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -44,21 +46,29 @@ class CreateOperationController extends GeneralOperationController
 
     public function getFormData(Account $account)
     {
-        // Check if the authenticated user is an admin
-        if (Auth::user()->user_type == 2) {
-            // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
-            return [
-                'operation_types' => OperationType::userAssignable()->get(),
-                'unrepaid_lendings' => FinancialOperation::unrepaidLendings()->get() //môžme upraviť eštex
-            ];
-        } else {
-            // Non-admin users get data based on their specific association with the account
-            $user = $account->user->first();
-            return [
-                'operation_types' => OperationType::userAssignable()->get(),
-                'unrepaid_lendings' => FinancialOperation::unrepaidLendings()->where('account_user_id', '=', $user->pivot->id)->get()
-            ];
-        }
+
+        return [
+            'operation_types' => OperationType::userAssignable()->get(),
+            'unrepaid_lendings' => Lending::all(),
+        ];
+
+
+
+//        // Check if the authenticated user is an admin
+//        if (Auth::user()->user_type == 2) {
+//            // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
+//            return [
+//                'operation_types' => OperationType::userAssignable()->get(),
+//                'financial_operations' => FinancialOperation::all(),
+//            ];
+//        } else {
+//            // Non-admin users get data based on their specific association with the account
+////            $user = $account->user->first();
+//            return [
+//                'operation_types' => OperationType::userAssignable()->get(),
+//                'financial_operations' => User::all(),
+//            ];
+//        }
     }
 
 

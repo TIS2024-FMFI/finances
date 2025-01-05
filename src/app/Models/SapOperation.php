@@ -14,7 +14,7 @@ class SapOperation extends Model
     use HasFactory;
 
 
-
+    protected $connection = 'db1';
 
     // Assuming your Excel file has columns like date, sum, title, etc.
     // Add these as fillable attributes in your model
@@ -108,7 +108,7 @@ class SapOperation extends Model
 
     /**
      * Return true if the operation has an assiocated SAP operation
-     * 
+     *
      * @return bool
      */
     public function isChecked()

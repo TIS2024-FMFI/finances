@@ -552,13 +552,30 @@ $(document).ready(function(){
     });
 
     // <-- Financial accounts filter operations
+    // $(".toggle-button").change(function(){
+    //     let account_id = $(this).data("account-id");
+    //     let isAdmin = $('body').data('is-admin');
+    //     let FakeAdmin = $(this).data('fake-admin-id');
+    //     let urlPath;
+    //     if (isAdmin) {
+    //         urlPath = FakeAdmin !== "" ? '/user/' + FakeAdmin + '/accounts/' : "/overview/accounts/";
+    //     } else {
+    //         urlPath = "/accounts/";
+    //     }
+    //     if($(this).attr('checked')){
+    //         window.location.href = root + urlPath + account_id+'/operations';
+    //     }else{
+    //         window.location.href = root + urlPath +account_id+'/sap-reports';
+    //     }
+    // })
+
+
     $(".toggle-button").change(function(){
         let account_id = $(this).data("account-id");
         let isAdmin = $('body').data('is-admin');
-        let FakeAdmin = $(this).data('fake-admin-id');
         let urlPath;
         if (isAdmin) {
-            urlPath = FakeAdmin !== "" ? '/user/' + FakeAdmin + '/accounts/' : "/overview/accounts/";
+            urlPath = "/overview/accounts/";
         } else {
             urlPath = "/accounts/";
         }
@@ -1469,7 +1486,7 @@ $(document).ready(function(){
                 $("#create-operation-modal").css("display", "flex");
             }
         }).done(function(response) {
-            //console.log(response);
+            console.log(response);
             $("#operation_choice").append($('<option>', {
                 value: "default_opt",
                 text: 'Vyberte typ operácie'
@@ -1490,16 +1507,20 @@ $(document).ready(function(){
                 text: 'Vyberte pôžičku'
             }));
             if (response.unrepaid_lendings.length != 0){
+
+
                 response.unrepaid_lendings.forEach(function(unrepaid_lending){
-                    let lendind_id = unrepaid_lending.lending.id
-                    let lending_title = unrepaid_lending.title
+                    let lendind_id = unrepaid_lending.id
+                    // let lending_title = unrepaid_lending.title
                     $("#lending-choice").append($('<option>',{
                         value: lendind_id,
-                        text: lending_title
+                        text: lendind_id
                     }))
                 })
             }
         }).fail(function(response){
+
+            console.log("hi")
             console.log(response);
         })
 
