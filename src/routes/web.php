@@ -54,9 +54,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
 
-Route::post('/register', [RegisterController::class, 'register'])
-    ->middleware(['ajax', 'jsonify']);
-
 
 /**
  * User Account Management
