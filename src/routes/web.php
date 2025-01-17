@@ -115,6 +115,8 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         Route::middleware('can:update,operation')->group(function () {
             Route::get('/operations/{operation}/update', [UpdateOperationController::class, 'getFormData']);
             Route::patch('/operations/{operation}', [UpdateOperationController::class, 'update']);
+            Route::patch('/operations/{operation}/status-accept', [UpdateOperationController::class, 'statusAccept']);
+            Route::patch('/operations/{operation}/status-refuse', [UpdateOperationController::class, 'statusRefuse']);
         });
 
         Route::post('/operations/{lending}/repayment', [CreateOperationController::class, 'createRepayment'])

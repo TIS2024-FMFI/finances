@@ -5,6 +5,18 @@
 
     <h2>Upraviť operáciu</h2>
 
+      @if(auth()->user()->user_type == 2)
+      <div class="flex">
+          <form id="success-operation-form">
+              <button type="submit" data-csrf="{{ csrf_token() }}"  class="success-operation-button">Potvrdiť</button>
+          </form>
+          <form id="refuse-operation-form">
+              <button type="submit" data-csrf="{{ csrf_token() }}"  class="refuse-operation-button">Zamietnuť</button>
+          </form>
+      </div>
+      @endif
+
+
     <form id="edit-operation-form">
 
         <div class="edit_type_category">
@@ -87,6 +99,8 @@
       <button type="submit" data-csrf="{{ csrf_token() }}"  id="edit-operation-button">Uložiť</button>
 
     </form>
+
+
   </div>
 
 </div>

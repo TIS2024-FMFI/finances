@@ -499,7 +499,6 @@ footer {
     font-size: 18px;
     color: var(--primary);
     padding: 10px 20px;
-    border-radius: 15px;
     margin: 20px;
 }
 .modal button:hover {

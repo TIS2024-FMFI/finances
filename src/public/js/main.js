@@ -1548,6 +1548,8 @@ $(document).ready(function(){
 
     })
 
+
+
     $("#create-operation-form").on("submit", function(e) {
         e.preventDefault();
         $("#create-operation-button").attr("disabled", true);
@@ -2217,6 +2219,7 @@ $(".account_admin").click(function(){
     console.log(user_id,account_id);
     window.location.href = root + '/user/'+ user_id + '/accounts/'+account_id+'/operations';
 });
+
 
 
 })
