@@ -11,6 +11,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('common.app_root_script')
     <script src={{ asset('js/main.js') }} rel="stylesheet"></script>
+    <script src={{ asset('js/modals.js') }} rel="stylesheet"></script>
     <title>BudgetMaster</title>
 </head>
 <body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">

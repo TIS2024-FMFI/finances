@@ -38,6 +38,25 @@
         <div class="error-box" id="add-operation-type-errors"></div>
       </div>
 
+<!--        User start-->
+
+        @if(auth()->user()->user_type == 2)
+
+        <div class="input-box add-operation-choice">
+            <div class="field">
+                <select id="operation_users" name="typ" id="add-operation-type">
+
+                </select>
+                <label for="add-operation-type">Používatelia</label>
+            </div>
+            <div class="error-box" id="add-operation-type-errors"></div>
+        </div>
+
+        @endif
+
+<!--        User end-->
+
+
       <div class="input-box add-operation-name">
         <div class="field">
           <input type="text" id="add-operation-name">
@@ -127,7 +146,14 @@
         </div>
       </div>
 
-      <button type="submit"  data-csrf="{{ csrf_token() }}"  id="create-operation-button">Uložiť</button>
+      <button type="submit"  data-csrf="{{ csrf_token() }}"  id="create-operation-button">
+          @if(auth()->user()->user_type == 2)
+          Vytvoriť Operáciu
+          @else
+          Vytvoriť požiadavku
+          @endif
+
+      </button>
 
     </form>
   </div>

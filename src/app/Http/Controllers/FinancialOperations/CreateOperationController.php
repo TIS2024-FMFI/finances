@@ -50,6 +50,8 @@ class CreateOperationController extends GeneralOperationController
         return [
             'operation_types' => OperationType::userAssignable()->get(),
             'unrepaid_lendings' => Lending::all(),
+            'user_list' => $account->users()->get()
+
         ];
 
 
@@ -306,7 +308,7 @@ class CreateOperationController extends GeneralOperationController
         // Identifikujte, či operáciu vykonáva admin alebo bežný užívateľ
         $accountUser = $account->users()->where('users.id', $user->id)->first();
         $accountUserId = $accountUser->pivot->id;
-        $recordData = array_merge($data, ['attachment' => $attachment, 'account_user_id' => $accountUserId]);
+        $recordData = array_merge($data, ['attachment' => $attachment, 'account_user_id' => $accountUserId, 'status' => 1]);
         Log::debug('Creating financial operation data', ['data' => $recordData]);
         $operation = $account->operations()->updateOrCreate($recordData);
 
