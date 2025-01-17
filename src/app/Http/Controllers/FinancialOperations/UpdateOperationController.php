@@ -35,6 +35,65 @@ class UpdateOperationController extends GeneralOperationController
         return ['operation' => $operation];
     }
 
+    // Accepts the individual operation proposal
+    public function statusAccept(FinancialOperation $operation, UpdateOperationRequest $request)
+    {
+        $requestData = $request->validated();
+        $requestData = array_merge($requestData, ['status' => 1]);
+
+        if (!$this->validateUpdate($operation, $requestData))
+        {
+            Log::debug('Update not validated.');
+            return response(trans('financial_operations.update.failure'), 500);
+        }
+
+        try {
+            $newAttachment = $this->saveAttachment($operation->account(), $requestData);
+            $oldAttachment = $operation->attachment;
+
+            $this->updateOperationWithinTransaction(
+                $operation, $requestData, $oldAttachment, $newAttachment
+            );
+        } catch (Exception $e) {
+            Log::debug('Updating financial operation failed, error: {e}', ['e' => $e]);
+            if ($e instanceof ValidationException)
+                throw $e;
+            return response(trans('financial_operations.update.failure'), 500);
+        }
+
+        return response(trans('financial_operations.update.success'));
+    }
+
+    // Refuses the individual operation proposal
+    public function statusRefuse(FinancialOperation $operation, UpdateOperationRequest $request)
+    {
+        $requestData = $request->validated();
+        $requestData = array_merge($requestData, ['status' => 2]);
+
+        if (!$this->validateUpdate($operation, $requestData))
+        {
+            Log::debug('Update not validated.');
+            return response(trans('financial_operations.update.failure'), 500);
+        }
+
+        try {
+            $newAttachment = $this->saveAttachment($operation->account(), $requestData);
+            $oldAttachment = $operation->attachment;
+
+            $this->updateOperationWithinTransaction(
+                $operation, $requestData, $oldAttachment, $newAttachment
+            );
+        } catch (Exception $e) {
+            Log::debug('Updating financial operation failed, error: {e}', ['e' => $e]);
+            if ($e instanceof ValidationException)
+                throw $e;
+            return response(trans('financial_operations.update.failure'), 500);
+        }
+
+        return response(trans('financial_operations.update.success'));
+
+    }
+
     /**
      * Handles the request to update a financial operation.
      *
@@ -48,12 +107,14 @@ class UpdateOperationController extends GeneralOperationController
     {
         $requestData = $request->validated();
 
+
+
         if (!$this->validateUpdate($operation, $requestData))
         {
             Log::debug('Update not validated.');
             return response(trans('financial_operations.update.failure'), 500);
         }
-            
+
         try {
             $newAttachment = $this->saveAttachment($operation->account(), $requestData);
             $oldAttachment = $operation->attachment;
