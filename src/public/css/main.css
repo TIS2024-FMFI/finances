@@ -77,7 +77,9 @@ h2 {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap:10px
+    gap:10px;
+    margin-top: 20px;
+
 }
 
 .account-name{
@@ -85,7 +87,7 @@ h2 {
     font-size: 24px;
     background-color: var(--secondary);
     padding: 20px 20px;
-    margin-top: 20px;
+
     flex-grow: 1;
 
 
@@ -97,11 +99,11 @@ h2 {
 
 .account-details{
     color:white;
-    font-size: 24px;
+    font-size: 18px;
     background-color: var(--secondary);
-    padding: 20px 20px;
-    margin-top: 20px;
+    padding: 8px 20px;
     flex-grow: 1;
+
 }
 
 .account-details > p{
@@ -363,7 +365,13 @@ table td a:hover {
     justify-content: space-between;
 }
 
-.button-search {
+.search-container-landing {
+    display: flex;
+    margin: 20px 0;
+    justify-content: space-between;
+}
+
+.button-search{
     padding: 10px 20px;
     border: 1px solid var(--primary);
     background-color: white;
@@ -371,7 +379,7 @@ table td a:hover {
     font-size: 15px;
     display: block;
     margin-left: auto;
-} 
+  }
 
 .button-add {
     padding: 2px 14px 6px 14px;
@@ -504,7 +512,6 @@ footer {
     font-size: 18px;
     color: var(--primary);
     padding: 10px 20px;
-    border-radius: 15px;
     margin: 20px;
 }
 .modal button:hover {

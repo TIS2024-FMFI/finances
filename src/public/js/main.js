@@ -562,13 +562,30 @@ $(document).ready(function(){
     });
 
     // <-- Financial accounts filter operations
+    // $(".toggle-button").change(function(){
+    //     let account_id = $(this).data("account-id");
+    //     let isAdmin = $('body').data('is-admin');
+    //     let FakeAdmin = $(this).data('fake-admin-id');
+    //     let urlPath;
+    //     if (isAdmin) {
+    //         urlPath = FakeAdmin !== "" ? '/user/' + FakeAdmin + '/accounts/' : "/overview/accounts/";
+    //     } else {
+    //         urlPath = "/accounts/";
+    //     }
+    //     if($(this).attr('checked')){
+    //         window.location.href = root + urlPath + account_id+'/operations';
+    //     }else{
+    //         window.location.href = root + urlPath +account_id+'/sap-reports';
+    //     }
+    // })
+
+
     $(".toggle-button").change(function(){
         let account_id = $(this).data("account-id");
         let isAdmin = $('body').data('is-admin');
-        let FakeAdmin = $(this).data('fake-admin-id');
         let urlPath;
         if (isAdmin) {
-            urlPath = FakeAdmin !== "" ? '/user/' + FakeAdmin + '/accounts/' : "/overview/accounts/";
+            urlPath = "/overview/accounts/";
         } else {
             urlPath = "/accounts/";
         }
@@ -1462,9 +1479,11 @@ $(document).ready(function(){
     $("#create_operation").click(function(){
         let account_id = $(this).data("account-id");
         let csrf = $(this).data("csrf");
-        let isAdmin = false;
-        let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
+        let isAdmin = $('body').data('is-admin');
+
+        let urlPath = "/accounts/";
         let url = root + urlPath + account_id + "/operations/create";
+
         $("#create-operation-form").data("account-id", account_id);
         defaultCreateOperationFormFields();
         $(".lending_detail_div").css("display", "none")
@@ -1489,11 +1508,23 @@ $(document).ready(function(){
                 $("#create-operation-modal").css("display", "flex");
             }
         }).done(function(response) {
-            //console.log(response);
+            console.log(response);
+
+            // Defaults:
             $("#operation_choice").append($('<option>', {
                 value: "default_opt",
                 text: 'Vyberte typ operácie'
             }));
+            $("#operation_users").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte používateľa'
+            }));
+            $("#lending-choice").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte pôžičku'
+            }));
+
+
             response.operation_types.forEach(function(choice){
                 let expense = choice.expense ? "expense_opt" : "income_opt";
                 let lending = choice.lending ? "lending" : "not_lending";
@@ -1505,25 +1536,39 @@ $(document).ready(function(){
                 }));
             })
 
-            $("#lending-choice").append($('<option>', {
-                value: "default_opt",
-                text: 'Vyberte pôžičku'
-            }));
+
+            if (isAdmin){
+                response.user_list.forEach(function(user){
+                    $("#operation_users").append($('<option>', {
+                        value: user.id,
+                        text: user.email
+                    }));
+                })
+            }
+
             if (response.unrepaid_lendings.length != 0){
+
                 response.unrepaid_lendings.forEach(function(unrepaid_lending){
-                    let lendind_id = unrepaid_lending.lending.id
-                    let lending_title = unrepaid_lending.title
+                    let lendind_id = unrepaid_lending.id
+                    // let lending_title = unrepaid_lending.title
                     $("#lending-choice").append($('<option>',{
                         value: lendind_id,
-                        text: lending_title
+                        text: lendind_id
                     }))
                 })
             }
+
+
+
         }).fail(function(response){
+
+            console.log("hi")
             console.log(response);
         })
 
     })
+
+
 
     $("#create-operation-form").on("submit", function(e) {
         e.preventDefault();
@@ -1531,8 +1576,8 @@ $(document).ready(function(){
 
         let csrf = $("#create-operation-button").data("csrf");
         let account_id = $(this).data("account-id");
-        let user_id = $(this).data("user-id");
         let isAdmin = $('body').data('is-admin');
+        let user_id = isAdmin ? $("#operation_users").val(): $(this).data("user-id");
         let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
         let url = root + urlPath + account_id + "/operations/";
 
@@ -2194,6 +2239,7 @@ $(".account_admin").click(function(){
     console.log(user_id,account_id);
     window.location.href = root + '/user/'+ user_id + '/accounts/'+account_id+'/operations';
 });
+
 
 
 })
