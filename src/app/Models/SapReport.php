@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class SapReport extends Model
 {
     use HasFactory;
+    protected $connection = 'db1';
+    protected $table = 'sap_reports';
 
     /**
      * The attributes that are mass assignable.

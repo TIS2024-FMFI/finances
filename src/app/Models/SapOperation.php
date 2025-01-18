@@ -15,6 +15,7 @@ class SapOperation extends Model
 
 
     protected $connection = 'db1';
+    protected $table = 'sap_operations';
 
     // Assuming your Excel file has columns like date, sum, title, etc.
     // Add these as fillable attributes in your model

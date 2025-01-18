@@ -125,17 +125,6 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
             <p id="account-balance"><em>{{ number_format($sum_zostatkove - $sum_expenses, 2, ',', ' ') }}€</em></p>
         </div>
 
-        <div class="switch-box">
-            <p>Výpis účtu</p>
-            <label class="switch">
-                <input data-account-id="{{ $account->id }}" class="toggle-button" type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <p>SAP</p>
-        </div>
-
-
-
     </div>
 </div>
 
@@ -223,8 +212,8 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
                                 <button type="button" data-operation-id="{{ $operation->id }}" class="financial-operation-check">
                                     <i  class="bi bi-check2-all" title="Označiť operáciu"></i>
                                     @else
-                                    <button type="button" data-operation-id="{{ $operation->id }}" class="financial-operation-uncheck">
-                                        <i  class="bi bi-check2-all" title="Odznačiť operáciu"></i>
+                                    <button type="button" data-operation-id="{{ $operation->id }}" class="">
+                                        <i  class="bi bi-check2-all" style="color: green;" title="Odznačiť operáciu"></i>
                                         @endif
                                         <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
                                             <i class="bi bi-trash3" title="Zmazať operáciu"></i>
@@ -237,6 +226,9 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
 
+<div class="import-sap-operations-div">
+    <button class="button-filter" data-account-id="{{ $account->id }}" data-csrf="{{ csrf_token() }}" id="add-excel-report" type="button">Importovať SAP operácie</button>
+</div>
 <table>
     <tr>
         <th>Poradie</th>

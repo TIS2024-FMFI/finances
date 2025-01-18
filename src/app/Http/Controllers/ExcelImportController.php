@@ -3,24 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DatabaseException;
-use App\Exceptions\FileFormatException;
 use App\Exceptions\StorageException;
 use App\Http\Helpers\DBTransaction;
-use App\Http\Helpers\SapReportParser;
 use App\Imports\UsersImport;
 use App\Models\SapReport;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Account;
 use Maatwebsite\Excel\Facades\Excel;
-
-// Imports the Account model
 
 class ExcelImportController extends Controller
 {
@@ -31,11 +25,14 @@ class ExcelImportController extends Controller
      * @param Account $account // Use Account instead of User
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function upload(Request $request, Account $account): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    public function upload(Request $request, Account $account): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'excel_file' => 'required|file|mimes:xlsx,csv',
-        ]);
+        Log::info('Excel upload started.');
+
+        if (!auth()->check()) {
+            Log::warning("User is not authenticated!");
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         $report = $request->file('excel_file');
 
@@ -51,7 +48,6 @@ class ExcelImportController extends Controller
         try {
             $this->storeFile($report, $account);
         } catch (Exception $e) {
-
             return response(trans('sap_reports.upload.failed'), 500);
         }
 
@@ -67,19 +63,25 @@ class ExcelImportController extends Controller
      */
     private function storeFile(UploadedFile $file, Account $account): void
     {
-        $reportPath = $this->saveReportFileToUserStorage($account, $file);
-
-        $absoluteReportPath = Storage::path($reportPath);
-        $exportedOrUploadedOn = $this->getDateExportedOrToday($absoluteReportPath);
-
-        // Process the Excel file
-        $createRecordTransaction = new DBTransaction(
-            fn() => $this->createReportRecord($account, $reportPath),
-            fn() => Storage::delete($reportPath)
-        );
-
-        $createRecordTransaction->run();
+        Log::info("Storing file for account ID: " . $account->id);
+    
+        try {
+            $reportPath = $this->saveReportFileToUserStorage($account, $file);    
+            $absoluteReportPath = Storage::path($reportPath);    
+            $exportedOrUploadedOn = $this->getDateExportedOrToday($absoluteReportPath);
+    
+            $createRecordTransaction = new DBTransaction(
+                fn() => $this->createReportRecord($account, $reportPath),
+                fn() => Storage::delete($reportPath)
+            );
+    
+            $createRecordTransaction->run();
+            Log::info("Successfully stored file and created DB record.");
+        } catch (\Exception $e) {
+            throw new \Exception("File storage failed: " . $e->getMessage());
+        }
     }
+    
 
     /**
      * Save the uploaded report file to the user's storage directory.

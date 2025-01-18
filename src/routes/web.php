@@ -7,7 +7,6 @@ use App\Http\Controllers\FinancialOperations\DeleteOperationController;
 use App\Http\Controllers\UserAccountManagement\ManageUserAccountController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FinancialOperations\OperationsOverviewController;
 use App\Http\Controllers\FinancialAccounts\AccountsOverviewController;
 use App\Http\Controllers\FinancialOperations\CreateOperationController;
@@ -15,10 +14,7 @@ use App\Http\Controllers\FinancialOperations\UpdateOperationController;
 use App\Http\Controllers\FinancialOperations\OperationDetailController;
 use App\Http\Controllers\FinancialOperations\OperationCheckController;
 use App\Http\Controllers\SapOperations\SapOperationCheckController;
-use App\Http\Controllers\SapReports\DeleteReportController;
-use App\Http\Controllers\SapReports\ReportDetailController;
 use App\Http\Controllers\SapReports\ReportsOverviewController;
-use App\Http\Controllers\SapReports\UploadReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExcelImportController;
 
@@ -128,22 +124,8 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     /**
      * SAP Reports
      */
-
-    Route::get('/accounts/{account}/sap-reports', [ReportsOverviewController::class, 'show'])
-        ->middleware('can:view,account');
-
-    Route::get('/sap-reports/{report}/raw', [ReportDetailController::class, 'download'])
-        ->middleware('can:view,report')
-        ->name('sap-report-raw');
-
     Route::middleware(['ajax', 'jsonify'])->group(function () {
-        Route::post('/accounts/{account}/sap-reports', [UploadReportController::class, 'upload'])
-            ->middleware('can:create,App\Models\SapReport,account');
-
-        Route::delete('/sap-reports/{report}', [DeleteReportController::class, 'delete'])
-            ->middleware('can:delete,report');
-
-        Route::post('/accounts/{account}/excel-upload', [ExcelImportController::class, 'upload']);
+        Route::post('/accounts/{account}/excel-upload', [ExcelImportController::class, 'upload'])->withoutMiddleware(['auth']);
 
     });
     /**
