@@ -225,9 +225,11 @@ $sum_rozdiel = 0;
                 <i class="bi bi-trash3" title="Zmazať operáciu"></i>
                 @else
             <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
-                <i class="bi bi-pencil" title="Upraviť operáciu"></i>
+                <i class="bi bi-file-earmark-pdf" title="Pridať prílohu"></i>
+                @if (!$operation->isChecked() && !$operation->isApproved())
             <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
                 <i class="bi bi-trash3" title="Zmazať operáciu"></i>
+                @endif
                 @endif
         </td>
     </tr>
