@@ -2232,6 +2232,92 @@ $(document).ready(function(){
 
     // <-- Financial operations
 
+    // Add User to Account
+    $("#add-user-check").click(function() {
+        let account_id = $(this).data("account-id");
+        let csrf = $(this).data("csrf");
+        let url = root + "/accounts/" + account_id + "/add";
+    
+        console.log("URL for add user ", url);
+        $("#add-user-form").data("account-id", account_id); 
+        $("#add-user-modal").css("display", "flex");
+        $(".choose-lending").show();
+    
+        $("#add-user-choice").empty();
+    
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            data: { "_token": csrf },
+            beforeSend: function() {
+                $("#loader-modal").css("display", "flex");
+                $("#add-user-modal").css("display", "none");
+            },
+            complete: function() {
+                $("#loader-modal").css("display", "none");
+                $("#add-user-modal").css("display", "flex");
+            }
+        }).done(function(response) {
+            $("#add-user-choice").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte používateľa'
+            }));
+    
+            if (response.users.length !== 0) { 
+                console.log(response);
+                response.users.forEach(function(user) {
+                    $("#add-user-choice").append($('<option>', {
+                        value: user.id,
+                        text: user.email
+                    }));
+                });
+            }
+        }).fail(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'error',
+                title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+            });
+        });
+    });
+    
+    $("#add-user-form").on("submit", function(e) {
+        e.preventDefault();
+    
+        let account_id = $(this).data("account-id");
+        let user_id = $("#add-user-choice").val();
+        let csrf = $("#add-user-button").data("csrf");
+    
+        if (user_id === "default_opt") {
+            Toast.fire({ icon: 'error', title: 'Vyberte používateľa!' });
+            return;
+        }
+    
+        $.ajax({
+            url: root + "/accounts/" + account_id + "/add",
+            type: "POST",
+            dataType: "json",
+            data: {
+                '_token': csrf,
+                'user_id': user_id
+            }
+        }).done(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'success',
+                title: response.displayMessage
+            });
+            location.reload();
+        }).fail(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'error',
+                title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+            });
+        });
+    });
+
 //admin
 $(".user").click(function(){
     var user_id = $(this).data("id");
@@ -2282,8 +2368,6 @@ $(".account_admin").click(function(){
 
 
 })
-
-
 
 
 

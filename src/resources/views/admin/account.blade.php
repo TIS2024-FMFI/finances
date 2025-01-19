@@ -27,16 +27,15 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         </div>
 
     </div>
-
-
 </div>
 
+<table class="usersTable">
+    <div class="import-sap-operations-div">
+        <div class='operations-name'>Používatelia účtu</div>        
+        <button class="button-filter" type="button" data-account-id="{{ $account->id }}" data-date-errors="{{$errors->first('to')}}" id="add-user-check">Pridať použivateľa</button>
+    </div>
 
 <?php
-
-    echo '<table class="usersTable">';
-    echo "<div class='operations-name'>Používatelia účtu</div>";
-
     // Table headers should be inside <thead>
     echo "<thead>";
     echo "<tr>

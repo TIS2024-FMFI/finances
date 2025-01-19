@@ -81,3 +81,5 @@
 
 @include('finances.modals.check_sap_operation')
 @include('finances.modals.uncheck_sap_operation')
+
+@include('finances.modals.add_users')
