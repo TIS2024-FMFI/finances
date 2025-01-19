@@ -20,7 +20,7 @@ class SapOperation extends Model
     // Assuming your Excel file has columns like date, sum, title, etc.
     // Add these as fillable attributes in your model
 
-    protected $fillable = ['date', 'sum', 'title', 'operation_type_id', 'subject', 'sap_id', 'account_sap_id'];
+    protected $fillable = ['date', 'sum', 'title', 'operation_type_id', 'subject', 'sap_id', 'account_sap_id', 'finnacial_item_id', 'account_hk_id'];
 
     // Rest of your model's code...
 
