@@ -790,6 +790,24 @@ a:visited {
     align-items: center;
 }
 
+.modal-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: fit-content;
+}
+.modal-footer h4{
+    margin: 0;
+}
+.modal-footer-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+.modal-footer-buttons button{
+    padding: 5px 10px 5px 10px;
+
 .search-container-form{
     margin: 0!important;
     flex-direction: row!important;
@@ -814,5 +832,4 @@ a:visited {
 
 .button-search:hover{
     opacity: 0.5;
-
 }

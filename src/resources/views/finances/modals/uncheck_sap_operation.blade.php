@@ -26,9 +26,12 @@
                 <p id="check_sap_operation_date"></p>
             </div>
         </div>
-        <div>
-          <button class="proceed" type="submit" data-csrf="{{ csrf_token() }}"  id="uncheck-sap-operation-button">Áno</button>
-          <button class="cancel" type="button">Nie</button>
+        <div class="modal-footer">
+          <h4>Chceš naozaj odznačiť operáciu ako skontrolovanú?</h4>
+          <div class="modal-footer-buttons">
+            <button class="proceed" type="submit" data-csrf="{{ csrf_token() }}"  id="uncheck-sap-operation-button">Áno</button>
+            <button class="cancel" type="button">Nie</button>
+          </div>
         </div>
       </form>
     </div>
