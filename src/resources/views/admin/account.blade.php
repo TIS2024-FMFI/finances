@@ -56,7 +56,8 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     $sum_zostatkove = 0;
     $currentYear = Date::now()->year;
     $zostatkoveStartDate = Date::minValue();
-    $zostatkoveEndDate = Date::create($currentYear-1, 1, 1);
+    $zostatkoveEndDate = Date::create($currentYear, 1, 1);
+
 
 
     foreach ($users as $user) {
@@ -73,6 +74,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         $sum_rozdiel += $user_balance;
         $sum_zostatkove += $zostatkopveIncomes;
 
+
         echo "<tr>";
         echo "
             <td>{$user_id}</td>
@@ -87,6 +89,10 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         echo "</tr>";
     }
+
+
+    $zostatkove_out = max(0, $sum_zostatkove - $sum_expenses);
+
     echo "</tbody>";
     echo "</table>";
 
@@ -122,7 +128,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         <div class="table-sum-row">
             <p>Zostatkove(< {{$currentYear}}):</p>
-            <p id="account-balance"><em>{{ number_format($sum_zostatkove - $sum_expenses, 2, ',', ' ') }}€</em></p>
+            <p id="account-balance"><em>{{ number_format($zostatkove_out, 2, ',', ' ') }}€</em></p>
         </div>
 
     </div>
