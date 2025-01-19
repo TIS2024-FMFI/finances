@@ -32,6 +32,7 @@
             </div>
         </div>
         <div>
+          <div>Chceš naozaj odznačiť operáciu ako skontrolovanú?</div>
           <button class="proceed" type="submit" data-csrf="{{ csrf_token() }}"  id="uncheck-operation-button">Áno</button>
           <button class="cancel" type="button">Nie</button>
         </div>
