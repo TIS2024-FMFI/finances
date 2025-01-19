@@ -5,116 +5,140 @@ namespace App\Imports;
 use App\Models\Account;
 use App\Models\OperationType;
 use App\Models\SapOperation;
-use DateTime;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class UsersImport implements ToModel, WithMultipleSheets
+
+class UsersImport implements ToCollection, WithCalculatedFormulas, WithMapping, WithMultipleSheets
 {
     use Importable;
 
+    private $sheetName;
 
-    private $previousSapId = null;
-    private $previousPrice = null;
-    private $consecutiveCount = 0;
-    private $firstNewRowAfterConsecutive = null;
-    private $firstNewRowAfterConsecutivex = null;
+    public function __construct($sheetName = 'RawData') // Define sheet
+    {
+        $this->sheetName = $sheetName;
+    }
+
+    public function sheets(): array
+    {
+        return [
+            $this->sheetName => new self($this->sheetName), // Only import the specified sheet
+        ];
+    }
 
     private const OPERATION_TYPE_ID = 1;
     private const EXCEL_DATE_OFFSET = 25569;
     private const SECONDS_IN_A_DAY = 86400;
 
-    private const REQUIRED_COLUMNS = [17, 3, 12, 10, 8, 0];
+    private const REQUIRED_COLUMNS = [16, 17, 2, 12, 10, 8, 0];
 
-    /**
-     * Process a row from the Excel file and convert it into a SapOperation model.
-     *
-     * This method handles the conversion of each row from the Excel sheet into a
-     * SapOperation model instance. It includes validation of required columns,
-     * conversion of Excel date format to a standard date format, and handling
-     * of operation type existence.
-     *
-     * @param array $row An array representing a single row from the Excel sheet.
-     *                   The row data is expected to contain specific columns
-     *                   like date, sum, title, etc., at predefined indices.
-     *
-     * @return ?SapOperation Returns an instance of SapOperation if the row is
-     *                       processed successfully and meets all validation criteria.
-     *                       Returns null if the row fails validation checks or
-     *                       if any exception occurs during the process.
-     *
-     */
-    public function model(array $row): ?SapOperation
+
+    public function collection(Collection $rows)
     {
+        Log::info('Starting Excel import process. Total rows: ' . $rows->count());
 
-        Log::warning($row[0]);
-        // If SAP ID is the same as the previous one, increment counter, else reset counter and remember the first new row
-        if ($this->previousSapId === $row[0] && $this->previousPrice === $row[3] * -1) {
+        $previousSapId = null;
+        $previousPrice = null;
+        $consecutiveCount = 0;
+        $firstNewRowAfterConsecutive = [];
+        $firstNewRowAfterConsecutivex = [];
 
-            $this->consecutiveCount++;
+        foreach ($rows as $row) {
+            if ($row[0] === null || $row[0] === ""){
+                Log::warning("Skipping empty row.");
+                continue;
+            }
 
-        } else {
+            Log::info("Processing row", $row->toArray());
 
-            // When SAP ID changes, remember the first row of the new SAP ID if consecutive count > 0
-            $this->previousSapId = $row[0];
-            $this->previousPrice = $row[3];
-            $this->firstNewRowAfterConsecutivex = $this->firstNewRowAfterConsecutive;
-            $this->firstNewRowAfterConsecutive = $row;
-            if (!is_array($this->firstNewRowAfterConsecutivex)) return null;
-            if ($this->consecutiveCount === 1) {
+            // If SAP ID is the same as the previous one, increment counter, else reset counter and remember the first new row
+            $amount = (float) str_replace(',', '.', str_replace(' ', '', $row[2] ?? 0));
 
+            if ($previousSapId === $row[0] && $previousPrice === $amount * -1) {
+                $consecutiveCount++;
+            } else {
+                Log::info("New SAP ID detected: " . $row[0]);
 
-                if ($this->firstNewRowAfterConsecutivex[17] === null || $this->firstNewRowAfterConsecutivex[17] === "") {
-                    return null;
+                // SAP ID changed, remember first row of new ID
+                $previousSapId = $row[0];
+                $previousPrice = $row[3];
+                $firstNewRowAfterConsecutivex = $firstNewRowAfterConsecutive ? $firstNewRowAfterConsecutive : [];
+                $firstNewRowAfterConsecutive = $row ? $row->toArray() : [];
+
+                if (!is_array($firstNewRowAfterConsecutivex)) {
+                    Log::warning("Skipping because previous row was not an array. Value:", [$firstNewRowAfterConsecutivex]);
+                    continue;
+                }                
+                if ($consecutiveCount === 1) {
+                    if ($firstNewRowAfterConsecutivex[17] === null || $firstNewRowAfterConsecutivex[17] === "") {
+                        Log::warning("Missing required date in row: ", $firstNewRowAfterConsecutivex);
+                        continue;
+                    }
+    
+                    $formattedDate = $this->formatDate($firstNewRowAfterConsecutivex[17]);
+    
+                    if (!$formattedDate || !$this->validateRequiredColumns($firstNewRowAfterConsecutivex)) {
+                        Log::warning("Invalid formatted date or missing required columns.");
+                        continue;
+                    }
+    
+                    if (!$this->operationTypeExists()) {
+                        Log::warning("Operation type ID does not exist. Skipping row.");
+                        continue;
+                    }
+
+                    Log::info("Row passed validation, creating SAP operation...");
+                    $this->createSapOperation($firstNewRowAfterConsecutivex, $formattedDate);
+                    Log::info("SAP operation successfully created.");
+
+                    continue;
+    
                 }
+                $firstNewRowAfterConsecutive = $row;
+                $consecutiveCount = 1; // Reset counter for new SAP ID
+                Log::info("Consecutive count reset to 1.");
+                continue;
+            }
 
-                $formattedDate = $this->formatDate($this->firstNewRowAfterConsecutivex[17]);
-
-                if (!$formattedDate || !$this->validateRequiredColumns($this->firstNewRowAfterConsecutivex)) {
-                    return null;
+            if ($consecutiveCount === 3) {
+                if ($row[17] === null || $row[17] === "") {
+                    Log::warning("Skipping row due to missing date", $row->toArray());
+                    continue;
+               }
+    
+                $formattedDate = $this->formatDate($row[17]);
+    
+    
+                if (!$formattedDate || !$this->validateRequiredColumns($row)) {
+                    Log::warning("Skipping row due to invalid date or missing columns", $row->toArray());
+                    continue;
                 }
-
+    
                 if (!$this->operationTypeExists()) {
                     Log::warning("Operation type ID " . self::OPERATION_TYPE_ID . " does not exist. Skipping row.");
-                    return null;
+                    continue;
                 }
-
-                return $this->createSapOperation($this->firstNewRowAfterConsecutivex, $formattedDate);
-
+    
+                Log::info("Row is valid, attempting to create SAP operation.");
+                $this->createSapOperation($row, $formattedDate);
+                Log::info("SAP operation successfully created.");
+                continue;
+    
+    
             }
-            $this->firstNewRowAfterConsecutive = $row;
-            $this->consecutiveCount = 1; // Reset counter for new SAP ID
-            return null;
         }
+    }
 
-        if ($this->consecutiveCount === 3) {
-
-
-            if ($row[17] === null || $row[17] === "") {
-                return null;
-            }
-
-            $formattedDate = $this->formatDate($row[17]);
-
-
-            if (!$formattedDate || !$this->validateRequiredColumns($row)) {
-                return null;
-            }
-
-            if (!$this->operationTypeExists()) {
-                Log::warning("Operation type ID " . self::OPERATION_TYPE_ID . " does not exist. Skipping row.");
-                return null;
-            }
-
-
-            return $this->createSapOperation($row, $formattedDate);
-
-
-        }
-        return null;
+    public function map($row): array
+    {
+        return array_map(fn($cell) => (string) $cell, $row); // Convert everything to a string
     }
 
     private function operationTypeExists(): bool
@@ -134,15 +158,26 @@ class UsersImport implements ToModel, WithMultipleSheets
     }
 
 
-    private function formatDate($excelDate): ?string
-    {
-        if ($excelDate === null || $excelDate === "") {
+    private function formatDate($date)
+    {    
+        if (!$date || trim($date) === '') {
             return null;
         }
-
-        $unixDate = ($excelDate - self::EXCEL_DATE_OFFSET) * self::SECONDS_IN_A_DAY;
-        return gmdate("Y-m-d", $unixDate);
+    
+        try {
+            // Convert Excel numeric date to PHP date
+            if (is_numeric($date)) {
+                $formattedDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date)->format('Y-m-d');
+            } else {
+                $formattedDate = date('Y-m-d', strtotime(str_replace('.', '-', $date)));
+            }
+    
+            return $formattedDate;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
+    
 
 
     private function createSapOperation($row, $formattedDate): ?SapOperation
@@ -150,7 +185,7 @@ class UsersImport implements ToModel, WithMultipleSheets
         if ($row[0] === null || $row[0] === "") return null;
 
         // Check if an SapOperation with the same sap_id already exists in the database
-        $exists = SapOperation::where('sap_id', $row[0])->where('sum', $row[3])->exists();
+        $exists = SapOperation::where('sap_id', $row[0])->where('sum', $row[2])->exists();
 
         if ($exists) {
             Log::info("An operation with sap_id {$row[0]} already exists. Skipping row.");
@@ -161,41 +196,33 @@ class UsersImport implements ToModel, WithMultipleSheets
         $account = Account::firstOrCreate(['sap_id' => $row[8]]);
 
         // Determine operation_type_id based on whether $row[3] is negative
-        $operationTypeId = $row[3] < 0 ? self::OPERATION_TYPE_ID : 6;
+        $operationTypeId = $row[2] < 0 ? self::OPERATION_TYPE_ID : 6;
 
-        if ($row[3] < 0){
-            $row[3] *= (-1);
+        if ($row[2] < 0){
+            $row[2] *= (-1);
         }
-        $sapOperation = new SapOperation([
-            'date' => $formattedDate,
-            'sum' => $row[3],
-            'title' => $row[12],
-            'operation_type_id' => $operationTypeId, // Use determined operation type ID here
-            'subject' => $row[10],
-            'sap_id' => $row[0],
-            'account_sap_id' => $row[8],
-        ]);
+        $amount = $row[2] ?? ''; // Ensure we are using the correct index for amount
 
+        Log::info("🔍 Checking sum column: " . json_encode($amount));
+        Log::info("🔍 Checking whole row: " . json_encode($row));
         try {
+            $sapOperation = new SapOperation([
+                'date' => $formattedDate,
+                'sum' => (float) str_replace(',', '.', str_replace(' ', '', $amount)), // Ensure numeric conversion
+                'title' => $row[9],
+                'operation_type_id' => $operationTypeId, // Use determined operation type ID here
+                'subject' => $row[11],
+                'sap_id' => $row[0],
+                'account_sap_id' => $row[8],
+            ]);
+
             $sapOperation->save();
+
+            Log::info("SAP operation saved successfully.");
             return $sapOperation;
         } catch (Exception $e) {
             Log::error("Error saving SapOperation: " . $e->getMessage());
             return null;
         }
     }
-
-
-    /**
-     * @return array
-     */
-    public function sheets(): array
-    {
-        // Only import the first sheet
-        return [
-            0 => new self(),
-        ];
-    }
-
-
 }

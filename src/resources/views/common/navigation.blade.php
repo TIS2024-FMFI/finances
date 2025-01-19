@@ -12,8 +12,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('common.app_root_script')
     <script src={{ asset('js/main.js') }} rel="stylesheet"></script>
-    <script src={{ asset('js/modals.js') }} rel="stylesheet"></script>
-    <title>BudgetMaster</title>
+    <title>Financie</title>
+
 </head>
 <body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
 
@@ -27,7 +27,7 @@
                 <div class="dropdown">
                     <button class="dropbtn"><i class="bi bi-caret-down-fill fs-8"></i></button>
                     <div class="dropdown-content">
-                       <a>Placeholder</a>
+                       <a href="https://pritomnost.dai.fmph.uniba.sk/" target="_blank">Vytvor nový ŠPP</a>
                     </div>
                 </div>
                 <form method="POST" action={{ route('logout') }}>
@@ -43,7 +43,7 @@
                         @endif>
             <div class="content-inner">
                 <div class="logo">
-                    <h1>FINANCES</h1>
+                    <h1>FINANCIE</h1>
                     <p>KATEDRA APLIKOVANEJ INFORMATIKY</p>
                 </div>
             </div>
