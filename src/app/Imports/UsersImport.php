@@ -140,9 +140,24 @@ class UsersImport implements ToCollection, WithCalculatedFormulas, WithMapping, 
 
     private function createSapOperation($row, $formattedDate): ?SapOperation
     {
-        // Check if an SapOperation with the same sap_id already exists in the database
-        $exists = SapOperation::where('sap_id', $row[0])->where('sum', $row[2])->exists();
+        $amount = (float) str_replace(',', '.', str_replace(' ', '', $row[2] ?? 0));
 
+        // Determine operation_type_id based on whether $row[2] is negative
+        $operationTypeId = $amount < 0 ? 6 : self::OPERATION_TYPE_ID;
+        Log::info("Operation type ID: " . $operationTypeId . " for amount: " . $amount);
+
+        if ($amount < 0){
+            $amount *= (-1);
+        }
+
+        // Check if an SapOperation with the same sap_id already exists in the database
+        $exists = SapOperation::where('sap_id', strval($row[0]))
+        ->where('sum', $amount)
+        ->where('finnacial_item_id', strval($row[4]))
+        ->where('account_hk_id', strval($row[16]))
+        ->where('account_sap_id', strval($row[8]))
+        ->exists();
+    
         if ($exists) {
             Log::info("An operation with sap_id {$row[0]} already exists. Skipping row.");
             return null;
@@ -151,15 +166,6 @@ class UsersImport implements ToCollection, WithCalculatedFormulas, WithMapping, 
         // Ensure an account is found or created based on the SAP ID before creating the SapOperation.
         Account::firstOrCreate(['sap_id' => $row[8]]);
 
-        // Determine operation_type_id based on whether $row[2] is negative
-        $amount = (float) str_replace(',', '.', str_replace(' ', '', $row[2] ?? 0));
-        $operationTypeId = $amount < 0 ? 6 : self::OPERATION_TYPE_ID;
-        Log::info("Operation type ID: " . $operationTypeId . " for amount: " . $amount);
-
-
-        if ($amount < 0){
-            $amount *= (-1);
-        }
         Log::info("🔍 Checking whole row: " . json_encode($row));
         try {
             $sapOperation = new SapOperation([
@@ -170,6 +176,8 @@ class UsersImport implements ToCollection, WithCalculatedFormulas, WithMapping, 
                 'subject' => $row[11],
                 'sap_id' => $row[0],
                 'account_sap_id' => $row[8],
+                'finnacial_item_id' => strval($row[4]),
+                'account_hk_id' => strval($row[16]),
             ]);
 
             $sapOperation->save();

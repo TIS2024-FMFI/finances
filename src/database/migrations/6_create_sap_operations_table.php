@@ -23,6 +23,8 @@ return new class extends Migration
             $table->Decimal('sum',10,2);
             $table->unsignedBigInteger('sap_id');
             $table->string('account_sap_id');
+            $table->string('finnacial_item_id');
+            $table->string('account_hk_id');
         });
     }
 
