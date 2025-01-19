@@ -89,7 +89,7 @@
         <input type="file" id="edit-operation-file" name="" accept=".doc, .docx, .pdf, .txt">
           <label for="edit-operation_file">Príloha
       <i class="bi bi-info-circle tooltip">
-          <span class="tooltiptext">Nahraním novej prílohy sa pôvodná príloha zmaže. Ak chcete pôvodnú prílohu v systéme zachovať, nechajte toto pole nevyplnené.</span>
+          <span class="tooltiptext">Nahraním novej prílohy sa pôvodná príloha zmaže. Ak chcete pridať novú prílohu a zanechať aj starú, tak si aktuálnu prílohu stiahnite a pridajte ju spoločne do priečnika s novou prílohou a následne ju dajte do ZIP a nahrajte.</span>
       </i></label>
         </div>
         <div class="error-box" id="edit-operation-attachment-errors"></div>

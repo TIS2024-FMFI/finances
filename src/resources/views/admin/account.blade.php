@@ -272,6 +272,10 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
 
+<div class="operations-name">
+        SAP operácie
+</div>
+
 <div class="search-container1">
     <form method="GET" action="{{ url()->current() }}" class="search-container-form">
         <input
