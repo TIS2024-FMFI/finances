@@ -18,7 +18,11 @@
 </div>
 
 <table class="accounts_table">
-    <div class='operations-name'>Všetky účty</div>
+    <div class="import-sap-operations-div">
+        <div class='operations-name'>Všetky účty</div>
+        <button class="button-filter" data-csrf="{{ csrf_token() }}" id="add-excel-report" type="button">Importovať SAP operácie</button>
+    </div>
+    
     <thead>
     <tr>
         <th>SAP ID</th>

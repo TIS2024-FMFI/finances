@@ -354,7 +354,8 @@ $(document).ready(function(){
         fileData.append("_token", csrf);
 
         $.ajax({
-            url: root + "/accounts/" + account_id + "/excel-upload",
+            // This is temporary solution as fast fix
+            url: root + "/accounts/" + '1' + "/excel-upload",
             type: "POST",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
