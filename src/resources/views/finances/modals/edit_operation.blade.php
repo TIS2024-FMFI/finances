@@ -8,7 +8,8 @@
       @if(auth()->user()->user_type == 2)
       <div class="flex">
           <form id="success-operation-form">
-              <button type="submit" data-csrf="{{ csrf_token() }}"  class="success-operation-button">Potvrdiť</button>
+              <button type="button" data-csrf="{{ csrf_token() }}" class="success-operation-button">Schváliť</button>
+
           </form>
           <form id="refuse-operation-form">
               <button type="submit" data-csrf="{{ csrf_token() }}"  class="refuse-operation-button">Zamietnuť</button>

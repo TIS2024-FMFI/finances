@@ -56,7 +56,8 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     $sum_zostatkove = 0;
     $currentYear = Date::now()->year;
     $zostatkoveStartDate = Date::minValue();
-    $zostatkoveEndDate = Date::create($currentYear-1, 1, 1);
+    $zostatkoveEndDate = Date::create($currentYear, 1, 1);
+
 
 
     foreach ($users as $user) {
@@ -73,6 +74,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         $sum_rozdiel += $user_balance;
         $sum_zostatkove += $zostatkopveIncomes;
 
+
         echo "<tr>";
         echo "
             <td>{$user_id}</td>
@@ -87,6 +89,10 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         echo "</tr>";
     }
+
+
+    $zostatkove_out = max(0, $sum_zostatkove - $sum_expenses);
+
     echo "</tbody>";
     echo "</table>";
 
@@ -122,18 +128,18 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         <div class="table-sum-row">
             <p>Zostatkove(< {{$currentYear}}):</p>
-            <p id="account-balance"><em>{{ number_format($sum_zostatkove - $sum_expenses, 2, ',', ' ') }}€</em></p>
+            <p id="account-balance"><em>{{ number_format($zostatkove_out, 2, ',', ' ') }}€</em></p>
         </div>
 
     </div>
 </div>
 
 <div class="search-container">
-    <form method="GET" action="{{ url()->current() }}">
-        <input 
-            type="text" 
-            name="search" 
-            placeholder="Search" 
+    <form method="GET" action="{{ url()->current() }}" class="search-container-form">
+        <input
+            type="text"
+            name="search"
+            placeholder="Search"
             value="{{ request('search') }}"
             id=searchh
         >
@@ -142,7 +148,13 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         <input type="hidden" name="status" value="{{ request('status') }}">
         <input type="hidden" name="operation_type" value="{{ request('operation_type') }}">
 
-        <button type="submit" class="button-search">🔍</button>
+        <button type="submit" class="button-search">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#732726FF" class="search-svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+
+        </button>
+
     </form>
 </div>
 
@@ -261,14 +273,19 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
 
 <div class="search-container1">
-    <form method="GET" action="{{ url()->current() }}">
-        <input 
-            type="text" 
-            name="searchS" 
-            placeholder="Search" 
-            value="{{ request('searchS') }}" 
+    <form method="GET" action="{{ url()->current() }}" class="search-container-form">
+        <input
+            type="text"
+            name="searchS"
+            placeholder="Search"
+            value="{{ request('searchS') }}"
         >
-        <button type="submit" class="button-search">🔍</button>
+        <button type="submit" class="button-search">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#732726FF" class="search-svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+
+        </button>
     </form>
 </div>
 
