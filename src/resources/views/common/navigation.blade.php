@@ -25,12 +25,14 @@
                 <span id="top-bar-email">
                     {{ Auth::User()->email }}
                 </span>
+                @if(Auth::user()->user_type == 2)
                 <div class="dropdown">
                     <button class="dropbtn"><i class="bi bi-caret-down-fill fs-8"></i></button>
                     <div class="dropdown-content">
                        <a href="https://pritomnost.dai.fmph.uniba.sk/" target="_blank">Vytvor nový ŠPP</a>
                     </div>
                 </div>
+                @endif
                 <form method="POST" action={{ route('logout') }}>
                     @csrf
                     <button type="submit" id="logout-button"><i class="bi bi-box-arrow-right fs-8"></i></button>

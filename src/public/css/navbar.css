@@ -95,7 +95,6 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    margin-right: 5px;
     margin-left: 0px;
     align-items: center;
 }
@@ -127,4 +126,7 @@
 }
 .dropdown:hover .dropdown-content {
     display: block;
+}
+#logout-button {
+    margin-left: 5px;
 }
