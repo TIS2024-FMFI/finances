@@ -334,9 +334,6 @@ $(document).ready(function(){
     
         $("#create-excel-button").attr("disabled", true);
     
-        let account_id = $(this).data("account-id");
-        console.log("Submitting for Account ID:", account_id);
-    
         let csrf = $("#create-excel-button").data("csrf");
         let fileUpload = $("#excel-file").get(0);
     
@@ -354,7 +351,8 @@ $(document).ready(function(){
         fileData.append("_token", csrf);
     
         $.ajax({
-            url: root + "/accounts/" + account_id + "/excel-upload",
+            // This is temporary solution as fast fix
+            url: root + "/accounts/" + '1' + "/excel-upload",
             type: "POST",
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
