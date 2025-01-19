@@ -2318,6 +2318,53 @@ $(document).ready(function(){
         });
     });
 
+    $(".remove-user-button").click(function() {
+        let userId = $(this).data("user-id");
+        let accountId = $(this).data("account-id");
+    
+        $("#delete-user-from-account-form").data("user-id", userId);
+        $("#delete-user-from-account-form").data("account-id", accountId);
+        
+        $("#delete-user-from-account-modal").css("display", "flex");
+    });
+    
+    $("#delete-user-from-account-form").on("submit", function(e) {
+        e.preventDefault();
+    
+        let userId = $(this).data("user-id");
+        let accountId = $(this).data("account-id");
+        let csrf = $("#delete-user-from-account-button").data("csrf");
+    
+        $.ajax({
+            url: `/accounts/${accountId}/users/${userId}`,
+            type: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": csrf
+            },
+            success: function(response) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.displayMessage
+                });
+                location.reload();
+            },
+            error: function(xhr) {
+                console.log(response);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+                });
+            }
+        });
+    
+        $("#delete-user-from-account-modal").css("display", "none");
+    });
+    
+    $(".close-modal, .cancel").on("click", function() {
+        $("#delete-user-from-account-modal").css("display", "none");
+    });
+    
+
 //admin
 $(".user").click(function(){
     var user_id = $(this).data("id");

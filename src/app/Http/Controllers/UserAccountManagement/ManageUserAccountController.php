@@ -7,7 +7,6 @@ use App\Http\Requests\UserAccountManagement\ChangePasswordRequest;
 use App\Models\Account;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\AccountUser;
@@ -44,30 +43,30 @@ class ManageUserAccountController extends Controller
     }
 
     public function addUserToAccount(Request $request, Account $account)
-{
-    Log::debug('Adding user to account:', ['account_id' => $account->id, 'user_id' => $request->user_id]);
+    {
+        Log::debug('Adding user to account:', ['account_id' => $account->id, 'user_id' => $request->user_id]);
 
-    if (!User::where('id', $request->user_id)->exists()) {
-        return response()->json(['message' => 'Používateľ neexistuje.'], 400);
+        if (!User::where('id', $request->user_id)->exists()) {
+            return response()->json(['message' => 'Používateľ neexistuje.'], 400);
+        }
+
+        $exists = AccountUser::where('account_id', $account->id)
+                            ->where('user_id', $request->user_id)
+                            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Používateľ je už pridaný k účtu.'], 400);
+        }
+
+        AccountUser::create([
+            'account_id' => $account->id,
+            'user_id' => $request->user_id,
+            // Temporary fix for missing title
+            'account_title' => 'title'
+        ]);
+
+        return response()->json(['message' => 'Používateľ bol úspešne pridaný.'], 201);
     }
-
-    $exists = AccountUser::where('account_id', $account->id)
-                         ->where('user_id', $request->user_id)
-                         ->exists();
-
-    if ($exists) {
-        return response()->json(['message' => 'Používateľ je už pridaný k účtu.'], 400);
-    }
-
-    AccountUser::create([
-        'account_id' => $account->id,
-        'user_id' => $request->user_id,
-        // Temporary fix for missing title
-        'account_title' => 'title'
-    ]);
-
-    return response()->json(['message' => 'Používateľ bol úspešne pridaný.'], 201);
-}
 
 
     public function getFormData(Account $account)
@@ -90,6 +89,24 @@ class ManageUserAccountController extends Controller
         return response()->json(['users' => $users]);
     }
 
-    
-    
+
+    public function removeUserFromAccount($accountId, $userId)
+    {
+        Log::debug('Removing user from account', ['account_id' => $accountId, 'user_id' => $userId]);
+
+        $accountId = intval($accountId);
+        $userId = intval($userId);
+
+        $accountUser = AccountUser::where('account_id', $accountId)
+        ->where('user_id', $userId)
+        ->first();
+
+        if (!$accountUser) {
+            return response()->json(['message' => 'User is not associated with this account.'], 404);
+        }
+
+        $accountUser->delete();
+
+        return response()->json(['message' => 'User successfully removed from the account.'], 200);
+    }
 }

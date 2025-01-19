@@ -152,6 +152,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
 
     Route::middleware(['ajax', 'jsonify'])->group(function () {
         Route::post("/accounts/{account}/add", [ManageUserAccountController::class, 'addUserToAccount']);
+        Route::delete('/accounts/{accountId}/users/{userId}', [ManageUserAccountController::class, 'removeUserFromAccount']);
     });
 
     /**
