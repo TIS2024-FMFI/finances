@@ -17,6 +17,7 @@ use App\Http\Controllers\SapOperations\SapOperationCheckController;
 use App\Http\Controllers\SapReports\ReportsOverviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExcelImportController;
+use Tests\Feature\UserAccountManagement\ManageUserAccountTest;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,16 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         Route::post("/sapOperations/{operation}/check", [SapOperationCheckController::class, 'checkOperation']);
         Route::delete("/sapOperations/{operation}/uncheck", [SapOperationCheckController::class, 'uncheckOperation']);
 
+    });
+
+    /**
+     * User Account Management
+     */
+    Route::get('/accounts/{account}/add', [ManageUserAccountController::class, 'getFormData']);
+
+    Route::middleware(['ajax', 'jsonify'])->group(function () {
+        Route::post("/accounts/{account}/add", [ManageUserAccountController::class, 'addUserToAccount']);
+        Route::delete('/accounts/{accountId}/users/{userId}', [ManageUserAccountController::class, 'removeUserFromAccount']);
     });
 
     /**

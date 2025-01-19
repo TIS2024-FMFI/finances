@@ -179,6 +179,16 @@ class FinancialOperation extends Model
     }
 
     /**
+     * Return true if the operation is approved
+     *
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return $this->status == 1;
+    }
+
+    /**
      * Return status of the operation - waiting/refused/accepted
      *
      * @return bool

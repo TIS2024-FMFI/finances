@@ -92,5 +92,4 @@ class User extends Authenticatable
         return $this->hasManyThrough(financialOperations::class, AccountUser::class);
     }
 
-
 }

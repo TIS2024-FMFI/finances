@@ -2232,6 +2232,139 @@ $(document).ready(function(){
 
     // <-- Financial operations
 
+    // Add User to Account
+    $("#add-user-check").click(function() {
+        let account_id = $(this).data("account-id");
+        let csrf = $(this).data("csrf");
+        let url = root + "/accounts/" + account_id + "/add";
+    
+        console.log("URL for add user ", url);
+        $("#add-user-form").data("account-id", account_id); 
+        $("#add-user-modal").css("display", "flex");
+        $(".choose-lending").show();
+    
+        $("#add-user-choice").empty();
+    
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            data: { "_token": csrf },
+            beforeSend: function() {
+                $("#loader-modal").css("display", "flex");
+                $("#add-user-modal").css("display", "none");
+            },
+            complete: function() {
+                $("#loader-modal").css("display", "none");
+                $("#add-user-modal").css("display", "flex");
+            }
+        }).done(function(response) {
+            $("#add-user-choice").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte používateľa'
+            }));
+    
+            if (response.users.length !== 0) { 
+                console.log(response);
+                response.users.forEach(function(user) {
+                    $("#add-user-choice").append($('<option>', {
+                        value: user.id,
+                        text: user.email
+                    }));
+                });
+            }
+        }).fail(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'error',
+                title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+            });
+        });
+    });
+    
+    $("#add-user-form").on("submit", function(e) {
+        e.preventDefault();
+    
+        let account_id = $(this).data("account-id");
+        let user_id = $("#add-user-choice").val();
+        let csrf = $("#add-user-button").data("csrf");
+    
+        if (user_id === "default_opt") {
+            Toast.fire({ icon: 'error', title: 'Vyberte používateľa!' });
+            return;
+        }
+    
+        $.ajax({
+            url: root + "/accounts/" + account_id + "/add",
+            type: "POST",
+            dataType: "json",
+            data: {
+                '_token': csrf,
+                'user_id': user_id
+            }
+        }).done(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'success',
+                title: response.displayMessage
+            });
+            location.reload();
+        }).fail(function(response) {
+            console.log(response);
+            Toast.fire({
+                icon: 'error',
+                title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+            });
+        });
+    });
+
+    $(".remove-user-button").click(function() {
+        let userId = $(this).data("user-id");
+        let accountId = $(this).data("account-id");
+    
+        $("#delete-user-from-account-form").data("user-id", userId);
+        $("#delete-user-from-account-form").data("account-id", accountId);
+        
+        $("#delete-user-from-account-modal").css("display", "flex");
+    });
+    
+    $("#delete-user-from-account-form").on("submit", function(e) {
+        e.preventDefault();
+    
+        let userId = $(this).data("user-id");
+        let accountId = $(this).data("account-id");
+        let csrf = $("#delete-user-from-account-button").data("csrf");
+    
+        $.ajax({
+            url: `/accounts/${accountId}/users/${userId}`,
+            type: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": csrf
+            },
+            success: function(response) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.displayMessage
+                });
+                location.reload();
+            },
+            error: function(xhr) {
+                console.log(response);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+                });
+            }
+        });
+    
+        $("#delete-user-from-account-modal").css("display", "none");
+    });
+    
+    $(".close-modal, .cancel").on("click", function() {
+        $("#delete-user-from-account-modal").css("display", "none");
+    });
+    
+
 //admin
 $(".user").click(function(){
     var user_id = $(this).data("id");
@@ -2282,8 +2415,6 @@ $(".account_admin").click(function(){
 
 
 })
-
-
 
 
 

@@ -27,24 +27,25 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         </div>
 
     </div>
-
-
 </div>
 
+<table class="usersTable">
+    <div class="import-sap-operations-div">
+        <div class='operations-name'>Používatelia účtu</div>        
+        <button class="button-filter" type="button" data-account-id="{{ $account->id }}" data-date-errors="{{$errors->first('to')}}" id="add-user-check">Pridať použivateľa</button>
+    </div>
 
 <?php
-
-    echo '<table class="usersTable">';
-    echo "<div class='operations-name'>Používatelia účtu</div>";
-
     // Table headers should be inside <thead>
     echo "<thead>";
     echo "<tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Zostatok</th>
-      </tr>";
+            <th style='width: 10%;'>ID</th>
+            <th style='width: 50%;'>Email</th>
+            <th style='width: 15%;' class='align-right'>Zmazať používateľa</th>
+            <th style='width: 25%;' class='align-right'>Zostatok</th>
+          </tr>";
     echo "</thead>";
+    
 
     // Table body should be inside <tbody>
     echo "<tbody>";
@@ -79,6 +80,14 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         echo "
             <td>{$user_id}</td>
             <td>{$user_email}</td>";
+        echo "
+        <td class='align-right'>
+            <button class='remove-user-button' 
+                    data-user-id=" . $user_id . " 
+                    data-account-id=" . $account->id . ">
+                <i class='bi bi-trash3' title='Zmazať používateľa'></i>
+            </button>
+        </td>";
 
         // Display balance in green if positive, red if negative
         if ($user_balance >= 0) {
@@ -86,7 +95,6 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         } else {
             echo "<td class=\"align-right\" style=\"color: red;\">" . number_format($user_balance, 2, ',', ' ') . "€</td>";
         }
-
         echo "</tr>";
     }
 
@@ -271,6 +279,10 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 </table>
 
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
+
+<div class="operations-name">
+        SAP operácie
+</div>
 
 <div class="search-container1">
     <form method="GET" action="{{ url()->current() }}" class="search-container-form">
