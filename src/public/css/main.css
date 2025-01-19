@@ -371,15 +371,7 @@ table td a:hover {
     justify-content: space-between;
 }
 
-.button-search{
-    padding: 10px 20px;
-    border: 1px solid var(--primary);
-    background-color: white;
-    color: var(--primary);
-    font-size: 15px;
-    display: block;
-    margin-left: auto;
-  }
+
 
 .button-add {
     padding: 2px 14px 6px 14px;
@@ -798,3 +790,29 @@ a:visited {
     align-items: center;
 }
 
+.search-container-form{
+    margin: 0!important;
+    flex-direction: row!important;
+}
+
+.button-search{
+    height: 100%;
+    width: 40px;
+    border: 1px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    background-color: white;
+    color: var(--primary);
+    font-size: 15px;
+    display: block;
+    cursor: pointer;
+}
+
+.search-svg {
+    width: 16px;
+    height: 16px;
+}
+
+.button-search:hover{
+    opacity: 0.5;
+
+}
