@@ -45,8 +45,25 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
-        $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
-        ->paginate($this::$resultsPerPage)->withQueryString();
+        $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
+
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
+
+        // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
+        // ->paginate($this::$resultsPerPage)->withQueryString();
         $sapOperations = $account->sapOperations;
 
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
@@ -64,6 +81,9 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'users' => $users,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
     }
 
@@ -73,10 +93,27 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $user = Auth::user();
         $users = null;
+        $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
+
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
+
         $sapOperations = $account->sapOperations;
 
-        $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
-        ->paginate($this::$resultsPerPage)->withQueryString();
+        // $operations = $account->OperationsBetween( $dateFrom, $dateTo)->orderBy('date', 'desc')
+        // ->paginate($this::$resultsPerPage)->withQueryString();
         $users = $account->users;
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
@@ -91,7 +128,10 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'users' => $users,
-            'sapOperations' => $sapOperations
+            'sapOperations' => $sapOperations,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
 
     }
@@ -102,9 +142,25 @@ class OperationsOverviewController extends Controller
         $dateTo = $request->getValidatedToDateOrMax();
         $sapOperations = $account->sapOperations;
 
-        $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
-            ->paginate($this::$resultsPerPage)->withQueryString();
+        // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
+            // ->paginate($this::$resultsPerPage)->withQueryString();
+        
+        $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
 
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        if (!is_null($status)) {
+            $query->where('status', $status);
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
+        }
+        $operations = $query->paginate($this::$resultsPerPage)->withQueryString();
 
         $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
         $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
@@ -120,7 +176,10 @@ class OperationsOverviewController extends Controller
             'expenses_total' => $expenses,
             'account_balance' => $accountBalance,
             'user' => $user,
-            'sapOperations' => $sapOperations
+            'sapOperations' => $sapOperations,
+            'status' => $status,
+            'operation_type' => $operationType,
+            'search' => $search,
         ]);
     }
 
@@ -139,9 +198,26 @@ class OperationsOverviewController extends Controller
     {
         $dateFrom = $request->getValidatedFromDateOrMin();
         $dateTo = $request->getValidatedToDateOrMax();
+        $search = $request->input('search', null);
+        $status = $request->input('status', null);
+        $operationType = $request->input('operation_type', null);
 
-        $operations = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc')->get();
-        $filename = $this->generateExportName($account, $dateFrom, $dateTo);
+        // $operations = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc')->get();
+
+        $query = $account->operationsBetween($dateFrom, $dateTo)->orderBy('date', 'desc');
+
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        if ($operationType) {
+            $operationTypes = explode(',', $operationType);
+            $query->whereIn('operation_type_id', $operationTypes);
+        }
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+        $operations = $query->get();
+        $filename = $this->generateExportName($account, $dateFrom, $dateTo, $search, $operationType, $status);
 
         return response()->streamDownload(
             fn () => $this->generateCsvFile($operations),
@@ -163,13 +239,24 @@ class OperationsOverviewController extends Controller
      * @return string
      * the generated file name
      */
-    private function generateExportName(Account $account, Carbon $dateFrom, Carbon $dateTo)
+    private function generateExportName(Account $account, Carbon $dateFrom, Carbon $dateTo, $search, $operationType, $status)
     {
         $sap_id  = $account->getSanitizedSapId();
         $from = $this->generateFromString($dateFrom);
         $to = $this->generateToString($dateTo);
+        $filters = '';
+        if ($search) {
+            $filters .= "_search_{$search}";
+        }
+        if ($operationType) {
+            $filters .= "_type_{$operationType}";
+        }
+        if ($status) {
+            $filters .= "_status_{$status}";
+        }
 
-        return "{$sap_id}_export{$from}{$to}.csv";
+        return "{$sap_id}_export{$from}{$to}{$filters}.csv";
+        // return "{$sap_id}_export{$from}{$to}.csv";
     }
 
     /**

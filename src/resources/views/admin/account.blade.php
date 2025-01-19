@@ -139,6 +139,23 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     </div>
 </div>
 
+<div class="search-container">
+    <form method="GET" action="{{ url()->current() }}">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search" 
+            value="{{ request('search') }}"
+            id=searchh
+        >
+        <input type="hidden" name="from" value="{{ request('from') }}">
+        <input type="hidden" name="to" value="{{ request('to') }}">
+        <input type="hidden" name="status" value="{{ request('status') }}">
+        <input type="hidden" name="operation_type" value="{{ request('operation_type') }}">
+
+        <button type="submit" class="button-search">🔍</button>
+    </form>
+</div>
 
 <div class="filter-box">
     <div>
@@ -148,6 +165,29 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         <label>Do:</label>
         <input type="date" id="filter-operations-to" value="<?php echo $to ?>"></input>
 
+        <label class="status-label">Status:</label>
+        <select id="filter-status">
+            <option value="">---</option>
+            <option value="0" {{ $status === '0' ? 'selected' : '' }}>Waiting</option>
+            <option value="1" {{ $status === '1' ? 'selected' : '' }}>Approved</option>
+            <option value="2" {{ $status === '2' ? 'selected' : '' }}>Refused</option>
+        </select>
+        <span>&nbsp;&nbsp;</span>
+        <label for="operation-type-label">Typ:</label>
+        <span>&nbsp;</span>
+        <select id="filter-operation-type">
+            <option value="" {{ $operation_type == '' ? 'selected' : '' }}>---</option>
+            <option value="1" {{ $operation_type == '1' ? 'selected' : '' }}>Služba na faktúru</option>
+            <option value="2" {{ $operation_type == '2' ? 'selected' : '' }}>Grant</option>
+            <option value="3,10" {{ $operation_type == '3,10' ? 'selected' : '' }}>Pôžička</option>
+            <option value="4,11" {{ $operation_type == '4,11' ? 'selected' : '' }}>Splatenie pôžičky</option>
+            <option value="5,12" {{ $operation_type == '5,12' ? 'selected' : '' }}>Iný</option>
+            <option value="6" {{ $operation_type == '6' ? 'selected' : '' }}>Nákup na faktúru</option>
+            <option value="7" {{ $operation_type == '7' ? 'selected' : '' }}>Nákup cez Marquet</option>
+            <option value="8" {{ $operation_type == '8' ? 'selected' : '' }}>Drobný nákup</option>
+            <option value="9" {{ $operation_type == '9' ? 'selected' : '' }}>Pracovná cesta</option>
+        </select>
+        <span>&nbsp;&nbsp;</span>
         <button class="button-filter" type="button" data-account-id="{{ $account->id }}" data-date-errors="{{$errors->first('to')}}" id="filter-operations">Filtrovať</button>
         <button class="button-filter" data-account-id="{{ $account->id }}" type="button" id="operations-export">Exportovať</button>
     </div>
@@ -165,8 +205,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 @endif
 
 <table>
-    <tr>
-        <th>Používateľ</th>
+    <tr> <th>Používateľ</th>
         <th>Názov</th>
         <th>Dátum</th>
         <th>Typ</th>
@@ -177,7 +216,6 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
     </tr>
 
     @foreach ($operations as $key=>$operation)
-
     <tr>
         <!--            <td>{{ ($operations->currentPage() - 1) * $operations->perPage() + $key + 1}}.</td>-->
         <td>{{ $operation->user()->email }}</td>
@@ -236,6 +274,18 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 </table>
 
 <div class="pagination"> {{ $operations->links("pagination::semantic-ui") }} </div>
+
+<div class="search-container1">
+    <form method="GET" action="{{ url()->current() }}">
+        <input 
+            type="text" 
+            name="searchS" 
+            placeholder="Search" 
+            value="{{ request('searchS') }}" 
+        >
+        <button type="submit" class="button-search">🔍</button>
+    </form>
+</div>
 
 <table>
     <tr>
