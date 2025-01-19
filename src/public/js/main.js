@@ -331,15 +331,15 @@ $(document).ready(function(){
 
     $("#create-excel-form").on("submit", function(e) {
         e.preventDefault();
-    
+
         $("#create-excel-button").attr("disabled", true);
-    
+
         let account_id = $(this).data("account-id");
         console.log("Submitting for Account ID:", account_id);
-    
+
         let csrf = $("#create-excel-button").data("csrf");
         let fileUpload = $("#excel-file").get(0);
-    
+
         // Ensure a file is selected
         if (!fileUpload.files.length) {
             console.log("No file selected!");
@@ -347,12 +347,12 @@ $(document).ready(function(){
             $("#create-excel-button").attr("disabled", false);
             return;
         }
-    
-        let file = fileUpload.files[0];    
+
+        let file = fileUpload.files[0];
         let fileData = new FormData();
         fileData.append("excel_file", file);
         fileData.append("_token", csrf);
-    
+
         $.ajax({
             url: root + "/accounts/" + account_id + "/excel-upload",
             type: "POST",
@@ -2252,6 +2252,32 @@ $(".account_admin").click(function(){
     window.location.href = root + '/user/'+ user_id + '/accounts/'+account_id+'/operations';
 });
 
+
+    function performSearch() {
+        const query = $('#search-bar').val().toLowerCase();
+        $('.accounts_table tbody tr').each(function () {
+            const sapIdCell = $(this).find('td:first-child');
+            if (sapIdCell.length) {
+                const sapId = sapIdCell.text().toLowerCase();
+                if (sapId.includes(query)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            }
+        });
+
+
+    }
+
+    $('#search-button').click(performSearch);
+
+    $('#search-bar').on('keypress', function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            performSearch();
+        }
+    });
 
 
 })

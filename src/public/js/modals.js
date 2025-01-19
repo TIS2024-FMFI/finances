@@ -16,8 +16,9 @@ $(document).ready(function(){
     })
     // <-- Initialize Toast
 
+
     function handleOperationFormSubmission(formSelector, urlSuffix) {
-        $(formSelector).on("submit", function (e) {
+        $(formSelector).find("button").on("click", function (e) {
             e.preventDefault();
             let csrf = $("#create-excel-button").data("csrf");
             let operation_id = $("#edit-operation-form").data("operation-id");
@@ -25,6 +26,9 @@ $(document).ready(function(){
 
             fileData.append('_token', csrf);
             fileData.append('_method', 'PATCH');
+            fileData.append('title', "1");
+
+            console.log(`${root}/operations/${operation_id}/${urlSuffix}`)
 
             $.ajax({
                 url: `${root}/operations/${operation_id}/${urlSuffix}`,
@@ -48,6 +52,8 @@ $(document).ready(function(){
                 });
         });
     }
+
+
 
     handleOperationFormSubmission("#success-operation-form", "status-accept");
     handleOperationFormSubmission("#refuse-operation-form", "status-refuse");

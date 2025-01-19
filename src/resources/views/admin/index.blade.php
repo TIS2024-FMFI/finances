@@ -2,9 +2,19 @@
 
 
 
-<div class="search-container-landing">
-    <input type="text" id="search-bar" placeholder="Search">
-    <button id="search-button" class="button-search">🔍</button>
+<div class="search-container">
+
+    <form method="GET" class="search-container-form">
+        <input type="text" id="search-bar" placeholder="Search">
+
+        <button id="search-button" class="button-search" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#732726FF" class="search-svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+
+        </button>
+    </form>
+
 </div>
 
 <table class="accounts_table">
@@ -62,27 +72,5 @@
     ?>
     </tbody>
 </table>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchBar = document.getElementById('search-bar');
-        const searchButton = document.getElementById('search-button');
-        const tableRows = document.querySelectorAll('.accounts_table tbody tr');
-        searchButton.addEventListener('click', function () {
-            const query = searchBar.value.toLowerCase();
-            tableRows.forEach(row => {
-                const sapIdCell = row.querySelector('td:first-child');
-                if (sapIdCell) {
-                    const sapId = sapIdCell.textContent.toLowerCase();
-                    if (sapId.includes(query)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            });
-        });
-    });
-</script>
 
 @include('common.footer')
