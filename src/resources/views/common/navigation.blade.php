@@ -6,12 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href={{ asset('images/credit-card-fill.svg') }}>
     <link href={{ asset('css/main.css') }} rel="stylesheet">
+    <link href={{ asset('css/modals.css') }} rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('common.app_root_script')
     <script src={{ asset('js/main.js') }} rel="stylesheet"></script>
     <title>Financie</title>
+
 </head>
 <body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
 

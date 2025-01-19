@@ -1,0 +1,16 @@
+
+.flex{
+    display: flex;
+}
+
+.success-operation-button{
+    border: 1px solid #43881b!important;
+    background-color: #43881b!important;
+    color: #ffffff!important;
+}
+
+.refuse-operation-button{
+    border: 1px solid #8a201f !important;
+    background-color: #8a201f !important;
+    color: #ffffff!important;
+}

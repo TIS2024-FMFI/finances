@@ -1,6 +1,7 @@
 @include('common.navigation', ['open_change_password' => Auth::user()->password_change_required])
 
 
+
 <div class="search-container-landing">
     <input type="text" id="search-bar" placeholder="Search">
     <button id="search-button" class="button-search">🔍</button>

@@ -326,6 +326,19 @@ table td a:hover {
 
 }
 
+.status-label {
+    padding-right: 14px;
+}
+
+.filter-box span {
+    padding-left: 10px;
+}
+
+.operation-type-label {
+    padding-right: 14px;
+    padding-left: 14px;
+}
+
 .filter-box {
     display: flex;
     margin: 20px 0;
@@ -366,7 +379,7 @@ table td a:hover {
     font-size: 15px;
     display: block;
     margin-left: auto;
-}
+  }
 
 .button-add {
     padding: 2px 14px 6px 14px;
@@ -499,7 +512,6 @@ footer {
     font-size: 18px;
     color: var(--primary);
     padding: 10px 20px;
-    border-radius: 15px;
     margin: 20px;
 }
 .modal button:hover {

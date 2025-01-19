@@ -108,6 +108,8 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         Route::middleware('can:update,operation')->group(function () {
             Route::get('/operations/{operation}/update', [UpdateOperationController::class, 'getFormData']);
             Route::patch('/operations/{operation}', [UpdateOperationController::class, 'update']);
+            Route::patch('/operations/{operation}/status-accept', [UpdateOperationController::class, 'statusAccept']);
+            Route::patch('/operations/{operation}/status-refuse', [UpdateOperationController::class, 'statusRefuse']);
         });
 
         Route::post('/operations/{lending}/repayment', [CreateOperationController::class, 'createRepayment'])
@@ -152,9 +154,9 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/user/{user}/accounts/{account}/sap-reports', [ReportsOverviewController::class, 'admin_user_show']);
     Route::get('/overview/accounts/{account}/sap-reports', [ReportsOverviewController::class, 'admin_show']);
 
-
     Route::get('/user/{user}/accounts/{account}/operations', [OperationsOverviewController::class, 'admin_user_show']);
     Route::get('/overview/accounts/{account}/operations', [OperationsOverviewController::class, 'admin_show']);
+    
     Route::middleware(['ajax', 'jsonify'])->group(function () {
 
         Route::post('/user/{user}/accounts/{account}/operations', [CreateOperationController::class, 'createAdmin']);

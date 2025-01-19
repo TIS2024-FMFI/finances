@@ -545,20 +545,30 @@ $(document).ready(function(){
         let account_id = $(this).data("account-id");
         let date_from = $('#filter-operations-from').val();
         let date_to = $('#filter-operations-to').val();
+        let status = $('#filter-status').val();
+        let search = $('#searchh').val();
+        let operation_type = $('#filter-operation-type').val();
         let error = $(this).data("date-errors");
         let url = root + '/accounts/'+account_id+'/operations';
+        let p = [];
 
-        if (date_from != "" || date_to != ""){
-            url += '?';
+        if (date_from != "") {
+            p.push('from=' + date_from);
         }
-        if (date_from != ""){
-            url += 'from=' + date_from
+        if (date_to != "") {
+            p.push('to=' + date_to);
         }
-        if (date_to != ""){
-            if (date_from != ""){
-                url += '&';
-            }
-            url += 'to=' + date_to
+        if (status != "") {
+            p.push('status=' + status);
+        }
+        if (search != "") {
+            p.push('search=' + search);
+        }
+        if (operation_type != "") {
+            p.push('operation_type=' + operation_type);
+        }
+        if (p.length > 0) {
+            url += '?' + p.join('&');
         }
         window.location.href = url;
     });
@@ -607,19 +617,29 @@ $(document).ready(function(){
         let account_id = $(this).data("account-id");
         let date_from = $('#filter-operations-from').val();
         let date_to = $('#filter-operations-to').val();
+        let status = $('#filter-status').val();
+        let search = $('#searchh').val();
         let url = root + '/accounts/'+account_id+'/operations/export';
+        let operation_type = $('#filter-operation-type').val();
+        let p = [];
 
-        if (date_from != "" || date_to != ""){
-            url += '?';
+        if (date_from != "") {
+            p.push('from=' + date_from);
         }
-        if (date_from != ""){
-            url += 'from=' + date_from
+        if (date_to != "") {
+            p.push('to=' + date_to);
         }
-        if (date_to != ""){
-            if (date_from != ""){
-                url += '&';
-            }
-            url += 'to=' + date_to
+        if (status != "") {
+            p.push('status=' + status);
+        }
+        if (search != "") {
+            p.push('search=' + search);
+        }
+        if (operation_type != "") {
+            p.push('operation_type=' + operation_type);
+        }
+        if (p.length > 0) {
+            url += '?' + p.join('&');
         }
         window.location.href = url;
 
@@ -1471,9 +1491,11 @@ $(document).ready(function(){
     $("#create_operation").click(function(){
         let account_id = $(this).data("account-id");
         let csrf = $(this).data("csrf");
-        let isAdmin = false;
-        let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
+        let isAdmin = $('body').data('is-admin');
+
+        let urlPath = "/accounts/";
         let url = root + urlPath + account_id + "/operations/create";
+
         $("#create-operation-form").data("account-id", account_id);
         defaultCreateOperationFormFields();
         $(".lending_detail_div").css("display", "none")
@@ -1499,10 +1521,22 @@ $(document).ready(function(){
             }
         }).done(function(response) {
             console.log(response);
+
+            // Defaults:
             $("#operation_choice").append($('<option>', {
                 value: "default_opt",
                 text: 'Vyberte typ operácie'
             }));
+            $("#operation_users").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte používateľa'
+            }));
+            $("#lending-choice").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte pôžičku'
+            }));
+
+
             response.operation_types.forEach(function(choice){
                 let expense = choice.expense ? "expense_opt" : "income_opt";
                 let lending = choice.lending ? "lending" : "not_lending";
@@ -1514,12 +1548,17 @@ $(document).ready(function(){
                 }));
             })
 
-            $("#lending-choice").append($('<option>', {
-                value: "default_opt",
-                text: 'Vyberte pôžičku'
-            }));
-            if (response.unrepaid_lendings.length != 0){
 
+            if (isAdmin){
+                response.user_list.forEach(function(user){
+                    $("#operation_users").append($('<option>', {
+                        value: user.id,
+                        text: user.email
+                    }));
+                })
+            }
+
+            if (response.unrepaid_lendings.length != 0){
 
                 response.unrepaid_lendings.forEach(function(unrepaid_lending){
                     let lendind_id = unrepaid_lending.id
@@ -1530,6 +1569,9 @@ $(document).ready(function(){
                     }))
                 })
             }
+
+
+
         }).fail(function(response){
 
             console.log("hi")
@@ -1538,14 +1580,16 @@ $(document).ready(function(){
 
     })
 
+
+
     $("#create-operation-form").on("submit", function(e) {
         e.preventDefault();
         $("#create-operation-button").attr("disabled", true);
 
         let csrf = $("#create-operation-button").data("csrf");
         let account_id = $(this).data("account-id");
-        let user_id = $(this).data("user-id");
         let isAdmin = $('body').data('is-admin');
+        let user_id = isAdmin ? $("#operation_users").val(): $(this).data("user-id");
         let urlPath = isAdmin ? "/user/"+ user_id+ "/accounts/" : "/accounts/";
         let url = root + urlPath + account_id + "/operations/";
 
@@ -2207,6 +2251,7 @@ $(".account_admin").click(function(){
     console.log(user_id,account_id);
     window.location.href = root + '/user/'+ user_id + '/accounts/'+account_id+'/operations';
 });
+
 
 
 })
