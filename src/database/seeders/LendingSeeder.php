@@ -23,6 +23,6 @@ class LendingSeeder extends Seeder
      */
     public function run()
     {
-        Lending::factory()->count($this::$count)->create();
+//        Lending::factory()->count($this::$count)->create();
     }
 }

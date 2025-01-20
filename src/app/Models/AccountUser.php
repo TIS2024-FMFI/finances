@@ -64,4 +64,20 @@ class AccountUser extends Model
         return $this->hasMany(FinancialOperation::class);
     }
 
+    public static function getAccountUserHosts(){
+
+        $accountUsers = AccountUser::all();
+
+        $out = $accountUsers->map(function($accountUser) {
+            return [
+                'sap_id' => $accountUser->account->sap_id,
+                'email' => $accountUser->user->email,
+                'id' => $accountUser->id,
+            ];
+        });
+
+        return $out;
+
+    }
+
 }

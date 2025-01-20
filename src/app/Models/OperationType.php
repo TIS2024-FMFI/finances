@@ -61,4 +61,8 @@ class OperationType extends Model
                             ->where('repayment', '=', true)
                             ->first();
     }
+
+    public static function lending(){
+
+    }
 }

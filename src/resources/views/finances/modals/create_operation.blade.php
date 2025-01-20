@@ -38,6 +38,8 @@
         <div class="error-box" id="add-operation-type-errors"></div>
       </div>
 
+
+
 <!--        User start-->
 
         @if(auth()->user()->user_type == 2)
@@ -53,8 +55,20 @@
         </div>
 
         @endif
+        <!--        User end-->
 
-<!--        User end-->
+
+        <div class="input-box add-operation-host" style="display: none">
+            <div class="field">
+                <select id="host_choice" name="typ" id="add-operation-type">
+
+                </select>
+                <label for="add-operation-type">Hostiteľ pôžičky</label>
+            </div>
+            <div class="error-box" id="add-operation-type-errors"></div>
+        </div>
+
+
 
 
       <div class="input-box add-operation-name">

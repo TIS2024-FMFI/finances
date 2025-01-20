@@ -232,9 +232,8 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
         <td>{{ $operation->date->format('d.m.Y') }}</td>
         <td>{{ $operation->operationType->name }}</td>
-        @if( $operation->isLending() )
-        <td>-</td>
-        @elseif( $operation->isChecked() )
+
+        @if( $operation->isChecked() )
         <td style="background-color: lightgreen;">Áno</td>
         @else
         <td style="background-color: red;">Nie</td>
@@ -257,21 +256,15 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
                 @elseif ( $operation->isLending() )
                 <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
                     <i class="bi bi-pencil" title="Upraviť operáciu"></i>
-                    @if (! $operation->lending->repayment)
-                    <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-repayment">
-                        <i class="bi bi-cash-coin" title="Splatiť pôžičku"></i>
-                        @endif
-                        <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
-                            <i class="bi bi-trash3" title="Zmazať operáciu"></i>
-                            @else
-                            <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
-                                <i class="bi bi-pencil" title="Upraviť operáciu"></i>
-                                @if (! $operation->isChecked())
-                                <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
-                                    <i class="bi bi-trash3" title="Zmazať operáciu"></i>
-                                    </button>
+
+                    <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
+                        <i class="bi bi-trash3" title="Zmazať operáciu"></i>
+                        @else
+                        <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
+                            <i class="bi bi-pencil" title="Upraviť operáciu"></i>
+                            <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
+                                <i class="bi bi-trash3" title="Zmazať operáciu"></i>
                                 @endif
-                            @endif
         </td>
     </tr>
 

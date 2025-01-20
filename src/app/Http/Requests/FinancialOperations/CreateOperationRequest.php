@@ -7,7 +7,7 @@ use Illuminate\Validation\Rules\File;
 
 /**
  * A request to create a new financial operation.
- * 
+ *
  * Fields: title, date, operation_type_id, subject, sum, attachment,
  *         expected_date_of_return.
  */
