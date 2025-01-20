@@ -213,9 +213,6 @@ $sum_rozdiel = 0;
             <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
                 <i class="bi bi-trash3" title="Zmazať operáciu"></i>
                 @elseif ( $operation->isLending() )
-            <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
-                <i class="bi bi-pencil" title="Upraviť operáciu"></i>
-
             <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
                 <i class="bi bi-trash3" title="Zmazať operáciu"></i>
                 @else
