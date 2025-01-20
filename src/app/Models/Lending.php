@@ -59,7 +59,9 @@ class Lending extends Model
      */
     public static function findRepayment(int $loanId)
     {
-        return Lending::where('id', '=', $loanId)->first();
+        $repayment = Lending::where('id', '=', $loanId)->first();
+
+        return $repayment;
     }
 
     /**
@@ -72,39 +74,17 @@ class Lending extends Model
         return $this->belongsTo(FinancialOperation::class, 'operation_id', 'id');
     }
 
-    /**
-     * Get the repayment associated with this loan.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function repayment()
+    public function operation_client_id(): BelongsTo
     {
-        return $this->hasOne(Lending::class, 'id', 'id');
+        return $this->belongsTo(FinancialOperation::class, 'operation_client_id', 'id');
     }
 
-    /**
-     * Get the loan with which this lending is associated.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function loan()
+    public function operation_host_id(): BelongsTo
     {
-        return $this->hasOne(FinancialOperation::class, 'id', 'id');
+        return $this->belongsTo(FinancialOperation::class, 'operation_host_id', 'id');
     }
 
-    /**
-     * If this lending is repaid, deletes the repayment's record in the 'financial operations' DB table.
-     * @return void
-     * @throws DatabaseException
-     */
-    public function deleteRepayment()
-    {
-        $repayment = $this->repayment;
-        if (! $repayment)
-            return;
-        if (! $repayment->operation->delete())
-            throw new DatabaseException('The lending\'s repayment wasn\'t deleted.');
-    }
+
 
     public function host()
     {
@@ -119,10 +99,16 @@ class Lending extends Model
     /**
      * Get the financial operation associated with the lending.
      */
-    public function financialOperation()
+    public function operation_host()
     {
-        return $this->belongsTo(FinancialOperation::class, 'operation_id');
+        return $this->belongsTo(FinancialOperation::class, 'operation_host_id');
     }
+
+    public function operation_client()
+    {
+        return $this->belongsTo(FinancialOperation::class, 'operation_client_id');
+    }
+
 
 
 }

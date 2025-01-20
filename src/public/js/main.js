@@ -655,6 +655,8 @@ $(document).ready(function(){
         let operation_id = $(this).data("operation-id");
         let csrf = $(this).data("csrf");
 
+        console.log("hello")
+
         $.ajax({
             url: root + "/operations/" + operation_id,
             type: "GET",
@@ -670,6 +672,9 @@ $(document).ready(function(){
                 $("#loader-modal").css("display", "none");
                 $("#operation-modal").css("display", "flex");
             }
+
+
+
         }).done(function(response) {
             if (response.operation.operation_type.expense == 0) {
                 $("#operation_main_type").html("Príjem");
@@ -687,61 +692,10 @@ $(document).ready(function(){
             yyyy = date.substring(0,4);
             $("#operation_date").html(dd+"."+mm+"."+yyyy);
 
-            let lending_type = response.operation.operation_type.lending
-            let repayment_type = response.operation.operation_type.repayment
-            if (lending_type == 1){
-                $("#previous-lending-button").css("display", "none");
-                if (repayment_type == 1){
-                    $("#previous-lending-button").data("previous-id", response.operation.lending.previous_lending_id);
-                    $("#previous-lending-button").css("display", "flex");
-                    $("#show-repayment-button").css("display", "none");
-                    return_date = response.operation.lending.expected_date_of_return
-                    if(return_date != null){
-
-                        rdd = return_date.substring(8,10);
-                        rmm = return_date.substring(5,7);
-                        ryyyy = return_date.substring(0,4);
-                        $("#operation_date_until").html(rdd+"."+rmm+"."+ryyyy);
-
-                        $("#operation_date_until_label").css("visibility", "visible")
-                        $("#operation_date_until").css("visibility", "visible");
-
-                    }else{
-                        $("#operation_date_until").css("visibility", "hidden");
-                        $("#operation_date_until_label").css("visibility", "hidden");
-                    }
-                }else{
-                    return_date = response.operation.lending.expected_date_of_return
-                    if(return_date != null){
-                        $("#operation_date_until_label").css("visibility", "visible")
-
-                        rdd = return_date.substring(8,10);
-                        rmm = return_date.substring(5,7);
-                        ryyyy = return_date.substring(0,4);
-                        $("#operation_date_until").html(rdd+"."+rmm+"."+ryyyy);
-                        $("#operation_date_until").css("visibility", "visible");
-
-                    }else{
-                        $("#operation_date_until").css("visibility", "hidden");
-                        $("#operation_date_until_label").css("visibility", "hidden");
-                    }
-                    let repaid = response.operation.lending.repayment
-                    if (repaid != null){
-                        $("#show-repayment-button").data("repay-id", repaid.id);
-                        $("#show-repayment-button").css("display", "flex")
-                    }else{
-                        $("#show-repayment-button").css("display", "none")
-                    }
-
-                }
-
-            }else{
-                $("#operation_date_until").css("visibility", "hidden");
-                $("#operation_date_until_label").css("visibility", "hidden");
-                $("#previous-lending-button").css("display", "none");
-                $("#show-repayment-button").css("display", "none")
-            }
-
+            $("#operation_date_until").css("visibility", "hidden");
+            $("#operation_date_until_label").css("visibility", "hidden");
+            $("#previous-lending-button").css("display", "none");
+            $("#show-repayment-button").css("display", "none")
             $("#operation-attachment-button").attr("onclick", 'location.href="'+ root +'/operations/'+ operation_id +'/attachment"')
 
             if (response.operation.attachment == null){
@@ -1537,6 +1491,11 @@ $(document).ready(function(){
                 text: 'Vyberte pôžičku'
             }));
 
+            $("#host_choice").append($('<option>', {
+                value: "default_opt",
+                text: 'Vyberte Hosstiteľa'
+            }));
+
 
             response.operation_types.forEach(function(choice){
                 let expense = choice.expense ? "expense_opt" : "income_opt";
@@ -1546,6 +1505,13 @@ $(document).ready(function(){
                     class: type,
                     value: choice.id,
                     text: choice.name
+                }));
+            })
+
+            response.host_choice.forEach(function(choice){
+                $("#host_choice").append($('<option>', {
+                    value: choice.id,
+                    text: choice.sap_id +" - "+ choice.email
                 }));
             })
 
@@ -1560,14 +1526,20 @@ $(document).ready(function(){
             }
 
             if (response.unrepaid_lendings.length != 0){
-
                 response.unrepaid_lendings.forEach(function(unrepaid_lending){
-                    let lendind_id = unrepaid_lending.id
-                    // let lending_title = unrepaid_lending.title
-                    $("#lending-choice").append($('<option>',{
-                        value: lendind_id,
-                        text: lendind_id
-                    }))
+
+                    let accId = unrepaid_lending.operation_client_id.account_user.account_id
+                    let websiteAccId = response.account.id
+
+                    if (accId == websiteAccId){
+                        $("#lending-choice").append($('<option>',{
+                            value: unrepaid_lending.id,
+                            text: unrepaid_lending.operation_client_id.title
+                        }))
+                    }
+
+
+
                 })
             }
 
@@ -1607,6 +1579,10 @@ $(document).ready(function(){
         let expected_date = $("#add-operation-expected-date").val();
         let lending_id = $("#lending-choice").val();
 
+        let host_id = $("#host_choice").val();
+
+        console.log("haloooo");
+        console.log(host_id);
 
 
         var fileUpload = $("#operation-file").get(0);
@@ -1620,6 +1596,11 @@ $(document).ready(function(){
         fileData.append('operation_type_id', operation_type_id);
         fileData.append('subject', subject);
         fileData.append('sum', sum);
+        fileData.append('host', host_id);
+
+        console.log("TESTYYYYYYYYYY")
+        console.log(fileData)
+
         if (files[0] != undefined){
             fileData.append('attachment', files[0] ?? '');
         }
@@ -1707,57 +1688,70 @@ $(document).ready(function(){
                 }
             })
         }else{
-            let option = $("#lending-choice").val()
-            let user_id = $(this).data("user-id");
-            let isAdmin = $('body').data('is-admin');
-            let urlPath = isAdmin ? "/user/"+ user_id + "/operations/" + lending_id + "/repayment": "/operations/" + lending_id + "/repayment";
-            let url = root + urlPath;
-            if(option != "default_opt"){
+
+            let csrf = $("#create-operation-button").data("csrf");
+            let lending_id = $("#lending-choice").val();
+            let url = root + "/lendings-get-opposite/" + lending_id;
+            console.log(root + "/lendings-get-opposite/" + lending_id)
+
+            let ultimateResponse;
+
+            if (lending_id != "default_opt") {
                 $("#create-operation-button").attr("disabled", false)
 
                 $.ajax({
                     url: url,
-                    type: "POST",
+                    type: "GET",
                     dataType: "json",
                     data: {
-                        "_token": csrf,
-                        'date': date
+                        "_token": csrf
+                    },
+                    beforeSend: function () {
+                        $("#loader-modal").css("display", "flex");
+                    },
+                    complete: function () {
+                        $("#loader-modal").css("display", "none");
                     }
-                }).done(function(response) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: response.displayMessage
-                    })
-                    $(".modal-box").css("display", "none");
+                }).then(function (response) {
 
-                    location.reload();
-                    $.fn.createOperationClearForm(true);
-                }).fail(function(response) {
-                    $.fn.createOperationClearForm();
-                    if (typeof response.responseJSON != 'undefined'){
-                        if (response.status === 422) {
-                            let errors = response.responseJSON.errors;
-                            if (typeof errors.date != 'undefined') {
-                                $("#add-operation-to").css("border-color", "red");
-                                errors.date.forEach(e => {
-                                    $("#add-operation-date-errors").append("<p>" + e + "</p>");
-                                });
-                            }
-                        } else if (typeof response.responseJSON.displayMessage != 'undefined') {
-                            Toast.fire({
-                                icon: 'error',
-                                title: response.responseJSON.displayMessage
-                            })
-                        }
-                    }else{
+                    console.log(response)
+                    ultimateResponse = response
+
+                    let user_id =  response.client.user_id;
+                    let account_id =  response.client.account_id;
+
+                    let urlPath = "/user/"+ user_id+ "/accounts/"+ account_id + "/operations/";
+
+                    var fileData = new FormData();
+                    fileData.append('_token', csrf);
+                    fileData.append('title', response.client_operation.title);
+                    fileData.append('date', response.client_operation.date);
+                    fileData.append('subject', response.client_operation.subject);
+                    fileData.append('sum', response.client_operation.sum);
+                    fileData.append('operation_type_id', "4");
+                    fileData.append('host', response.host.id);
+                    fileData.append('repay_id', ultimateResponse.lending.id);
+
+                    $.ajax({
+                        url: urlPath,
+                        type: "POST",
+                        contentType: false,
+                        processData: false,
+                        dataType: "json",
+                        data: fileData
+                    }).done(function(response) {
                         Toast.fire({
-                            icon: 'error',
-                            title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+                            icon: 'success',
+                            title: response.displayMessage
                         })
-                    }
+                        location.reload();
+
+                        $(".modal-box").css("display", "none");
+
+                        $.fn.createOperationClearForm(true);
+                    })
+
                 })
-            }else{
-                $("#create-operation-button").attr("disabled", true)
             }
         }
     });
@@ -1853,18 +1847,9 @@ $(document).ready(function(){
             $(".operation-file").css("display", "flex")
             $("#edit-operation-to").val(date);
             $(".add-operation-expected-date").css("display", "none");
+
             if (response.operation.operation_type.lending == 1) {
-
                 $(".operation-file").css("display", "none");
-                if (response.operation.lending.expected_date_of_return != null){
-                    let expected_date = response.operation.lending.expected_date_of_return.substring(0,10);
-                    $("#edit-operation-expected-date").val(expected_date);
-                }else{
-                    $("#edit-operation-expected-date").val('');
-                }
-                $(".add-operation-expected-date").css("display", "flex");
-
-
             }
 
         }).fail(
@@ -1875,15 +1860,24 @@ $(document).ready(function(){
     })
 
     $("#lending-choice").change(function(){
-        let lending_id = $(this).val()
-        let csrf = $("#create-operation-button").data("csrf");
-        let option = $("#lending-choice").val()
 
-        if (option != "default_opt"){
+
+        let csrf = $("#create-operation-button").data("csrf");
+        let lending_id = $("#lending-choice").val();
+
+        let url = root + "/lendings-get/" + lending_id;
+        // let lending_id = 1
+
+        console.log(root + "/lendings-get/" + lending_id)
+
+        let lending;
+
+
+        if (lending_id != "default_opt"){
             $("#create-operation-button").attr("disabled", false)
 
             $.ajax({
-                url: root + "/operations/" + lending_id,
+                url: url,
                 type: "GET",
                 dataType: "json",
                 data: {
@@ -1895,7 +1889,24 @@ $(document).ready(function(){
                 complete: function() {
                     $("#loader-modal").css("display", "none");
                 }
-            }).done(function(response) {
+            }).then(function (response) {
+
+                lending = response.lending;
+                let second_url = root + "/operations/" + lending.operation_client_id;
+
+                return $.ajax({
+                    url: second_url,
+                    method: 'GET',
+                    dataType: "json",
+                    data: {
+                        "_token": csrf
+                    },
+                });
+            }).then(function(response) {
+
+                console.log(response)
+
+
                 $("#lending_operation_name").html(response.operation.title);
                 $("#lending_operation_subject").html(response.operation.subject);
                 $("#lending_operation_sum").html(response.operation.sum + " €");
@@ -1905,17 +1916,14 @@ $(document).ready(function(){
                 yyyy = date.substring(0,4);
                 $("#lending_operation_date").html(dd+"."+mm+"."+yyyy);
 
-                if (response.operation.lending.expected_date_of_return != null){
-                    date = response.operation.lending.expected_date_of_return.substring(0,10);
-                    ldd = date.substring(8,10);
-                    lmm = date.substring(5,7);
-                    lyyyy = date.substring(0,4);
 
-                    $("#lending_operation_date_until").html(ldd+"."+lmm+"."+lyyyy);
-                }else{
-                    $("#lending_operation_date_until_label").css('display', 'none')
+                date = lending.expected_date_of_return.substring(0,10);
+                ldd = date.substring(8,10);
+                lmm = date.substring(5,7);
+                lyyyy = date.substring(0,4);
 
-                }
+                $("#lending_operation_date_until").html(ldd+"."+lmm+"."+lyyyy);
+
 
                 $(".lending_detail_div").css("display", "flex")
                 $("#lending_detail").css("display", "flex")
@@ -2204,6 +2212,7 @@ $(document).ready(function(){
             $(".add-operation-sum").css("display","flex");
             $(".add-operation-to").css("display","flex");
             $(".add-operation-expected-date").css("display","flex");
+            $(".add-operation-host").css("display","flex");
             $(".operation-file").css("display","none");
             $(".choose-lending").css("display","none");
             return;
@@ -2213,6 +2222,7 @@ $(document).ready(function(){
         $(".add-operation-sum").css("display","flex");
         $(".add-operation-to").css("display","flex");
         $(".add-operation-expected-date").css("display","none");
+        $(".add-operation-host").css("display","none");
         $(".operation-file").css("display","flex");
         $(".choose-lending").css("display","none");
 

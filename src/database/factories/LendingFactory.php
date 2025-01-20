@@ -32,7 +32,8 @@ class LendingFactory extends Factory
             'expected_date_of_return' => fake()->date,
             "host_id"=>$user_host,
             "client_id"=>$user_client,
-            "operation_id"=>$operation
+            "operation_client_id"=>$operation,
+            "operation_host_id"=>$operation
         ];
     }
 }

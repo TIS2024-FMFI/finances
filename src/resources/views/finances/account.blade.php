@@ -192,9 +192,7 @@ $sum_rozdiel = 0;
 
         <td>{{ $operation->date->format('d.m.Y') }}</td>
         <td>{{ $operation->operationType->name }}</td>
-        @if( $operation->isLending() )
-        <td>-</td>
-        @elseif( $operation->isChecked() )
+        @if( $operation->isChecked() )
         <td>Áno</td>
         @else
         <td>Nie</td>
@@ -217,10 +215,7 @@ $sum_rozdiel = 0;
                 @elseif ( $operation->isLending() )
             <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-edit">
                 <i class="bi bi-pencil" title="Upraviť operáciu"></i>
-                @if (! $operation->lending->repayment)
-            <button type="button" data-operation-id="{{ $operation->id }}" data-csrf="{{ csrf_token() }}" class="operation-repayment">
-                <i class="bi bi-cash-coin" title="Splatiť pôžičku"></i>
-                @endif
+
             <button type="button" data-operation-id="{{ $operation->id }}" class="operation-delete">
                 <i class="bi bi-trash3" title="Zmazať operáciu"></i>
                 @else

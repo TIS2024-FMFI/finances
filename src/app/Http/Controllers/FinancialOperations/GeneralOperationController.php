@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\FinancialOperation;
 use App\Models\Lending;
+use App\Models\OperationType;
 use App\Models\User;
+use Complex\Operations;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
@@ -71,14 +74,19 @@ class GeneralOperationController extends Controller
      * @return void
      * @throws DatabaseException
      */
-    protected function upsertLending(FinancialOperation $operation, array $lendingData)
+    protected function upsertLending(FinancialOperation $operation_host, FinancialOperation $operation_client, array $lendingData,  $host)
     {
-        $validatedData = $this->getValidatedLendingData($operation, $lendingData);
 
-        $lending = Lending::updateOrCreate(
-            ['id' => $operation->id],
-            $validatedData
-        );
+
+
+        $lending = Lending::create([
+            'host_id' => $operation_host->account_user_id,
+            'client_id' => $operation_client->account_user_id,
+            'operation_client_id' => $operation_client->id,
+            'operation_host_id' => $operation_host->id,
+            'expected_date_of_return' => '2025-01-25',
+        ]);
+
 
         if (!$lending->exists)
             throw new DatabaseException('The lending wasn\'t created.');

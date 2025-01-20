@@ -17,13 +17,10 @@ return new class extends Migration
             $table->id();
             $table->date('expected_date_of_return')->nullable();
             $table->unsignedBigInteger('host_id');
-            $table->foreign('host_id')->references('id')->on('account_user')->cascadeOnDelete();
             $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('account_user')->cascadeOnDelete();
-            $table->unsignedBigInteger('operation_id')->unique();
-            $table->foreign('operation_id')->references('id')->on('financial_operations')->cascadeOnDelete();
-
-
+            $table->unsignedBigInteger('operation_client_id')->unique();
+            $table->unsignedBigInteger('operation_host_id')->unique();
+            $table->boolean('isRepayed')->default(false);
         });
     }
 

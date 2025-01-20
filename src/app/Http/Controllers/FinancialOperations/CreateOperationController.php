@@ -49,30 +49,44 @@ class CreateOperationController extends GeneralOperationController
 
         return [
             'operation_types' => OperationType::userAssignable()->get(),
-            'unrepaid_lendings' => Lending::all(),
-            'user_list' => $account->users()->get()
+            'unrepaid_lendings' => Lending::where('isRepayed', 0)
+                ->with(['operation_client_id', 'operation_host_id'])
+                ->get(),
+            'user_list' => $account->users()->get(),
+            'operations' => $account->operations()->get(),
+            'host_choice' => AccountUser::getAccountUserHosts(),
+            'account' => $account,
 
         ];
-
-
-
-//        // Check if the authenticated user is an admin
-//        if (Auth::user()->user_type == 2) {
-//            // Admin users get all user-assignable operation types and all unrepaid lendings associated with the account
-//            return [
-//                'operation_types' => OperationType::userAssignable()->get(),
-//                'financial_operations' => FinancialOperation::all(),
-//            ];
-//        } else {
-//            // Non-admin users get data based on their specific association with the account
-////            $user = $account->user->first();
-//            return [
-//                'operation_types' => OperationType::userAssignable()->get(),
-//                'financial_operations' => User::all(),
-//            ];
-//        }
     }
 
+
+    public function getLendingData(Lending $lending)
+    {
+        return [
+            'lending' => $lending
+        ];
+    }
+
+    public function getOpposite(Lending $lending)
+    {
+        $lendObj = $lending;
+
+        $client_operation = $lendObj->operation_client()->get()[0];
+        $host_operation = $lendObj->operation_host()->get()[0];
+
+        $client = $lendObj->client()->get()[0];
+        $host = $lendObj->host()->get()[0];
+
+        return [
+            'lending' => $lending,
+            "client_operation" => $client_operation,
+            "host_operation" => $host_operation,
+            'client' => $client,
+            'host' => $host
+
+        ];
+    }
 
     /**
      * Handles the request to create a new financial operation.
@@ -86,67 +100,24 @@ class CreateOperationController extends GeneralOperationController
      */
     public function create(Account $account, CreateOperationRequest $request)
     {
-        DB::enableQueryLog();
-        $type = OperationType::findOrFail($request->validated('operation_type_id'));
 
-        // if ($type->repayment)
-        //     return response(trans('financial_operations.create.failure'), 500);
-       // Log::debug($user);
-        return $this->createOperationFromData($account, $request->validated());
+        $user = Auth::user();
+        $host = $request['host'];
+        $repay_id = $request['repay_id'];
+
+        return $this->createOperationFromData($user,$account, $request->validated(), $host, $repay_id);
     }
 
     public function createAdmin(User $user, Account $account, CreateOperationRequest $request)
     {
-        Log::debug($user);
+
         if (is_null($user))
             $user = Auth::user();
-        Log::debug(is_null($user));
-        Log::debug($user);
-        DB::enableQueryLog();
-        $type = OperationType::findOrFail($request->validated('operation_type_id'));
 
-        // if ($type->repayment)
-        //     return response(trans('financial_operations.create.failure'), 500);
+        $host = $request['host'];
+        $repay_id = $request['repay_id'];
 
-        return $this->createOperationFromDataAdmin($user,$account, $request->validated());
-    }
-
-    /**
-     * Handles a request to create a new repayment operation.
-     *
-     * @param Lending $lending
-     * the lending with which to associate the repayment
-     * @param CreateRepaymentRequest $request
-     * the request containing the repayment data
-     * @return Application|ResponseFactory|Response
-     * a response containing information about this operation's result
-     */
-
-    public function createRepayment(Lending $lending, CreateRepaymentRequest $request)
-    {
-        $lendingOperation = $lending->operation;
-
-        if ($lendingOperation->isRepayment())
-            return response(trans('financial_operations.create.failure'), 500);
-
-        $account = $lendingOperation->account();
-        $data = $request->prepareValidatedOperationData($lendingOperation);
-
-        return $this->createOperationFromData($account, $data);
-    }
-
-    public function createRepaymentAdmin(User $user = null, Lending $lending, CreateRepaymentRequest $request)
-    {
-
-        $lendingOperation = $lending->operation;
-
-        if ($lendingOperation->isRepayment())
-            return response(trans('financial_operations.create.failure'), 500);
-
-        $account = $lendingOperation->account();
-        $data = $request->prepareValidatedOperationData($lendingOperation);
-
-        return $this->createOperationFromDataAdmin($user,$account, $data);
+        return $this->createOperationFromDataAdmin($user,$account, $request->validated(), $host, $repay_id);
     }
 
 
@@ -162,11 +133,11 @@ class CreateOperationController extends GeneralOperationController
      * @return Application|ResponseFactory|Response
      * a response containing information about this operation's result
      */
-    private function createOperationFromData(Account $account, array $data)
+    private function createOperationFromData(User $user = null, Account $account, array $data, $host, $repay_id)
     {
         try {
             $attachment = $this->saveAttachment($account, $data);
-            $this->createOperationWithinTransaction($account, $data, $attachment);
+            $this->createOperationWithinTransaction($user,$account, $data, $attachment, $host, $repay_id);
         } catch (Exception $e) {
             Log::debug('Creating financial operation failed, error: {e}', ['e' => $e]);
             if ($e instanceof ValidationException)
@@ -178,12 +149,12 @@ class CreateOperationController extends GeneralOperationController
     }
 
 
-    private function createOperationFromDataAdmin(User $user = null, Account $account, array $data)
+    private function createOperationFromDataAdmin(User $user = null, Account $account, array $data, $host, $repay_id)
     {
 
         try {
             $attachment = $this->saveAttachment($account, $data);
-            $this->createOperationWithinTransactionAdmin($user,$account, $data, $attachment);
+            $this->createOperationWithinTransactionAdmin($user,$account, $data, $attachment, $host, $repay_id);
         } catch (Exception $e) {
             Log::debug('Creating financial operation failed, error: {e}', ['e' => $e]);
             if ($e instanceof ValidationException)
@@ -206,21 +177,21 @@ class CreateOperationController extends GeneralOperationController
      * @return void
      * @throws Exception
      */
-    private function createOperationWithinTransaction(Account $account, array $data, string|null $attachment)
+    private function createOperationWithinTransaction(User $user = null, Account $account, array $data, string|null $attachment, $host, $repay_id)
     {
         $createRecordTransaction = new DBTransaction(
-            fn() => $this->createOperationAndLendingRecord($account, $data, $attachment),
+            fn() => $this->createOperationAndLendingRecord($user,$account, $data, $attachment, $host, $repay_id),
             fn() => FileHelper::deleteFileIfExists($attachment)
         );
 
         $createRecordTransaction->run();
     }
 
-    private function createOperationWithinTransactionAdmin(User $user = null, Account $account, array $data, string|null $attachment)
+    private function createOperationWithinTransactionAdmin(User $user = null, Account $account, array $data, string|null $attachment, $host, $repay_id)
     {
 
         $createRecordTransaction = new DBTransaction(
-            fn() => $this->createOperationAndLendingRecordAdmin($user,$account, $data, $attachment),
+            fn() => $this->createOperationAndLendingRecordAdmin($user,$account, $data, $attachment, $host, $repay_id),
             fn() => FileHelper::deleteFileIfExists($attachment)
         );
 
@@ -241,23 +212,86 @@ class CreateOperationController extends GeneralOperationController
      * @throws DatabaseException
      */
 
-    private function createOperationAndLendingRecord(Account $account, array $data, string|null $attachment)
+    private function createOperationAndLendingRecord(User $user = null, Account $account, array $data, string|null $attachment, $host, $repay_id)
     {
-        $operation = $this->createOperationRecord($account, $data, $attachment);
-        Log::debug("Created an operation {e}", ['e' => $operation]);
-        Log::debug("Is the operation a lending? {e}", ['e' => $operation->isLending()]);
-        if ($operation->isLending())
-            $this->upsertLending($operation, $data);
+        $operation_client = $this->createOperationRecord($user, $account, $data, $attachment);
+
+        if ($operation_client->isRepayment()){
+
+            $accountUser = AccountUser::find($host);
+            $hostUser = $accountUser->user;
+            $hostAccount = $accountUser->account;
+            $hostdata = array_merge([], $data);
+            $hostdata['operation_type_id'] = "11";
+
+            $operation_host = $this->createOperationRecord($hostUser, $hostAccount, $hostdata, $attachment);
+
+            Log::debug("hakinoo");
+            Log::debug($operation_client);
+            Log::debug("$operation_host");
+
+            Lending::findRepayment($repay_id)?->update(['isRepayed' => 1]);
+        }
+
+        else if ($operation_client->isLending()){
+
+            $accountUser = AccountUser::find($host);
+            $hostUser = $accountUser->user;
+            $hostAccount = $accountUser->account;
+            $hostdata = array_merge([], $data);
+            $hostdata['operation_type_id'] = "10";
+
+            $operation_host = $this->createOperationRecord($hostUser, $hostAccount, $hostdata, $attachment);
+
+            Log::debug("JOKINOOOO");
+            Log::debug($operation_client);
+            Log::debug("$operation_host");
+
+            $this->upsertLending($operation_client,$operation_host, $data, $host);
+        }
+
+
     }
 
-    private function createOperationAndLendingRecordAdmin(User $user = null, Account $account, array $data, string|null $attachment)
+    private function createOperationAndLendingRecordAdmin(User $user = null, Account $account, array $data, string|null $attachment, $host, $repay_id)
     {
 
-        $operation = $this->createOperationRecordAdmin($user, $account, $data, $attachment);
-        Log::debug("Created an operation {e}", ['e' => $operation]);
-        Log::debug("Is the operation a lending? {e}", ['e' => $operation->isLending()]);
-        if ($operation->isLending())
-            $this->upsertLending($operation, $data);
+        $operation_client = $this->createOperationRecordAdmin($user, $account, $data, $attachment);
+
+        if ($operation_client->isRepayment()){
+
+            $accountUser = AccountUser::find($host);
+            $hostUser = $accountUser->user;
+            $hostAccount = $accountUser->account;
+            $hostdata = array_merge([], $data);
+            $hostdata['operation_type_id'] = "11";
+
+            $operation_host = $this->createOperationRecordAdmin($hostUser, $hostAccount, $hostdata, $attachment);
+
+            Log::debug("hakinoo");
+            Log::debug($operation_client);
+            Log::debug("$operation_host");
+
+            Lending::findRepayment($repay_id)?->update(['isRepayed' => 1]);
+        }
+
+        else if ($operation_client->isLending()){
+
+            $accountUser = AccountUser::find($host);
+            $hostUser = $accountUser->user;
+            $hostAccount = $accountUser->account;
+            $hostdata = array_merge([], $data);
+            $hostdata['operation_type_id'] = "10";
+
+            $operation_host = $this->createOperationRecordAdmin($hostUser, $hostAccount, $hostdata, $attachment);
+
+            Log::debug("JOKINOOOO");
+            Log::debug($operation_client);
+            Log::debug("$operation_host");
+
+            $this->upsertLending($operation_client,$operation_host, $data, $host);
+        }
+
     }
 
     /**
@@ -277,18 +311,19 @@ class CreateOperationController extends GeneralOperationController
      *
      */
 
-    private function createOperationRecord(Account $account, array $data, string|null $attachment)
+    private function createOperationRecord(User $user, Account $account, array $data, string|null $attachment)
     {
         unset($data['expected_date_of_return']);
         unset($data['']);
         DB::enableQueryLog();
-        $currentUser = Auth::user();
+
+        Log::debug($user);
         // Identifikujte, či operáciu vykonáva admin alebo bežný užívateľ
-        $accountUser = $account->users()->where('users.id', $currentUser->id)->first();
+        $accountUser = $account->users()->where('users.id', $user->id)->first();
         $accountUserId = $accountUser->pivot->id;
         $recordData = array_merge($data, ['attachment' => $attachment, 'account_user_id' => $accountUserId]);
         Log::debug('Creating financial operation data', ['data' => $recordData]);
-        $operation = $account->operations()->updateOrCreate($recordData);
+        $operation = $account->operations()->create($recordData);
 
         if (!$operation->exists) {
             Log::error('The operation wasn\'t created.', ['data' => $recordData]);
@@ -310,7 +345,7 @@ class CreateOperationController extends GeneralOperationController
         $accountUserId = $accountUser->pivot->id;
         $recordData = array_merge($data, ['attachment' => $attachment, 'account_user_id' => $accountUserId, 'status' => 1]);
         Log::debug('Creating financial operation data', ['data' => $recordData]);
-        $operation = $account->operations()->updateOrCreate($recordData);
+        $operation = $account->operations()->create($recordData);
 
         if (!$operation->exists) {
             Log::error('The operation wasn\'t created.', ['data' => $recordData]);
