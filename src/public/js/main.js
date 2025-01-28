@@ -550,7 +550,18 @@ $(document).ready(function(){
         let search = $('#searchh').val();
         let operation_type = $('#filter-operation-type').val();
         let error = $(this).data("date-errors");
-        let url = root + '/accounts/'+account_id+'/operations';
+
+        let isAdmin = $('body').data('is-admin');
+        let urlPath;
+        if (isAdmin) {
+            urlPath = "/overview/accounts/";
+        } else {
+            urlPath = "/accounts/";
+        }
+
+        let url = root + urlPath + account_id+'/operations'
+
+
         let p = [];
 
         if (date_from != "") {
@@ -2247,14 +2258,14 @@ $(document).ready(function(){
         let account_id = $(this).data("account-id");
         let csrf = $(this).data("csrf");
         let url = root + "/accounts/" + account_id + "/add";
-    
+
         console.log("URL for add user ", url);
-        $("#add-user-form").data("account-id", account_id); 
+        $("#add-user-form").data("account-id", account_id);
         $("#add-user-modal").css("display", "flex");
         $(".choose-lending").show();
-    
+
         $("#add-user-choice").empty();
-    
+
         $.ajax({
             url: url,
             type: "GET",
@@ -2273,8 +2284,8 @@ $(document).ready(function(){
                 value: "default_opt",
                 text: 'Vyberte používateľa'
             }));
-    
-            if (response.users.length !== 0) { 
+
+            if (response.users.length !== 0) {
                 console.log(response);
                 response.users.forEach(function(user) {
                     $("#add-user-choice").append($('<option>', {
@@ -2291,19 +2302,19 @@ $(document).ready(function(){
             });
         });
     });
-    
+
     $("#add-user-form").on("submit", function(e) {
         e.preventDefault();
-    
+
         let account_id = $(this).data("account-id");
         let user_id = $("#add-user-choice").val();
         let csrf = $("#add-user-button").data("csrf");
-    
+
         if (user_id === "default_opt") {
             Toast.fire({ icon: 'error', title: 'Vyberte používateľa!' });
             return;
         }
-    
+
         $.ajax({
             url: root + "/accounts/" + account_id + "/add",
             type: "POST",
@@ -2331,20 +2342,20 @@ $(document).ready(function(){
     $(".remove-user-button").click(function() {
         let userId = $(this).data("user-id");
         let accountId = $(this).data("account-id");
-    
+
         $("#delete-user-from-account-form").data("user-id", userId);
         $("#delete-user-from-account-form").data("account-id", accountId);
-        
+
         $("#delete-user-from-account-modal").css("display", "flex");
     });
-    
+
     $("#delete-user-from-account-form").on("submit", function(e) {
         e.preventDefault();
-    
+
         let userId = $(this).data("user-id");
         let accountId = $(this).data("account-id");
         let csrf = $("#delete-user-from-account-button").data("csrf");
-    
+
         $.ajax({
             url: `/accounts/${accountId}/users/${userId}`,
             type: "DELETE",
@@ -2366,14 +2377,14 @@ $(document).ready(function(){
                 });
             }
         });
-    
+
         $("#delete-user-from-account-modal").css("display", "none");
     });
-    
+
     $(".close-modal, .cancel").on("click", function() {
         $("#delete-user-from-account-modal").css("display", "none");
     });
-    
+
 
 //admin
 $(".user").click(function(){
