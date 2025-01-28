@@ -77,8 +77,6 @@ class GeneralOperationController extends Controller
     protected function upsertLending(FinancialOperation $operation_host, FinancialOperation $operation_client, array $lendingData,  $host)
     {
 
-
-
         $lending = Lending::create([
             'host_id' => $operation_host->account_user_id,
             'client_id' => $operation_client->account_user_id,

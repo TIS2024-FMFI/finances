@@ -38,6 +38,14 @@ class UpdateOperationController extends GeneralOperationController
     // Accepts the individual operation proposal
     public function statusAccept(FinancialOperation $operation, UpdateOperationRequest $request)
     {
+
+        Log::debug("start");
+        Log::debug($operation);
+        Log::debug($request);
+
+        Log::debug("end");
+
+
         $requestData = $request->validated();
         $requestData = array_merge($requestData, ['status' => 1]);
 
@@ -181,11 +189,6 @@ class UpdateOperationController extends GeneralOperationController
         $this->updateOperationRecord($operation, $data, $newAttachment);
 
         $operation->refresh();
-
-        if ($operation->isLending()) {
-            $this->upsertLending($operation, $data);
-            $this->updateRepaymentRecord($operation->lending, $data);
-        }
 
         if ($newAttachment)
             FileHelper::deleteFileIfExists($oldAttachment);
