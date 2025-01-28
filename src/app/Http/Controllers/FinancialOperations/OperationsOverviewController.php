@@ -49,7 +49,14 @@ class OperationsOverviewController extends Controller
         $status = $request->input('status', null);
         $operationType = $request->input('operation_type', null);
 
-        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc');
+        $isAccountAdmin = false;
+
+        if ($user->id == $account->spravca_id){
+            $users = $account->users;
+            $isAccountAdmin = true;
+        }
+
+        $query = $account->userOperationsBetween($user, $dateFrom, $dateTo, $isAccountAdmin)->orderBy('date', 'desc');
         if (!empty($search)) {
             $query->where('title', 'like', '%' . $search . '%');
         }
@@ -66,10 +73,19 @@ class OperationsOverviewController extends Controller
         // ->paginate($this::$resultsPerPage)->withQueryString();
         $sapOperations = $account->sapOperations;
 
-        $incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
-        $expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
+        $total_incomes = 0;
+        $total_expenses = 0;
+        $my_total_incomes = 0;
+        $my_total_expenses = 0;
 
-        $accountBalance = $account->getBalance();
+        if ($isAccountAdmin){
+            $total_incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo, $isAccountAdmin)->incomes()->sum('sum');
+            $total_expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo, $isAccountAdmin)->expenses()->sum('sum');
+        }
+
+        $my_total_incomes = $account->userOperationsBetween($user, $dateFrom, $dateTo)->incomes()->sum('sum');
+        $my_total_expenses = $account->userOperationsBetween($user, $dateFrom, $dateTo)->expenses()->sum('sum');
+
         // Upravený kód na získanie account_title
         $accountTitle = $account->users()->first()?->pivot?->account_title ?? 'Predvolený názov účtu';
         return view('finances.account', [
@@ -77,13 +93,15 @@ class OperationsOverviewController extends Controller
             'account_title' => $accountTitle,
             'operations' => $operations,
             'sapOperations' => $sapOperations,
-            'incomes_total' => $incomes,
-            'expenses_total' => $expenses,
-            'account_balance' => $accountBalance,
+            'incomes_total' => $total_incomes,
+            'expenses_total' => $total_expenses,
+            'my_incomes_total' => $my_total_incomes,
+            'my_expenses_total' => $my_total_expenses,
             'users' => $users,
             'status' => $status,
             'operation_type' => $operationType,
             'search' => $search,
+            'isAccountAdmin' => $isAccountAdmin,
         ]);
     }
 

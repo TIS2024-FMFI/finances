@@ -167,10 +167,10 @@ class Account extends Model
      * @param Carbon $to The end date of the interval for which operations are being requested. Only operations on or before this date are included.
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough The query builder instance that can be used to further query the model or get the results.
      */
-    public function userOperationsBetween(User $user, Carbon $from, Carbon $to)
+    public function userOperationsBetween(User $user, Carbon $from, Carbon $to, bool $isAccountAdmin = false)
     {
         // Grant access to all operations within the account for admin users.
-        if ($user->user_type == 2) {
+        if ($user->user_type == 2 || $isAccountAdmin) {
             return $this->operations()->whereBetween('date', [$from, $to]);
         }
 
