@@ -31,7 +31,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
 <table class="usersTable">
     <div class="import-sap-operations-div">
-        <div class='operations-name'>Používatelia účtu</div>        
+        <div class='operations-name'>Používatelia účtu</div>
         <button class="button-filter" type="button" data-account-id="{{ $account->id }}" data-date-errors="{{$errors->first('to')}}" id="add-user-check">Pridať použivateľa</button>
     </div>
 
@@ -45,7 +45,7 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
             <th style='width: 25%;' class='align-right'>Zostatok</th>
           </tr>";
     echo "</thead>";
-    
+
 
     // Table body should be inside <tbody>
     echo "<tbody>";
@@ -82,8 +82,8 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
             <td>{$user_email}</td>";
         echo "
         <td class='align-right'>
-            <button class='remove-user-button' 
-                    data-user-id=" . $user_id . " 
+            <button class='remove-user-button'
+                    data-user-id=" . $user_id . "
                     data-account-id=" . $account->id . ">
                 <i class='bi bi-trash3' title='Zmazať používateľa'></i>
             </button>
@@ -177,9 +177,9 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
         <label class="status-label">Status:</label>
         <select id="filter-status">
             <option value="">---</option>
-            <option value="0" {{ $status === '0' ? 'selected' : '' }}>Waiting</option>
-            <option value="1" {{ $status === '1' ? 'selected' : '' }}>Approved</option>
-            <option value="2" {{ $status === '2' ? 'selected' : '' }}>Refused</option>
+            <option value="0" {{ $status === '0' ? 'selected' : '' }}>Čaká sa</option>
+            <option value="1" {{ $status === '1' ? 'selected' : '' }}>Schválené</option>
+            <option value="2" {{ $status === '2' ? 'selected' : '' }}>Zamietnuté</option>
         </select>
         <span>&nbsp;&nbsp;</span>
         <label for="operation-type-label">Typ:</label>

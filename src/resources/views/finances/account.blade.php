@@ -134,9 +134,9 @@ $sum_rozdiel = 0;
         <label class="status-label">Status:</label>
         <select id="filter-status">
             <option value="">---</option>
-            <option value="0" {{ $status === '0' ? 'selected' : '' }}>Waiting</option>
-            <option value="1" {{ $status === '1' ? 'selected' : '' }}>Approved</option>
-            <option value="2" {{ $status === '2' ? 'selected' : '' }}>Refused</option>
+            <option value="0" {{ $status === '0' ? 'selected' : '' }}>Čaká sa</option>
+            <option value="1" {{ $status === '1' ? 'selected' : '' }}>Schválené</option>
+            <option value="2" {{ $status === '2' ? 'selected' : '' }}>Zamietnuté</option>
         </select>
         <span>&nbsp;&nbsp;</span>
         <label for="operation-type-label">Typ:</label>
