@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ajax' => \App\Http\Middleware\RequireAjaxCall::class,
         'jsonify' => \App\Http\Middleware\JsonifyResponse::class,
+        'user_type' => \App\Http\Middleware\UserTypeMiddleware::class
     ];
 }
