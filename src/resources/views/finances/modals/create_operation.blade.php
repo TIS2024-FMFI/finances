@@ -113,7 +113,7 @@
 
       <div class="input-box operation-file">
         <div class="field">
-          <input type="file" id="operation-file" name="" accept=".doc, .docx, .pdf, .txt">
+          <input type="file" id="operation-file" name="" accept=".zip">
           <label for="operation-file">Príloha</label>
         </div>
         <div class="error-box" id="add-operation-attachment-errors"></div>

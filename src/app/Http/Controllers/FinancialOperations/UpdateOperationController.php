@@ -113,6 +113,7 @@ class UpdateOperationController extends GeneralOperationController
      */
     public function update(FinancialOperation $operation, UpdateOperationRequest $request)
     {
+        Log::debug('test.');
         $requestData = $request->validated();
 
 

@@ -1824,6 +1824,8 @@ $(document).ready(function(){
 
         $("#edit-operation-form").data("operation-id", operation_id);
 
+        console.log('hellko')
+
         $.ajax({
             url: root + "/operations/" + operation_id + "/update",
             type: "GET",
@@ -1840,7 +1842,7 @@ $(document).ready(function(){
                 $("#edit-operation-modal").css("display", "flex");
             }
         }).done(function(response) {
-
+            console.log('pekne')
             let expense = response.operation.operation_type.expense ? "Výdavok" : "Príjem";
 
             $("#operation_edit_main_type").html(expense);
@@ -1964,16 +1966,33 @@ $(document).ready(function(){
         var files = fileUpload.files;
         var fileData = new FormData();
 
-        fileData.append('title', title);
-        fileData.append('date', date);
-        fileData.append('expected_date_of_return', expected_date);
-        fileData.append('subject', subject);
-        fileData.append('sum', sum);
+
+        if (title !== undefined){
+            fileData.append('title', title);
+        }
+        if (date !== undefined){
+            fileData.append('date', date);
+        }
+        if (expected_date !== undefined){
+            fileData.append('expected_date_of_return', expected_date);
+        }
+        if (subject !== undefined){
+            fileData.append('subject', subject);
+        }
+        if (sum !== undefined){
+            fileData.append('sum', sum);
+        }
         if (files[0] != undefined){
             fileData.append('attachment', files[0] ?? '');
         }
+
         fileData.append('_token', csrf);
         fileData.append('_method', 'PATCH');
+
+        console.log("TESTIK")
+        fileData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
 
         $.ajax({
             url: root + "/operations/" + operation_id,
@@ -1997,6 +2016,8 @@ $(document).ready(function(){
             if (typeof response.responseJSON != 'undefined'){
                 if (response.status === 422) {
                     let errors = response.responseJSON.errors;
+
+                    console.log('err')
 
                     if (typeof errors.attachment != 'undefined') {
                         $("#edit-operation-file").css("border-color", "red");
