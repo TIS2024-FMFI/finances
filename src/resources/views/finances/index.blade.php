@@ -23,7 +23,6 @@
         <th>Názov účtu</th>
         <th>Správca</th>
         <th class="align-right">Zostatok</th>
-        <th class="align-right">Manipulácie</th>
     </tr>
     </thead>
     <tbody>
@@ -38,20 +37,11 @@
         $color_of_balance = $account_balance >= 0 ? 'green' : 'red';
 
         echo <<<EOL
-            <tr>
+            <tr data-id="{$account_id}" class="account_detail">
                 <td>{$account_sap_id}</td>
                 <td>{$account_name}</td>
                 <td>{$account_spravca}</td>
                 <td style="color: {$color_of_balance};" class="align-right">{$account_balance}€</td>
-                <td class=" ">
-                    <div class="account_manipulations align-right">
-                        <button data-id="{$account_id}" class="account_detail ">
-                            <i  class="bi bi-info-circle" title="Detail účtu"></i>
-                        </button>
-
-                    </div>
-
-                </td>
             </tr>
             EOL;
     }

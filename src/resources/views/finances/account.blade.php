@@ -6,30 +6,16 @@ $to = filter_input(INPUT_GET, 'to', FILTER_SANITIZE_URL);
 
 
 $account_balance = $account->getBalance();
-
 $thisUser = auth()->user();
+$isAccountAdmin = $isAccountAdmin;
 
-$sum_incomes = 0;
-$sum_expenses = 0;
-$sum_rozdiel = 0;
-
-
-//not working yet
-
-//foreach ($users as $user) {
-//    $user_id = $user->id;
-//    $user_email = $user->email;
-//    $incomes = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->incomes()->sum('sum');
-//    $expenses = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->expenses()->sum('sum');
-//    $user_balance = $incomes - $expenses;
-//
-//    $sum_incomes += $incomes;
-//    $sum_expenses += $expenses;
-//    $sum_rozdiel += $user_balance;
-//
-//}
-
-
+$my_rozdiel = $my_incomes_total - $my_expenses_total;
+$total_rozdiel = $incomes_total - $expenses_total;
+$sum_zostatkove = 0;
+$my_sum_zostatkove = 0;
+$currentYear = now()->year;
+$zostatkoveStartDate = Illuminate\Support\Facades\Date::minValue();
+$zostatkoveEndDate = Illuminate\Support\Facades\Date::create($currentYear, 1, 1);
 
 ?>
 
@@ -56,36 +42,75 @@ $sum_rozdiel = 0;
 
 </div>
 
+@if($isAccountAdmin)
+<table class="usersTable">
+    <thead>
+        <tr>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 50%;">Email</th>
+            <th style="width: 25%;" class="align-right">Zostatok</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($users as $user)
+            <?php
+            $incomes = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->incomes()->sum('sum');
+            $expenses = $account->userOperationsBetween($user, Illuminate\Support\Facades\Date::minValue(), Illuminate\Support\Facades\Date::maxValue())->expenses()->sum('sum');
+            $user_balance = $incomes - $expenses;
+            ?>
+            <tr>
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->email }}</td>
+                <td class="align-right">
+                    @if( $user_balance >= 0)
+                    <em style="color: green;">{{ number_format($user_balance, 2, ',', ' ') }}€</em>
+                    @else
+                    <em style="color: red;">{{ number_format($user_balance, 2, ',', ' ')}}€</em>
+                    @endif
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+@endif
+
 <div class="info-box">
-    <div class="operations-name">
-        Operácie
-    </div>
-
+    <div class="operations-name">Operácie</div>
     <div class="table-sum">
-
+        @if($isAccountAdmin)
         <div class="table-sum-row">
-            <p>Moje Príjmy: </p>
-            <p id="income"><em>{{ $incomes_total }}€</em></p>
+            <p>Celkové príjmy: </p>
+            <p><em>{{ number_format($incomes_total, 2, ',', ' ') }}€</em></p>
         </div>
-
+        <div class="table-sum-row">
+            <p>Celkové výdavky:</p>
+            <p><em>{{ number_format($expenses_total, 2, ',', ' ') }}€</em></p>
+        </div>
+        <div class="table-sum-row" style="margin-bottom: 15px;">
+            <p>Celkový zostatok:</p>
+            @if( $total_rozdiel >= 0)
+            <p id="total"><em style="color: green;">{{ number_format($total_rozdiel, 2, ',', ' ') }}€</em></p>
+            @else
+            <p id="total"><em style="color: red;">{{ number_format($total_rozdiel, 2, ',', ' ')}}€</em></p>
+            @endif
+        </div>
+        @endif
+        <div class="table-sum-row">
+            <p>Moje Príjmy:</p>
+            <p><em>{{ number_format($my_incomes_total, 2, ',', ' ') }}€</em></p>
+        </div>
         <div class="table-sum-row">
             <p>Moje Výdavky:</p>
-            <p id="outcome"><em>{{ $expenses_total }}€</em></p>
+            <p><em>{{ number_format($my_expenses_total, 2, ',', ' ') }}€</em></p>
         </div>
-
         <div class="table-sum-row">
-            @if( ($incomes_total - $expenses_total) >= 0)
-            <p>Celkový zostatok na účte:</p>
-            <p id="total"><em style="color: green;">{{ $account_balance }}€</em></p>
+            <p>Môj zostatok:</p>
+            @if( $my_rozdiel >= 0)
+            <p id="total"><em style="color: green;">{{ number_format($my_rozdiel, 2, ',', ' ') }}€</em></p>
             @else
-            <p>Celkový zostatok na účte:</p>
-            <p id="total"><em style="color: red;">{{ $account_balance}}€</em></p>
+            <p id="total"><em style="color: red;">{{ number_format($my_rozdiel, 2, ',', ' ')}}€</em></p>
             @endif
-
         </div>
-
-
-
     </div>
 </div>
 
@@ -165,6 +190,9 @@ $sum_rozdiel = 0;
 <table>
     <tr>
 <!--            <th>Poradie</th>-->
+        @if($isAccountAdmin)
+        <th>Používateľ</th>
+        @endif
         <th>Názov</th>
         <th>Dátum</th>
         <th>Typ</th>
@@ -178,8 +206,8 @@ $sum_rozdiel = 0;
 
     <tr>
 <!--            <td>{{ ($operations->currentPage() - 1) * $operations->perPage() + $key + 1}}.</td>-->
+        <td>{{ $operation->user()->email }}</td>
         <td>{{ $operation->title }}</td>
-
         <td>{{ $operation->date->format('d.m.Y') }}</td>
         <td>{{ $operation->operationType->name }}</td>
         @if( $operation->isChecked() )
