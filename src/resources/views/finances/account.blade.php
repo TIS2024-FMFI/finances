@@ -74,16 +74,6 @@ $sum_rozdiel = 0;
         </div>
 
         <div class="table-sum-row">
-            <p>Všetky Príjmy: </p>
-            <p id="income"><em>{{ $sum_incomes }}€</em></p>
-        </div>
-
-        <div class="table-sum-row">
-            <p>Všetky Výdavky:</p>
-            <p id="outcome"><em>{{ $sum_expenses }}€</em></p>
-        </div>
-
-        <div class="table-sum-row">
             @if( ($incomes_total - $expenses_total) >= 0)
             <p>Celkový zostatok na účte:</p>
             <p id="total"><em style="color: green;">{{ $account_balance }}€</em></p>
