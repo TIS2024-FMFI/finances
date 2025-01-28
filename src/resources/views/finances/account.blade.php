@@ -43,6 +43,7 @@ $zostatkoveEndDate = Illuminate\Support\Facades\Date::create($currentYear, 1, 1)
 </div>
 
 @if($isAccountAdmin)
+<div class='operations-name'>Používatelia účtu</div>
 <table class="usersTable">
     <thead>
         <tr>
