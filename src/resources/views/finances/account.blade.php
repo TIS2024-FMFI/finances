@@ -104,7 +104,7 @@ $sum_rozdiel = 0;
         <input
             type="text"
             name="search"
-            placeholder="Search"
+            placeholder="Hľadať podľa názvu"
             value="{{ request('search') }}"
             id=searchh
         >

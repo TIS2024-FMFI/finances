@@ -1211,11 +1211,10 @@ $(document).ready(function(){
                         value: operation_id,
                         text:
                         "EMAIL: " + user_email
-                        + ", TITLE: " + operation_title
-                        + (! operation_subject ? "" : ", SUBJECT: " + operation_subject)
-                        + ", DATE: " + dd+"."+mm+"."+yyyy
-                        + ", TYPE: " + operation_type
-                        + ", SUM: " + operation_sum
+                        + ", NÁZOV: " + operation_title
+                        + ", DÁTUM: " + dd+"."+mm+"."+yyyy
+                        + ", TYP: " + operation_type
+                        + ", SUMA: " + operation_sum + " €"
                     }))
                 })
             }

@@ -3,7 +3,7 @@
 <div class="search-container">
 
     <form method="GET" class="search-container-form">
-        <input type="text" id="search-bar" placeholder="Search">
+        <input type="text" id="search-bar" placeholder="Hľadať podľa názvu">
 
         <button id="search-button" class="button-search" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#732726FF" class="search-svg">
