@@ -5,7 +5,7 @@
 <div class="search-container">
 
     <form method="GET" class="search-container-form">
-        <input type="text" id="search-bar" placeholder="Search">
+        <input type="text" id="search-bar" placeholder="Hľadať podľa SPP ID">
 
         <button id="search-button" class="button-search" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#732726FF" class="search-svg">
@@ -29,7 +29,6 @@
         <th>Názov účtu</th>
         <th>Správca</th>
         <th class="align-right">Zostatok</th>
-        <th class="align-right">Manipulácie</th>
     </tr>
     </thead>
     <tbody>
@@ -55,21 +54,11 @@
 //        </button>
 
         echo <<<EOL
-            <tr>
+            <tr data-id="{$account_id}" class="account_detail_admin">
                 <td>{$account_sap_id}</td>
                 <td>{$account_name}</td>
                 <td>{$account_spravca}</td>
                 <td style="color: {$color_of_balance};" class="align-right">{$account_balance}€</td>
-                <td class=" ">
-                    <div class="account_manipulations align-right">
-
-                        <button data-id="{$account_id}" class="account_detail_admin ">
-                            <i  class="bi bi-info-circle" title="Detail účtu"></i>
-                        </button>
-
-                    </div>
-
-                </td>
             </tr>
             EOL;
     }
