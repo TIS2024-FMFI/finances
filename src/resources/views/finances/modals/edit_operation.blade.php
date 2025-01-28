@@ -86,7 +86,7 @@
       @endif
       <div class="input-box operation-file">
         <div class="field">
-        <input type="file" id="edit-operation-file" name="" accept=".doc, .docx, .pdf, .txt">
+        <input type="file" id="edit-operation-file" name="" accept=".zip">
           <label for="edit-operation_file">Príloha
       <i class="bi bi-info-circle tooltip">
           <span class="tooltiptext">Nahraním novej prílohy sa pôvodná príloha zmaže. Ak chcete pridať novú prílohu a zanechať aj starú, tak si aktuálnu prílohu stiahnite a pridajte ju spoločne do priečnika s novou prílohou a následne ju dajte do ZIP a nahrajte.</span>
