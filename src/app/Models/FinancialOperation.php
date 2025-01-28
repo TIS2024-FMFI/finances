@@ -196,11 +196,11 @@ class FinancialOperation extends Model
     public function stringStatus()
     {
         if ($this->status == 0){
-            return "Waiting";
+            return "Čaká sa";
         }else if ($this->status == 1){
-            return "Approved";
+            return "Schválené";
         }else{
-            return "Refused";
+            return "Zamietnuté";
         }
     }
 
