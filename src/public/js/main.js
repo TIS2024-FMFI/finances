@@ -2221,7 +2221,7 @@ $(document).ready(function(){
             $(".add-operation-subject").css("display","flex");
             $(".add-operation-sum").css("display","flex");
             $(".add-operation-to").css("display","flex");
-            $(".add-operation-expected-date").css("display","flex");
+            // $(".add-operation-expected-date").css("display","flex");
             $(".add-operation-host").css("display","flex");
             $(".operation-file").css("display","none");
             $(".choose-lending").css("display","none");
