@@ -77,12 +77,16 @@ class ManageUserAccountController extends Controller
             ->pluck('user_id')
             ->toArray();
 
-        $users = User::whereNotIn('id', $existingUserIds)
-            ->whereHas('accounts', function ($query) use ($account) {
-                $query->where('account_id', '!=', $account->id);
-            })
-            ->distinct()
-            ->get();
+	// original mystery:
+        // $users = User::whereNotIn('id', $existingUserIds)
+        //    ->whereHas('accounts', function ($query) use ($account) {
+        //        $query->where('account_id', '!=', $account->id);
+        //    })
+        //    ->distinct()
+        //    ->get();
+
+	// our try
+        $users = User::whereNotIn('id', $existingUserIds)->get();
 
         Log::debug('Users available to be added:', ['users' => $users]);
 

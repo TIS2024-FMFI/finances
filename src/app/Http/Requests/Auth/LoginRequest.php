@@ -5,9 +5,9 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * A request to log in a user via email and password.
+ * A request to log in a user via username and password.
  * 
- * Fields: email, password.
+ * Fields: username, password.
  */
 class LoginRequest extends FormRequest
 {
@@ -19,7 +19,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'email'],
+            'username' => ['required'],
             'password' => ['required'],
         ];
     }

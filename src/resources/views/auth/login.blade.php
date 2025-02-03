@@ -23,18 +23,18 @@
                     @csrf
                     
                     <div class="input-box">
-                        @if ($errors->has('email'))
+                        @if ($errors->has('username'))
                             <div class="field">
-                                <input type="text" name="email" id="login-email" value="{{ old('email') }}" style="border-color: red;">
-                                <label for="login-email">E-mailová adresa</label>
+                                <input type="text" name="username" id="login-username" value="{{ old('username') }}" style="border-color: red;">
+                                <label for="login-username">Používateľské meno</label>
                             </div>
                             <div class="error-box">
-                                <p>{{ $errors->first('email') }}</p>
+                                <p>{{ $errors->first('username') }}</p>
                             </div>
                         @else
                             <div class="field">
-                                <input type="text" name="email" id="login-email" value="{{ old('email') }}">
-                                <label for="login-email">E-mailová adresa</label>
+                                <input type="text" name="username" id="login-username" value="{{ old('username') }}">
+                                <label for="login-username">Používateľské meno</label>
                             </div>
                         @endif
                     </div>

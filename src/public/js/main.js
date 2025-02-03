@@ -1530,6 +1530,7 @@ $(document).ready(function(){
                 response.user_list.forEach(function(user){
                     $("#operation_users").append($('<option>', {
                         value: user.id,
+                        //text: user.first_name + " " + user.last_name    // user.email
                         text: user.email
                     }));
                 })
@@ -1611,6 +1612,10 @@ $(document).ready(function(){
         console.log("TESTYYYYYYYYYY")
         console.log(fileData)
 
+	fileData.forEach((value, key)=>{
+		console.log(`${key}: ${value}`)
+	})
+
         if (files[0] != undefined){
             fileData.append('attachment', files[0] ?? '');
         }
@@ -1691,9 +1696,10 @@ $(document).ready(function(){
                         })
                     }
                 }else{
+			console.log(response.responseText);
                     Toast.fire({
                         icon: 'error',
-                        title: 'Niečo sa pokazilo. Prosím, skúste to neskôr.'
+                        title: 'Niečo sa pokazilo. Prosím, skúste to neskôr. response json - undefined '
                     })
                 }
             })
@@ -2310,7 +2316,7 @@ $(document).ready(function(){
                 response.users.forEach(function(user) {
                     $("#add-user-choice").append($('<option>', {
                         value: user.id,
-                        text: user.email
+                        text: user.first_name + " " + user.last_name //user.email
                     }));
                 });
             }

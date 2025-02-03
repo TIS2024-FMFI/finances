@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * This controller provides methods to:
  *      - show the login form
- *      - log in a user via email an password
+ *      - log in a user via username an password
  *      - log in a user via login link
  *      - log out a user
  */
@@ -33,7 +33,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle a request to log in via email and password.
+     * Handle a request to log in via username and password.
      *
      * @param \App\Http\Requests\Auth\LoginRequest  $request
      * the request to handle
@@ -55,8 +55,8 @@ class LoginController extends Controller
         }
 
         return back()
-                ->withErrors([ 'email' => trans('auth.failed') ])
-                ->onlyInput('email');
+                ->withErrors([ 'username' => trans('auth.failed') ])
+                ->onlyInput('username');
     }
 
     /**
