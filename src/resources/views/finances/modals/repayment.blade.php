@@ -6,7 +6,7 @@
     <h2>Splatenie pôžičky</h2>
 
     <form id="repay-lending-form"
-          @if(auth()->user()->user_type == 2 && isset($user))
+          @if(auth()->user()->user_type == 4 && isset($user))
               data-user-id="{{$user->id}}"
         @endif
     >

@@ -16,7 +16,7 @@
     <title>Financie</title>
 
 </head>
-<body data-is-admin="{{ Auth::user()->user_type == 2 ? 'true' : 'false' }}">
+<body data-is-admin="{{ Auth::user()->user_type == 4 ? 'true' : 'false' }}">
 
 <nav>
     <div class="navbar">
@@ -25,7 +25,7 @@
                 <span id="top-bar-email">
                     {{ Auth::User()->email }}
                 </span>
-                @if(Auth::user()->user_type == 2)
+                @if(Auth::user()->user_type == 4)
                 <div class="dropdown">
                     <button class="dropbtn"><i class="bi bi-caret-down-fill fs-8"></i></button>
                     <div class="dropdown-content">
@@ -39,7 +39,7 @@
                 </form>
             </div>
         </div>
-        <a @if(auth()->user()->user_type == 2)
+        <a @if(auth()->user()->user_type == 4)
                         href={{ route('admin_home') }}
                         @else
                         href={{ route('home') }}

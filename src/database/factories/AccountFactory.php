@@ -20,7 +20,7 @@ class AccountFactory extends Factory
     {
 
         return [
-            'sap_id' => Str::upper(fake()->uuid())
+            'spp_symbol' => Str::upper(fake()->uuid())
         ];
     }
 }

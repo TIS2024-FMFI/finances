@@ -20,7 +20,6 @@ class User extends Authenticatable
     protected $connection = 'db2';
 
 
-
     /**
      * The attributes that are mass assignable.
      *
