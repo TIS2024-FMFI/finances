@@ -226,7 +226,8 @@ class Account extends Model
     }
 
     public function getSpravca(){
-        return $this->user_spravca->email;
+//         return $this->user_spravca->email;
+        return $this->grantee;
     }
 
 
