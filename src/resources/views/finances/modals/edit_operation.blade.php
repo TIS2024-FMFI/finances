@@ -3,13 +3,13 @@
   <div class="modal">
     <span class="close-modal"><i class="bi bi-x"></i></span>
 
-    @if(auth()->user()->user_type == 2)
+    @if(auth()->user()->user_type == 4)
     <h2>Upraviť operáciu</h2>
     @else
     <h2>Pridať prílohu</h2>
     @endif
 
-      @if(auth()->user()->user_type == 2)
+      @if(auth()->user()->user_type == 4)
       <div class="flex">
           <form id="success-operation-form">
               <button type="button" data-csrf="{{ csrf_token() }}" class="success-operation-button">Schváliť</button>
@@ -22,7 +22,7 @@
       @endif
 
     <form id="edit-operation-form">
-    @if(auth()->user()->user_type == 2)
+    @if(auth()->user()->user_type == 4)
         <div class="edit_type_category">
             <div>
                 <label for="operation_edit_main_type">Kategória:</label>

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
-     * Show the Login view 
+     * Show the Login view
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      * the view that will be shown
@@ -47,7 +47,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if (Auth::user()->user_type == 2) {
+            if (Auth::user()->user_type == 4) {
                 return redirect(route('admin_home'));
             } else {
                 return redirect(route('home'));

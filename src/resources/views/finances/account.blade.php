@@ -21,7 +21,7 @@ $zostatkoveEndDate = Illuminate\Support\Facades\Date::create($currentYear, 1, 1)
 
 <div class="flex-between">
     <div class="main_info">
-        <a @if(auth()->user()->user_type == 2)
+        <a @if(auth()->user()->user_type == 4)
             href={{ route('admin_home') }}
             @else
             href={{ route('home') }}
@@ -30,11 +30,11 @@ $zostatkoveEndDate = Illuminate\Support\Facades\Date::create($currentYear, 1, 1)
         </a>
         <div class="account-info">
             <div class="account-name">
-                <p id="sap-id-detail">{{ $account->sap_id }}</p>
+                <p id="sap-id-detail">{{ $account->spp_symbol }}</p>
             </div>
 
             <div class="account-details">
-                <p >Meno účtu: {{ $account->name }}</p>
+                <p >Meno účtu: {{ $account->spp_symbol }}</p>
                 <p >Správca: {{ $account->getSpravca() }}</p>
             </div>
         </div>

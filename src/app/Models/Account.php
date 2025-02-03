@@ -21,7 +21,8 @@ class Account extends Model
     use HasFactory;
 
     protected $connection = 'db2';
-    protected $table = 'accounts';
+    protected $table = 'spp_symbols';
+
 
     /**
      * Indicates if the model should be timestamped.
@@ -170,7 +171,7 @@ class Account extends Model
     public function userOperationsBetween(User $user, Carbon $from, Carbon $to, bool $isAccountAdmin = false)
     {
         // Grant access to all operations within the account for admin users.
-        if ($user->user_type == 2 || $isAccountAdmin) {
+        if ($user->user_type == 4 || $isAccountAdmin) {
             return $this->operations()->whereBetween('date', [$from, $to]);
         }
 
@@ -221,7 +222,7 @@ class Account extends Model
     public function user_spravca()
     {
         DB::enableQueryLog();
-        return $this->belongsTo(User::class, 'spravca_id');
+        return $this->belongsTo(User::class, 'guarantee');
     }
 
     public function getSpravca(){

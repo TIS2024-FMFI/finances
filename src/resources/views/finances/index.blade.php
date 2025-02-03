@@ -30,8 +30,8 @@
     foreach ($accounts as $account) {
         $account_balance = $account->getBalance();
         $account_id = $account->id;
-        $account_sap_id = $account->sap_id;
-        $account_name = $account->name;
+        $account_sap_id = $account->spp_symbol;
+        $account_name = $account->spp_symbol;
         $account_spravca = $account->getSpravca();
 
         $color_of_balance = $account_balance >= 0 ? 'green' : 'red';

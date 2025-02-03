@@ -7,7 +7,7 @@
     <h2>Pridať operáciu</h2>
 
     <form id="create-operation-form"
-          @if(auth()->user()->user_type == 2 && isset($user))
+          @if(auth()->user()->user_type == 4 && isset($user))
             data-user-id="{{$user->id}}"
         @endif
 
@@ -42,7 +42,7 @@
 
 <!--        User start-->
 
-        @if(auth()->user()->user_type == 2)
+        @if(auth()->user()->user_type == 4)
 
         <div class="input-box add-operation-choice">
             <div class="field">
@@ -161,7 +161,7 @@
       </div>
 
       <button type="submit"  data-csrf="{{ csrf_token() }}"  id="create-operation-button">
-          @if(auth()->user()->user_type == 2)
+          @if(auth()->user()->user_type == 4)
           Vytvoriť Operáciu
           @else
           Vytvoriť požiadavku

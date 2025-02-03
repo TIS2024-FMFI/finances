@@ -166,7 +166,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
      * Admin
      */
 
-    Route::middleware(['auth', 'user_type:2'])->group(function () {
+    Route::middleware(['auth', 'user_type:4'])->group(function () {
 
         Route::get('/user/{user}/accounts', [AccountsOverviewController::class, 'admin_user_show']);
         Route::get('/overview', [AccountsOverviewController::class, 'admin_show'])->name('admin_home');

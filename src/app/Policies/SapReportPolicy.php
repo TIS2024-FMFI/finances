@@ -24,7 +24,7 @@ class SapReportPolicy
     public function view(User $user, SapReport $report)
     {
         // Admin má prístup k akejkoľvek SAP správe
-        if ($user->user_type == 2) {
+        if ($user->user_type == 4) {
             return true;
         }
 
@@ -45,7 +45,7 @@ class SapReportPolicy
     public function create(User $user, Account $account)
     {
         // Admin môže vytvoriť SAP správu pre akýkoľvek účet
-        if ($user->user_type == 2) {
+        if ($user->user_type == 4) {
             return true;
         }
 
@@ -67,7 +67,7 @@ class SapReportPolicy
     public function delete(User $user, SapReport $report)
     {
         // Grant permission to admin users to delete any SAP report.
-        if ($user->user_type == 2) {
+        if ($user->user_type == 4) {
             return true;
         }
 
