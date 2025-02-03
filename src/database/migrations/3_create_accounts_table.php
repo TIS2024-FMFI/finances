@@ -20,11 +20,11 @@ return new class extends Migration
 //             $table->string('spravca_id')->default(1);
 //         });
 
-        Schema::connection('db2')->create('spp_symbols', function (Blueprint $table) {
+/*        Schema::connection('db2')->create('spp_symbols', function (Blueprint $table) {
             $table->id();
             $table->string('spp_symbol')->unique();
             $table->string('guarantee')->default(1);
-        });
+}); */
     }
 
     /**
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+     //   Schema::dropIfExists('accounts');
     }
 };

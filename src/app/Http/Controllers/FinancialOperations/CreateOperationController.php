@@ -100,19 +100,25 @@ class CreateOperationController extends GeneralOperationController
      */
     public function create(Account $account, CreateOperationRequest $request)
     {
-
-        $user = Auth::user();
+	Log::debug("testingCreate");
+	    
+	    $user = Auth::user();
         $host = $request['host'];
-        $repay_id = $request['repay_id'];
+	$repay_id = $request['repay_id'];
+
+	Log::debug($request);
 
         return $this->createOperationFromData($user,$account, $request->validated(), $host, $repay_id);
     }
 
     public function createAdmin(User $user, Account $account, CreateOperationRequest $request)
     {
+	Log::debug("testingCreateAdmin");
 
         if (is_null($user))
-            $user = Auth::user();
+		$user = Auth::user();
+
+	Log::debug($request);
 
         $host = $request['host'];
         $repay_id = $request['repay_id'];
