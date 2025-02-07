@@ -222,12 +222,12 @@ class Account extends Model
     public function user_spravca()
     {
         DB::enableQueryLog();
-        return $this->belongsTo(User::class, 'guarantee');
+        return $this->belongsTo(User::class, 'grantee');
     }
 
     public function getSpravca(){
-//         return $this->user_spravca->email;
-        return $this->grantee;
+        $name = $this->user_spravca->first_name . ' ' . $this->user_spravca->last_name;
+        return $name;
     }
 
 

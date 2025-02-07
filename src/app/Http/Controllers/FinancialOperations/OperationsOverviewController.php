@@ -51,7 +51,7 @@ class OperationsOverviewController extends Controller
 
         $isAccountAdmin = false;
 
-        if ($user->id == $account->spravca_id){
+        if ($user->id == $account->grantee){
             $users = $account->users;
             $isAccountAdmin = true;
         }
@@ -162,7 +162,7 @@ class OperationsOverviewController extends Controller
 
         // $operations = $account->userOperationsBetween($user, $dateFrom, $dateTo)->orderBy('date', 'desc')
             // ->paginate($this::$resultsPerPage)->withQueryString();
-        
+
         $search = $request->input('search', null);
         $status = $request->input('status', null);
         $operationType = $request->input('operation_type', null);
