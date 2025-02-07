@@ -21,14 +21,17 @@ return new class extends Migration
      */
     public function up()
     {
-/*        Schema::connection('db2')->create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->string('password')->default(Hash::make('password'));
-            $table->boolean('password_change_required')->default(true);
-            $table->boolean('user_type')->default(0);
-});
- */
+//        Schema::connection('db2')->create('users', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('email')->unique();
+//            $table->string('password')->default(Hash::make('password'));
+//            $table->boolean('password_change_required')->default(true);
+//            $table->boolean('user_type')->default(0);
+//            $table->string('username')->default("a");
+//            $table->string('first_name')->default("First");
+//            $table->string('last_name')->default("Last");
+//});
+
     }
 
     /**

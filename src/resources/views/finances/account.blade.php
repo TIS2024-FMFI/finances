@@ -191,9 +191,8 @@ $zostatkoveEndDate = Illuminate\Support\Facades\Date::create($currentYear, 1, 1)
 <table>
     <tr>
 <!--            <th>Poradie</th>-->
-        @if($isAccountAdmin)
+
         <th>Používateľ</th>
-        @endif
         <th>Názov</th>
         <th>Dátum</th>
         <th>Typ</th>

@@ -55,7 +55,7 @@ return [
     */
 
     'url' => env('APP_URL', 'https://kempelen.dai.fmph.uniba.sk/account'),
-
+//    'url' => env('APP_URL'),
     'asset_url' => env('ASSET_URL'),
 
     /*
