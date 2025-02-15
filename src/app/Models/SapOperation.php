@@ -124,7 +124,7 @@ class SapOperation extends Model
      */
     public function account()
     {
-        return $this->hasOne(Account::class, 'sap_id', 'account_sap_id');
+        return $this->hasOne(Account::class, 'spp_symbol', 'account_sap_id');
     }
 
     /**

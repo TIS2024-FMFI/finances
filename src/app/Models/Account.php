@@ -89,7 +89,7 @@ class Account extends Model
      */
     public function sapOperations()
     {
-        return $this->hasMany(SapOperation::class, 'account_sap_id', 'sap_id');
+        return $this->hasMany(SapOperation::class, 'account_sap_id', 'spp_symbol');
     }
 
     /**

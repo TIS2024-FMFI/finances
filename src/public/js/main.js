@@ -1503,7 +1503,7 @@ $(document).ready(function(){
 
             $("#host_choice").append($('<option>', {
                 value: "default_opt",
-                text: 'Vyberte Hosstiteľa'
+                text: 'Vyberte Hostiteľa'
             }));
 
 

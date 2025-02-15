@@ -164,7 +164,7 @@ class UsersImport implements ToCollection, WithCalculatedFormulas, WithMapping, 
         }
 
         // Ensure an account is found or created based on the SAP ID before creating the SapOperation.
-        Account::firstOrCreate(['sap_id' => $row[8]]);
+        Account::firstOrCreate(['spp_symbol' => $row[8]]);
 
         Log::info("🔍 Checking whole row: " . json_encode($row));
         try {

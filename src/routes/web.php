@@ -166,6 +166,15 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
      * Admin
      */
 
+    Route::middleware(['ajax', 'jsonify'])->group(function () {
+
+        Route::post('/user/{user}/accounts/{account}/operations', [CreateOperationController::class, 'createAdmin']);
+        Route::post('/user/{user}/accounts/', [CreateAccountController::class, 'createAdmin']);
+        Route::post('/user/{user}/operations/{lending}/repayment', [CreateOperationController::class, 'createRepaymentAdmin']);
+    });
+    
+    Route::get('/user/{user}/accounts/{account}/operations', [OperationsOverviewController::class, 'admin_user_show']);
+
     Route::middleware(['auth', 'user_type:4'])->group(function () {
 
         Route::get('/user/{user}/accounts', [AccountsOverviewController::class, 'admin_user_show']);
@@ -173,16 +182,8 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
 
         Route::get('/user/{user}/accounts/{account}/sap-reports', [ReportsOverviewController::class, 'admin_user_show']);
         Route::get('/overview/accounts/{account}/sap-reports', [ReportsOverviewController::class, 'admin_show']);
-
-        Route::get('/user/{user}/accounts/{account}/operations', [OperationsOverviewController::class, 'admin_user_show']);
+        
         Route::get('/overview/accounts/{account}/operations', [OperationsOverviewController::class, 'admin_show']);
-
-        Route::middleware(['ajax', 'jsonify'])->group(function () {
-
-            Route::post('/user/{user}/accounts/{account}/operations', [CreateOperationController::class, 'createAdmin']);
-            Route::post('/user/{user}/accounts/', [CreateAccountController::class, 'createAdmin']);
-            Route::post('/user/{user}/operations/{lending}/repayment', [CreateOperationController::class, 'createRepaymentAdmin']);
-        });
     });
 
 

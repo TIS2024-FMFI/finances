@@ -27,7 +27,7 @@ class SapOperationCheckController extends Controller
         $operations = collect([]);
         foreach($financialOperations as $finOp)
         {
-            if ($finOp->account()->sap_id === $operation->account_sap_id)
+            if ($finOp->account()->spp_symbol === $operation->account_sap_id)
             {
                 Log::debug('This op is all right {e}', ['e' => $finOp]);
                 $operations->push([$finOp, $finOp->user()]);

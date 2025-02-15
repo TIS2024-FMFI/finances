@@ -70,7 +70,7 @@ class AccountUser extends Model
 
         $out = $accountUsers->map(function($accountUser) {
             return [
-                'sap_id' => $accountUser->account->sap_id,
+                'sap_id' => $accountUser->account->spp_symbol,
                 'email' => $accountUser->user->email,
                 'id' => $accountUser->id,
             ];
