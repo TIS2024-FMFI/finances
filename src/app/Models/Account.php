@@ -123,7 +123,8 @@ class Account extends Model
      */
     public function getSanitizedSapId()
     {
-        return Str::replace('/', '-', $this->sap_id);
+        //return Str::replace('/', '-', $this->sap_id);
+        return Str::replace('/', '-', $this->spp_symbol);
     }
 
     /**

@@ -26,7 +26,7 @@ $(document).ready(function(){
 
             fileData.append('_token', csrf);
             fileData.append('_method', 'PATCH');
-            fileData.append('title', "1");
+            //fileData.append('title', "1");
 
             console.log(`${root}/operations/${operation_id}/${urlSuffix}`)
 

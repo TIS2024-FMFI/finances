@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 
+use DateTime;
+use DateTimeZone;
+
 class FinancialOperation extends Model
 {
 
@@ -48,9 +51,15 @@ class FinancialOperation extends Model
      *
      * @var array<int, string>
      */
+
     protected $casts = [
-        'date' => 'date',
+      'date' => 'datetime:Y-m-d H:i:s', // Ensures a correct format
     ];
+
+    protected function serializeDate($date)
+    {
+      return $date->timezone('Europe/Bratislava'); // Apply timezone globally
+    }
 
 
     /**
@@ -165,7 +174,7 @@ class FinancialOperation extends Model
      */
     public function sapOperation()
     {
-        return $this->belongsTo(SapOperation::class);
+        return $this->belongsTo(SapOperation::class); //, 'sap_operation_id');
     }
 
     /**
@@ -265,14 +274,14 @@ class FinancialOperation extends Model
     public function getExportData()
     {
         return [
-            $this->account()->sap_id,
+            $this->account()->spp_symbol,
             $this->title,
             $this->date->format('d.m.Y'),
             $this->operationType->name,
             $this->subject,
             $this->getSumString(),
-            $this->getCheckedString(),
-            $this->sap_id
+	    $this->getCheckedString(),
+            "tbd"
         ];
     }
 
